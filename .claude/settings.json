@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc:*)",
+      "Bash(python3:*)",
+      "Bash(head:*)",
+      "Bash(npx prisma db push:*)",
+      "Bash(npx dotenv -e .env.local -- prisma db push:*)",
+      "Bash(wc -l:*)",
+      "Bash(npx next build:*)",
+      "Bash(find /Users/sayon/Documents/GitHub/performai/app -type d -name \"public\" -o -type d -name \"\\(public\\)\")",
+      "Bash(find /Users/sayon/Documents/GitHub/performai/app -type d -name \"\\(auth\\)\" -o -type d -name \"\\(public\\)\")",
+      "Bash(find /Users/sayon/Documents/GitHub/performai/app/\\\\\\(protected\\\\\\)/dashboard/employees/\\\\[id\\\\] -type f)"
+    ],
+    "additionalDirectories": [
+      "/Users/sayon/Documents/GitHub/performai/app/api/v1/time/[id]",
+      "/Users/sayon/Documents/GitHub/performai/app/api/v1/task/[id]/claim",
+      "/Users/sayon/Documents/GitHub/performai/app/api/v1/request/[id]",
+      "/Users/sayon/Documents/GitHub/performai/app/(protected)/dashboard/employees",
+      "/Users/sayon/Documents/GitHub/performai/app/(protected)/dashboard/tasks",
+      "/Users/sayon/Documents/GitHub/performai/app/(protected)/dashboard/reports/employee"
+    ]
+  }
+}

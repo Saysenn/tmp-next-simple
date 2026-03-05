@@ -1,0 +1,1 @@
+A template that comes with responsive Header and Footer for NextJS applications
