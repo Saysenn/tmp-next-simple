@@ -15,8 +15,6 @@ type ContactFormData = {
   website?: string; // Honeypot field
 };
 
-// ─── Rate limiting ────────────────────────────────────────────
-
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
 const RATE_LIMIT_WINDOW = 60 * 1000;
 const RATE_LIMIT_MAX = 5;
@@ -49,8 +47,6 @@ function checkRateLimit(ip: string): { allowed: boolean; remaining: number } {
   return { allowed: true, remaining: RATE_LIMIT_MAX - record.count };
 }
 
-// ─── Plain text fallback ──────────────────────────────────────
-
 function generatePlainText(name: string, email: string, phone: string, message: string): string {
   return `
 NEW CONTACT FORM SUBMISSION
@@ -66,8 +62,6 @@ ${message ? `Message:\n${message}` : "No message provided"}
 Sent from the contact form.
   `.trim();
 }
-
-// ─── Handler ─────────────────────────────────────────────────
 
 export async function POST(request: NextRequest) {
   try {
@@ -89,7 +83,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: true, message: "Your inquiry has been sent successfully" });
     }
 
-    const name = sanitizeInput(body.name?.trim() || "");
+    // Strip newlines from name to prevent email header injection via subject line
+    const rawName = (body.name?.trim() || "").replace(/[\r\n]/g, " ");
+    const name = sanitizeInput(rawName);
     const email = body.email?.trim();
     const phone = sanitizeInput(body.phone?.trim() || "");
     const message = sanitizeInput(body.message?.trim() || "");
@@ -103,8 +99,25 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Name must be at least 2 characters" }, { status: 400 });
     }
 
+    if (name.length > 100) {
+      return NextResponse.json({ error: "Name is too long" }, { status: 400 });
+    }
+
+    if (phone.length > 30) {
+      return NextResponse.json({ error: "Phone number is too long" }, { status: 400 });
+    }
+
     if (message.length < 5) {
       return NextResponse.json({ error: "Message must be at least 5 characters" }, { status: 400 });
+    }
+
+    if (message.length > 5000) {
+      return NextResponse.json({ error: "Message is too long (max 5000 characters)" }, { status: 400 });
+    }
+
+    if (!mailConfig.contactEmail) {
+      console.error("[Contact] CONTACT_EMAIL is not configured");
+      return NextResponse.json({ error: "Service unavailable" }, { status: 503 });
     }
 
     const emailValidation = validateEmailStrict(email);

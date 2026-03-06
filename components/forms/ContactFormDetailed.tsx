@@ -91,7 +91,7 @@ export default function ContactFormDetailed() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-5 overflow-hidden rounded-2xl border border-gray-100 shadow-xl">
       {/* ── Left info panel ─────────────────────────────────── */}
-      <div className="lg:col-span-2 bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-900 p-10 flex flex-col justify-between">
+      <div className="lg:col-span-2 bg-linear-to-br from-slate-900 via-slate-800 to-indigo-900 p-10 flex flex-col justify-between">
         <div>
           <h2 className="text-2xl font-bold text-white mb-3">Get in touch</h2>
           <p className="text-slate-300 text-sm leading-relaxed">
@@ -100,14 +100,14 @@ export default function ContactFormDetailed() {
 
           <div className="mt-10 flex flex-col gap-6">
             <div className="flex items-start gap-4">
-              <span className="mt-0.5 flex-shrink-0 text-indigo-400">
+              <span className="mt-0.5 shrink-0 text-indigo-400">
                 <MapPinIcon />
               </span>
               <span className="text-slate-300 text-sm">{companyInfo.address}</span>
             </div>
 
             <div className="flex items-center gap-4">
-              <span className="flex-shrink-0 text-indigo-400">
+              <span className="shrink-0 text-indigo-400">
                 <MailIcon />
               </span>
               <a
@@ -119,7 +119,7 @@ export default function ContactFormDetailed() {
             </div>
 
             <div className="flex items-center gap-4">
-              <span className="flex-shrink-0 text-indigo-400">
+              <span className="shrink-0 text-indigo-400">
                 <PhoneIcon />
               </span>
               <a

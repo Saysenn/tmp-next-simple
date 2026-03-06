@@ -14,8 +14,6 @@ type SubscribeFormData = {
   website?: string; // Honeypot field
 };
 
-// ─── Rate limiting ────────────────────────────────────────────
-
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
 const RATE_LIMIT_WINDOW = 60 * 1000;
 const RATE_LIMIT_MAX = 3; // Stricter than contact form
@@ -48,8 +46,6 @@ function checkRateLimit(ip: string): { allowed: boolean; remaining: number } {
   return { allowed: true, remaining: RATE_LIMIT_MAX - record.count };
 }
 
-// ─── Handler ─────────────────────────────────────────────────
-
 export async function POST(request: NextRequest) {
   try {
     const ip = getRateLimitKey(request);
@@ -71,7 +67,9 @@ export async function POST(request: NextRequest) {
     }
 
     const email = body.email?.trim();
-    const name = body.name ? sanitizeInput(body.name.trim()) : undefined;
+    // Strip newlines to prevent email header injection via subject line
+    const rawName = body.name ? body.name.trim().replace(/[\r\n]/g, " ") : undefined;
+    const name = rawName ? sanitizeInput(rawName) : undefined;
     const role = body.role ? sanitizeInput(body.role.trim()) : undefined;
     const captchaToken = body.captchaToken ?? null;
 
@@ -84,8 +82,21 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: emailValidation.error }, { status: 400 });
     }
 
+    if (!mailConfig.contactEmail) {
+      console.error("[Subscribe] CONTACT_EMAIL is not configured");
+      return NextResponse.json({ error: "Service unavailable" }, { status: 503 });
+    }
+
     if (name && name.length < 2) {
       return NextResponse.json({ error: "Name must be at least 2 characters" }, { status: 400 });
+    }
+
+    if (name && name.length > 100) {
+      return NextResponse.json({ error: "Name is too long" }, { status: 400 });
+    }
+
+    if (role && role.length > 100) {
+      return NextResponse.json({ error: "Role is too long" }, { status: 400 });
     }
 
     if (formsConfig.subscribeForm.requireCaptcha) {

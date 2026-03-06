@@ -1,14 +1,10 @@
 "use client";
 
-// ─────────────────────────────────────────────────────────────
-// Header — entry point, switches on siteConfig.headerType
-//
-// "nav"       → NavHeader  (logo + desktop nav + mobile hamburger)
-// "cta"       → CTAHeader  (logo + single CTA button)
-// "menu-only" → MenuOnlyHeader (logo + Menu button on all sizes)
-//
-// Change headerType in configs/navigation.ts to switch layouts.
-// ─────────────────────────────────────────────────────────────
+// Header switcher — change headerType in configs/header.ts to switch layouts.
+// "nav"           → logo + desktop nav + mobile hamburger
+// "cta"           → logo + single CTA button
+// "menu-only"     → logo + Menu button on all sizes
+// "centered-logo" → centered logo only, no nav
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -17,6 +13,7 @@ import { headerNav, siteConfig } from "@/configs/header";
 import Logo from "@/components/header/Logo";
 import CTAHeader from "@/components/header/CTAHeader";
 import MenuOnlyHeader from "@/components/header/MenuOnlyHeader";
+import CenteredLogoHeader from "@/components/header/CenteredLogoHeader";
 import DrawerHeader from "@/components/header/DrawerHeader";
 import DropdownHeader from "@/components/header/DropdownHeader";
 import FullscreenHeader from "@/components/header/FullscreenHeader";
@@ -110,5 +107,6 @@ function NavHeader() {
 export default function Header() {
   if (siteConfig.headerType === "cta") return <CTAHeader />;
   if (siteConfig.headerType === "menu-only") return <MenuOnlyHeader />;
+  if (siteConfig.headerType === "centered-logo") return <CenteredLogoHeader />;
   return <NavHeader />;
 }

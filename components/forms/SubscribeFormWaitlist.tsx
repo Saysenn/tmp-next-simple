@@ -70,7 +70,7 @@ export default function SubscribeFormWaitlist() {
   if (state === "success") {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] text-center gap-6 px-4 py-16">
-        <div className="w-20 h-20 rounded-full bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center text-4xl">
+        <div className="w-20 h-20 rounded-full bg-linear-to-br from-indigo-100 to-purple-100 flex items-center justify-center text-4xl">
           🎉
         </div>
         <div>
@@ -206,7 +206,7 @@ export default function SubscribeFormWaitlist() {
         <button
           type="submit"
           disabled={state === "loading"}
-          className="w-full rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-6 py-4 text-sm font-semibold text-white shadow-lg shadow-indigo-200 transition hover:from-indigo-700 hover:to-violet-700 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
+          className="w-full rounded-xl bg-linear-to-r from-indigo-600 to-violet-600 px-6 py-4 text-sm font-semibold text-white shadow-lg shadow-indigo-200 transition hover:from-indigo-700 hover:to-violet-700 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
         >
           {state === "loading" ? "Joining waitlist…" : "Reserve my spot →"}
         </button>

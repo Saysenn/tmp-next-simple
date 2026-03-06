@@ -1,9 +1,4 @@
-// ─────────────────────────────────────────────────────────────
-// lib/services/captcha.ts
-//
-// Server-side CAPTCHA token verification.
-// Provider is read from configs/forms.ts → captchaProvider.
-// ─────────────────────────────────────────────────────────────
+// lib/services/captcha.ts — server-side CAPTCHA token verification
 
 import type { CaptchaProvider } from "@/configs/forms";
 
@@ -52,11 +47,6 @@ async function verifyRecaptcha(token: string): Promise<boolean> {
   return data.success;
 }
 
-/**
- * Verify a CAPTCHA token server-side.
- * Pass the provider explicitly so the route doesn't need to import formsConfig
- * (which may cause issues in edge/server contexts).
- */
 export async function verifyCaptchaToken(
   token: string,
   provider: CaptchaProvider

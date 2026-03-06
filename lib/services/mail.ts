@@ -1,17 +1,10 @@
-// ─────────────────────────────────────────────────────────────
-// lib/services/mail.ts
-//
-// Shared email sending service used by all API routes.
-// Provider selection is controlled by configs/mail.ts.
-// ─────────────────────────────────────────────────────────────
+// lib/services/mail.ts — shared email sender, used by all API routes
 
 import nodemailer from "nodemailer";
 import { Resend } from "resend";
 import { mailConfig } from "@/configs/mail";
 
-// ─── Input helpers ────────────────────────────────────────────
-
-/** Escape HTML entities to prevent XSS in rendered email bodies */
+/** Escape HTML entities to prevent XSS in email bodies */
 export function sanitizeInput(input: string): string {
   return input
     .replace(/&/g, "&amp;")
@@ -21,7 +14,7 @@ export function sanitizeInput(input: string): string {
     .replace(/'/g, "&#x27;");
 }
 
-/** Strict email validator — blocks disposable, test, and suspicious addresses */
+/** Blocks disposable, test, and suspicious email addresses */
 export function validateEmailStrict(email: string): { valid: boolean; error?: string } {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
@@ -88,15 +81,12 @@ export function validateEmailStrict(email: string): { valid: boolean; error?: st
   return { valid: true };
 }
 
-// ─── Send helpers ─────────────────────────────────────────────
-
 type SendEmailOptions = {
   to: string;
   replyTo?: string;
   subject: string;
   html: string;
-  /** Plain-text fallback (only used by SMTP) */
-  text?: string;
+  text?: string; // plain-text fallback (SMTP only)
 };
 
 async function sendViaResend(options: SendEmailOptions) {
@@ -135,12 +125,7 @@ async function sendViaSMTP(options: SendEmailOptions) {
   console.log("[SMTP] Email sent successfully");
 }
 
-// ─── Public API ───────────────────────────────────────────────
-
-/**
- * Send an email using the provider configured in configs/mail.ts.
- * Falls back to console logging when no provider is fully configured.
- */
+/** Send via the provider configured in configs/mail.ts. Logs when unconfigured. */
 export async function sendEmail(options: SendEmailOptions) {
   const { provider, resend, smtp } = mailConfig;
 

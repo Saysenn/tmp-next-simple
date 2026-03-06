@@ -90,7 +90,7 @@ export default function SubscribeFormInline() {
           <button
             type="submit"
             disabled={state === "loading"}
-            className="flex-shrink-0 rounded-xl bg-indigo-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed whitespace-nowrap"
+            className="shrink-0 rounded-xl bg-indigo-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed whitespace-nowrap"
           >
             {state === "loading" ? "Joining…" : "Get early access"}
           </button>
