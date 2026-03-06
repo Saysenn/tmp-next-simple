@@ -1,26 +1,168 @@
 @import "tailwindcss";
 
+/* ===========================
+   COLOR VARIABLES
+=========================== */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Single accent — change this one value to retheme the whole site */
+  --accent: #4f46e5;          /* indigo-600 */
+  --accent-hover: #4338ca;    /* indigo-700 */
+  --accent-light: #e0e7ff;    /* indigo-100 */
+  --accent-muted: #6366f1;    /* indigo-500 */
+
+  /* Backgrounds */
+  --bg-base: #ffffff;
+  --bg-soft: #f9fafb;         /* gray-50 */
+  --bg-subtle: #f3f4f6;       /* gray-100 */
+
+  /* Text */
+  --text-heading: #111827;    /* gray-900 */
+  --text-body: #374151;       /* gray-700 */
+  --text-muted: #6b7280;      /* gray-500 */
+  --text-faint: #9ca3af;      /* gray-400 */
+
+  /* Borders */
+  --border: #e5e7eb;          /* gray-200 */
+  --border-strong: #d1d5db;   /* gray-300 */
+
+  /* Gradients — tweak to taste */
+  --gradient-hero: linear-gradient(135deg, #f0f4ff 0%, #fafbff 60%, #f5f3ff 100%);
+  --gradient-card: linear-gradient(to bottom right, #f0f4ff, #fafbff);
+  --gradient-accent: linear-gradient(to right, var(--accent), #7c3aed);
 }
 
+/* ===========================
+   TAILWIND THEME BRIDGE
+=========================== */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: var(--bg-base);
+  --color-foreground: var(--text-heading);
+  --color-accent: var(--accent);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ===========================
+   BASE
+=========================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+  overflow-x: hidden;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background: var(--bg-base);
+  color: var(--text-body);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.625;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ===========================
+   TYPOGRAPHY SCALE
+=========================== */
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  color: var(--text-heading);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+/* H1 — hero */
+h1 {
+  font-size: 2rem;       /* 32px */
+  font-weight: 800;
+}
+@media (min-width: 640px)  { h1 { font-size: 2.5rem; }  }  /* 40px */
+@media (min-width: 1024px) { h1 { font-size: 3.5rem; }  }  /* 56px */
+
+/* H2 — section title */
+h2 {
+  font-size: 1.75rem;    /* 28px */
+  font-weight: 800;
+}
+@media (min-width: 640px)  { h2 { font-size: 2rem; }    }  /* 32px */
+@media (min-width: 1024px) { h2 { font-size: 2.5rem; }  }  /* 40px */
+
+/* H3 — card / subsection */
+h3 {
+  font-size: 1.25rem;    /* 20px */
+  font-weight: 700;
+}
+@media (min-width: 1024px) { h3 { font-size: 1.5rem; }  }  /* 24px */
+
+/* H4 — feature title */
+h4 {
+  font-size: 1rem;       /* 16px */
+  font-weight: 600;
+}
+@media (min-width: 1024px) { h4 { font-size: 1.125rem; } } /* 18px */
+
+/* H5, H6 — labels, captions */
+h5, h6 {
+  font-size: 0.875rem;   /* 14px */
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* Body text */
+p {
+  margin: 0;
+  color: var(--text-body);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+@media (min-width: 1024px) { p { font-size: 1.0625rem; } } /* 17px */
+
+/* Muted / caption */
+small, .text-caption {
+  font-size: 0.75rem;    /* 12px */
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+@media (min-width: 640px) { small, .text-caption { font-size: 0.8125rem; } } /* 13px */
+
+/* ===========================
+   ACCENT UTILITIES
+   Use these instead of hardcoding indigo- classes in components.
+   These respect the single --accent variable above.
+=========================== */
+.accent-text  { color: var(--accent); }
+.accent-bg    { background-color: var(--accent); }
+.accent-light { background-color: var(--accent-light); }
+.accent-border { border-color: var(--accent); }
+
+/* ===========================
+   BACKGROUND UTILITIES
+=========================== */
+.bg-hero    { background: var(--gradient-hero); }
+.bg-card    { background: var(--gradient-card); }
+.bg-soft    { background-color: var(--bg-soft); }
+.bg-subtle  { background-color: var(--bg-subtle); }
+
+/* ===========================
+   SECTION SPACING
+=========================== */
+.section {
+  padding: 4rem 1.25rem;
+}
+@media (min-width: 640px)  { .section { padding: 5rem 1.5rem; }  }
+@media (min-width: 1024px) { .section { padding: 6rem 2rem; }    }
+
+.section-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  width: 100%;
 }
