@@ -101,9 +101,25 @@ Input helpers: `toDateInput` (ISO → `<input type="date">` value), `toIntInput`
 
 - **Always create docs** for any new feature, config file, API route, or reusable component system
 - Docs live in `docs/` — one file per feature area (e.g. `docs/FORMS.md`, `docs/MAIL.md`)
-- Doc format: quick-start first → variant/options table → API reference → file structure
-- Update existing docs in `docs/` if the feature touches them
+- Update existing docs if a feature touches them
 - Docs are non-negotiable: if you built it, document it
+
+## Doc Format — Strict Order, No Fluff
+
+1. **One-line summary** — what it does, nothing more
+2. **Quick start** — the minimum code/config to make it work (≤10 lines)
+3. **Options table** — variants/props in a tight table: `Option | Type | Description`
+4. **Config API** — only non-obvious fields, one line each
+5. **File structure** — flat list of paths, one-line purpose per file
+
+## Doc Rules
+
+- No intros, no "Welcome to X", no motivation paragraphs
+- No "As you can see" / "Note that" / filler phrases
+- Every sentence must be actionable or reference something concrete
+- Code blocks only for things you'd actually copy-paste
+- Max 1 blank line between sections
+- If a section has nothing useful to say, omit it entirely
 
 # Core Principles
 
