@@ -15,7 +15,7 @@ interface Props {
 export default function FooterMinimal({ brand, config }: Props) {
   return (
     <footer className="border-t border-gray-200 bg-white">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-5">
+      <div className="mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-8 py-5">
         <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
           {/* Logo */}
           <span className="text-sm font-bold text-gray-900">{brand.logo}</span>

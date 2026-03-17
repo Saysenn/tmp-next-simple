@@ -36,7 +36,31 @@ function HamburgerButton({ open, onClick }: { open: boolean; onClick: () => void
   );
 }
 
+const navLinkClass: Record<string, (active: boolean) => string> = {
+  "bg-fill": (a) =>
+    `px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+      a ? "bg-indigo-50 text-indigo-700" : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+    }`,
+  "underline-center": (a) =>
+    `nav-underline-center px-2 py-1.5 text-sm font-medium transition-colors ${
+      a ? "text-indigo-600 is-active" : "text-gray-600 hover:text-indigo-600"
+    }`,
+  "underline-left": (a) =>
+    `nav-underline-left px-2 py-1.5 text-sm font-medium transition-colors ${
+      a ? "text-indigo-600 is-active" : "text-gray-600 hover:text-indigo-600"
+    }`,
+  "text-accent": (a) =>
+    `px-3 py-1.5 text-sm font-medium transition-colors ${
+      a ? "text-indigo-600 font-semibold" : "text-gray-600 hover:text-indigo-600"
+    }`,
+  "dot-below": (a) =>
+    `nav-dot-below px-3 py-2 text-sm font-medium transition-colors ${
+      a ? "text-indigo-600 is-active" : "text-gray-600 hover:text-indigo-600"
+    }`,
+};
+
 function DesktopNav({ pathname }: { pathname: string }) {
+  const getClass = navLinkClass[siteConfig.navLinkStyle] ?? navLinkClass["bg-fill"];
   return (
     <nav className="hidden md:flex items-center gap-1">
       {headerNav.map((link) => {
@@ -47,11 +71,7 @@ function DesktopNav({ pathname }: { pathname: string }) {
             href={link.href}
             target={link.external ? "_blank" : undefined}
             rel={link.external ? "noopener noreferrer" : undefined}
-            className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-              isActive
-                ? "bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300"
-                : "text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-800"
-            }`}
+            className={getClass(isActive)}
           >
             {link.label}
           </Link>
@@ -83,7 +103,7 @@ function NavHeader() {
           siteConfig.headerSticky ? "sticky top-0 z-50" : "relative"
         } bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700`}
       >
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center h-16">
             <Logo
               type={siteConfig.logoType}

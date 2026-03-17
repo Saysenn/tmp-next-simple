@@ -18,7 +18,7 @@ export default function FooterBrand({ brand, config }: Props) {
       {/* Gradient accent line */}
       <div className="h-[3px] w-full bg-linear-to-r from-indigo-500 to-purple-500" />
 
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-16">
+      <div className="mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-8 py-16">
         {/* Main brand statement */}
         <div className="mb-10">
           <h2 className="text-4xl font-bold leading-tight text-gray-900 sm:text-5xl">

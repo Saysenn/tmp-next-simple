@@ -17,6 +17,13 @@ export type HeaderType =
   | "menu-only"      // logo + Menu button on all screen sizes
   | "centered-logo"; // centered logo only, no nav
 
+export type NavLinkStyle =
+  | "bg-fill"          // background pill changes on hover/active (default)
+  | "underline-center" // underline expands from center outward
+  | "underline-left"   // underline slides in from left to right
+  | "text-accent"      // text color shifts to accent, no background
+  | "dot-below";       // small dot appears below the active/hovered item
+
 export type NavLink = {
   label: string;
   href: string;
@@ -38,6 +45,7 @@ export type HeaderConfig = {
   headerType: HeaderType;
   mobileMenuType: MobileMenuType;
   headerSticky: boolean;
+  navLinkStyle: NavLinkStyle;
   cta: CtaConfig;
 };
 
@@ -57,6 +65,9 @@ export const siteConfig: HeaderConfig = {
   mobileMenuType: "drawer",
 
   headerSticky: true,
+
+  // "bg-fill" | "underline-center" | "underline-left" | "text-accent" | "dot-below"
+  navLinkStyle: "bg-fill",
 
   cta: {
     enabled: true,

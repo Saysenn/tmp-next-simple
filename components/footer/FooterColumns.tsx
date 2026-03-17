@@ -18,7 +18,7 @@ export default function FooterColumns({ brand, config }: Props) {
 
   return (
     <footer className="bg-gray-50 border-t border-gray-200">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12">
+      <div className="mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
 
           {/* Col 1 — Contents */}

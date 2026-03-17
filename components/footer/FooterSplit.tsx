@@ -17,7 +17,7 @@ export default function FooterSplit({ brand, config }: Props) {
     <footer>
       {/* Upper zone */}
       <div className="border-t border-gray-200 bg-gray-50">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12">
+        <div className="mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-8 py-12">
           <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
             {/* Left — logo + tagline */}
             <div className="max-w-xs">
@@ -45,7 +45,7 @@ export default function FooterSplit({ brand, config }: Props) {
 
       {/* Lower zone */}
       <div className="bg-gray-100">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-5">
+        <div className="mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-8 py-5">
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
             <p className="text-xs text-gray-400">{config.copyright}</p>
             {config.socials.length > 0 && <SocialIcons socials={config.socials} />}

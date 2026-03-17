@@ -177,3 +177,55 @@ small, .text-caption {
   margin: 0 auto;
   width: 100%;
 }
+
+/* ===========================
+   NAV LINK STYLES
+   Controlled via navLinkStyle in configs/header.ts
+=========================== */
+
+/* underline-center — expands from center outward */
+.nav-underline-center,
+.nav-underline-left {
+  position: relative;
+}
+.nav-underline-center::after,
+.nav-underline-left::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--accent);
+  transform: scaleX(0);
+  transition: transform 0.25s ease;
+}
+.nav-underline-center::after  { transform-origin: center; }
+.nav-underline-left::after    { transform-origin: left; }
+.nav-underline-center:hover::after,
+.nav-underline-center.is-active::after,
+.nav-underline-left:hover::after,
+.nav-underline-left.is-active::after {
+  transform: scaleX(1);
+}
+
+/* dot-below — small dot appears below hovered/active item */
+.nav-dot-below {
+  position: relative;
+}
+.nav-dot-below::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  border-radius: 9999px;
+  background-color: var(--accent);
+  transform: translateX(-50%) scale(0);
+  transition: transform 0.2s ease;
+}
+.nav-dot-below:hover::after,
+.nav-dot-below.is-active::after {
+  transform: translateX(-50%) scale(1);
+}
