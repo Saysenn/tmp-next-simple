@@ -54,7 +54,7 @@ export type CompanyInfo = {
 // ─── Config ───────────────────────────────────────────────────
 
 // Footer layout — switch between: "columns" | "minimal" | "centered" | "brand" | "split" | "info"
-export const footerLayout: FooterLayout = "columns";
+export const footerLayout: FooterLayout = "info";
 
 // ─── Legal links (used by all footer layouts) ─────────────────
 
@@ -72,12 +72,6 @@ export const footerSections: FooterSection[] = [
       { label: "About Us", href: "/about" },
       { label: "Why Choose Us", href: "/why-us" },
       { label: "Services", href: "/services" },
-    ],
-  },
-  {
-    title: "Support",
-    links: [
-      { label: "Contact Us", href: "/contact" },
     ],
   },
 ];

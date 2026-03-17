@@ -1,27 +1,30 @@
 /**
- * FooterColumns — brand | nav sections | legal + social
+ * FooterColumns — 4 fixed columns: Contents | Company | Legal | Contact
  * Best for: SaaS products, startups, B2B sites.
  */
 
 import Link from "next/link";
 import { SocialIcons } from "./_social-icons";
+import Logo from "@/components/header/Logo";
 import type { FooterConfig, HeaderConfig } from "@/lib/config";
 
 interface Props {
-  brand: Pick<HeaderConfig, "logo">;
+  brand: Pick<HeaderConfig, "logo" | "logoType" | "logoImageSrc">;
   config: FooterConfig;
 }
 
 export default function FooterColumns({ brand, config }: Props) {
+  const company = config.sections.find((s) => s.title === "Company");
+
   return (
     <footer className="bg-gray-50 border-t border-gray-200">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12">
-        {/* Grid: brand col + section cols + legal col */}
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-          {/* Brand */}
-          <div className="sm:col-span-2 lg:col-span-1">
-            <p className="text-lg font-bold text-gray-900">{brand.logo}</p>
-            <p className="mt-3 text-sm text-gray-500 leading-relaxed max-w-xs">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
+
+          {/* Col 1 — Contents */}
+          <div>
+            <Logo type={brand.logoType} name={brand.logo} imageSrc={brand.logoImageSrc} />
+            <p className="mt-3 text-sm text-gray-500 leading-relaxed">
               {config.tagline}
             </p>
             {config.socials.length > 0 && (
@@ -31,14 +34,14 @@ export default function FooterColumns({ brand, config }: Props) {
             )}
           </div>
 
-          {/* Nav sections */}
-          {config.sections.map((section) => (
-            <div key={section.title}>
+          {/* Col 2 — Company */}
+          {company && (
+            <div>
               <h3 className="text-xs font-semibold text-gray-900 uppercase tracking-widest">
-                {section.title}
+                Company
               </h3>
               <ul className="mt-4 space-y-2.5">
-                {section.links.map((link) => (
+                {company.links.map((link) => (
                   <li key={link.href}>
                     <Link
                       href={link.href}
@@ -51,9 +54,9 @@ export default function FooterColumns({ brand, config }: Props) {
                 ))}
               </ul>
             </div>
-          ))}
+          )}
 
-          {/* Legal */}
+          {/* Col 3 — Legal */}
           <div>
             <h3 className="text-xs font-semibold text-gray-900 uppercase tracking-widest">
               Legal
@@ -71,6 +74,41 @@ export default function FooterColumns({ brand, config }: Props) {
               ))}
             </ul>
           </div>
+
+          {/* Col 4 — Contact */}
+          <div>
+            <h3 className="text-xs font-semibold text-gray-900 uppercase tracking-widest">
+              Contact
+            </h3>
+            <ul className="mt-4 space-y-2.5">
+              {config.companyInfo.address && (
+                <li className="text-sm text-gray-500 leading-relaxed">
+                  {config.companyInfo.address}
+                </li>
+              )}
+              {config.companyInfo.email && (
+                <li>
+                  <a
+                    href={`mailto:${config.companyInfo.email}`}
+                    className="text-sm text-gray-500 hover:text-indigo-600 transition-colors"
+                  >
+                    {config.companyInfo.email}
+                  </a>
+                </li>
+              )}
+              {config.companyInfo.phone && (
+                <li>
+                  <a
+                    href={`tel:${config.companyInfo.phone}`}
+                    className="text-sm text-gray-500 hover:text-indigo-600 transition-colors"
+                  >
+                    {config.companyInfo.phone}
+                  </a>
+                </li>
+              )}
+            </ul>
+          </div>
+
         </div>
 
         {/* Bottom bar */}

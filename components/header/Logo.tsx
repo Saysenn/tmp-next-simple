@@ -31,6 +31,16 @@ type LogoProps = {
 };
 
 export default function Logo({ type, name, imageSrc }: LogoProps) {
+  if (type === "image") {
+    return (
+      <Link href="/" aria-label={name}>
+        {imageSrc && (
+          <Image src={imageSrc} alt={name} width={0} height={0} sizes="100vw" className="h-10 w-auto" />
+        )}
+      </Link>
+    );
+  }
+
   if (type === "image-text") {
     return (
       <Link href="/" className="flex items-center gap-2.5 text-lg font-semibold">
