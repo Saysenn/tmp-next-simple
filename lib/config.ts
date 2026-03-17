@@ -7,6 +7,7 @@
 // ─────────────────────────────────────────────────────────────
 
 import { siteConfig, headerNav } from "@/configs/header";
+import type { LogoType } from "@/configs/header";
 import { socialLinks, footerSections, legalLinks, companyInfo } from "@/configs/footer";
 import type { CompanyInfo } from "@/configs/footer";
 
@@ -25,9 +26,10 @@ export type LinkItem = {
 
 export type HeaderConfig = {
   logo: string;
+  logoType: LogoType;
+  logoImageSrc?: string;
   nav: LinkItem[];
-  ctaLabel?: string;
-  ctaHref?: string;
+  cta: { enabled: boolean; label: string; href: string };
 };
 
 export type FooterConfig = {
@@ -43,9 +45,10 @@ export type FooterConfig = {
 
 export const headerConfig: HeaderConfig = {
   logo: siteConfig.name,
+  logoType: siteConfig.logoType,
+  logoImageSrc: siteConfig.logoImageSrc,
   nav: headerNav,
-  ctaLabel: siteConfig.ctaLabel,
-  ctaHref: siteConfig.ctaHref,
+  cta: siteConfig.cta,
 };
 
 export const footerConfig: FooterConfig = {
