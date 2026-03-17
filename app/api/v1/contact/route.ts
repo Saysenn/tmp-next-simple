@@ -1,10 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { render } from "@react-email/render";
-import ContactFormEmail from "@/emails/ContactFormEmail";
+import { ContactEmailBold, ContactEmailClassic, ContactEmailMinimal } from "@/emails";
 import { sendEmail, sanitizeInput, validateEmailStrict } from "@/lib/services/mail";
 import { verifyCaptchaToken } from "@/lib/services/captcha";
 import { mailConfig } from "@/configs/mail";
 import { formsConfig } from "@/configs/forms";
+import { emailTemplatesConfig } from "@/configs/email-templates";
+
+const contactTemplates = {
+  bold: ContactEmailBold,
+  classic: ContactEmailClassic,
+  minimal: ContactEmailMinimal,
+};
 
 type ContactFormData = {
   name: string;
@@ -65,6 +72,10 @@ Sent from the contact form.
 
 export async function POST(request: NextRequest) {
   try {
+    if (request.headers.get("content-type") !== "application/json") {
+      return NextResponse.json({ error: "Unsupported content type" }, { status: 415 });
+    }
+
     const ip = getRateLimitKey(request);
     const { allowed, remaining } = checkRateLimit(ip);
 
@@ -135,7 +146,8 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const emailComponent = ContactFormEmail({ name, email, phone, message });
+    const Template = contactTemplates[emailTemplatesConfig.contactTemplate];
+    const emailComponent = Template({ name, email, phone, message });
     const html = await render(emailComponent);
     const text = generatePlainText(name, email, phone, message);
 
@@ -154,6 +166,6 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     const msg = error instanceof Error ? error.message : "Unknown error";
     console.error("Contact form error:", msg);
-    return NextResponse.json({ error: `Email failed: ${msg}` }, { status: 500 });
+    return NextResponse.json({ error: "Failed to send message. Please try again." }, { status: 500 });
   }
 }

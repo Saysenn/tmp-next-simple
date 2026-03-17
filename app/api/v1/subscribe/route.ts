@@ -1,10 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { render } from "@react-email/render";
-import SubscribeEmail from "@/emails/SubscribeEmail";
+import { SubscribeEmailBold, SubscribeEmailClassic, SubscribeEmailMinimal } from "@/emails";
 import { sendEmail, sanitizeInput, validateEmailStrict } from "@/lib/services/mail";
 import { verifyCaptchaToken } from "@/lib/services/captcha";
 import { mailConfig } from "@/configs/mail";
 import { formsConfig } from "@/configs/forms";
+import { emailTemplatesConfig } from "@/configs/email-templates";
+
+const subscribeTemplates = {
+  bold: SubscribeEmailBold,
+  classic: SubscribeEmailClassic,
+  minimal: SubscribeEmailMinimal,
+};
 
 type SubscribeFormData = {
   name?: string;
@@ -48,6 +55,10 @@ function checkRateLimit(ip: string): { allowed: boolean; remaining: number } {
 
 export async function POST(request: NextRequest) {
   try {
+    if (request.headers.get("content-type") !== "application/json") {
+      return NextResponse.json({ error: "Unsupported content type" }, { status: 415 });
+    }
+
     const ip = getRateLimitKey(request);
     const { allowed, remaining } = checkRateLimit(ip);
 
@@ -109,7 +120,8 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const emailComponent = SubscribeEmail({ name, email, role });
+    const Template = subscribeTemplates[emailTemplatesConfig.subscribeTemplate];
+    const emailComponent = Template({ name, email, role });
     const html = await render(emailComponent);
 
     await sendEmail({
@@ -126,6 +138,6 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     const msg = error instanceof Error ? error.message : "Unknown error";
     console.error("Subscribe form error:", msg);
-    return NextResponse.json({ error: `Signup failed: ${msg}` }, { status: 500 });
+    return NextResponse.json({ error: "Failed to sign up. Please try again." }, { status: 500 });
   }
 }
