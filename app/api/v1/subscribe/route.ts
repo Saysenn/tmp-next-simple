@@ -81,7 +81,11 @@ export async function POST(request: NextRequest) {
     // Strip newlines to prevent email header injection via subject line
     const rawName = body.name ? body.name.trim().replace(/[\r\n]/g, " ") : undefined;
     const name = rawName ? sanitizeInput(rawName) : undefined;
-    const role = body.role ? sanitizeInput(body.role.trim()) : undefined;
+    const rawRole = body.role ? body.role.trim() : undefined;
+    if (rawRole && !formsConfig.subscribeForm.roleOptions.includes(rawRole)) {
+      return NextResponse.json({ error: "Invalid role selection" }, { status: 400 });
+    }
+    const role = rawRole ? sanitizeInput(rawRole) : undefined;
     const captchaToken = body.captchaToken ?? null;
 
     if (!email) {
