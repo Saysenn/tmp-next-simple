@@ -121,6 +121,19 @@ Input helpers: `toDateInput` (ISO → `<input type="date">` value), `toIntInput`
 - Max 1 blank line between sections
 - If a section has nothing useful to say, omit it entirely
 
+# Legal & Compliance
+
+See `.claude/legal.md` for the full ruleset. Summary:
+
+- **Ask first**: Before writing any legal page or compliance component, verify all company info is complete. If anything is missing or placeholder, STOP and ask the user.
+- **Required pages**: Every project must ship with `/privacy`, `/terms`, and a cookie consent banner. Do not consider a project complete without them.
+- **Cookie banner**: `components/cookie/CookieBannerModal.tsx` — must show on first visit, offer Accept / Reject / Manage Preferences, and gate non-essential scripts behind consent.
+- **Anti-slavery**: Optional but recommended for payroll/labour sectors — route `/anti-slavery`, add to footer legal links if built.
+- **Company info source of truth**: store in a single config file (e.g. `configs/footer.ts`) — never hardcode company details inline in components or pages.
+- **Page requirements**: Homepage must have a reviews section. About page must have a map. Contact page must show company info block. Footer must show company name, address, and email.
+- **Footer layout standard**: 4 columns — (1) Logo + description + social icons, (2) Company links, (3) Legal links, (4) Contact info. **Strictly ask the user before building the footer: "Do you want to proceed with the standard 4-column footer layout (Logo/Description/Socials | Company | Legal | Contact)?" — never implement without explicit confirmation.**
+- **GDPR/CCPA**: Forms need consent checkboxes, API routes must not log PII, all outbound emails must include company address and opt-out.
+
 # Core Principles
 
 - **Simplicity First**: Make every change as simple as possible. Impact minimal code.
