@@ -31,10 +31,10 @@ export default function CTAHeader() {
           />
 
           <Link
-            href={siteConfig.ctaHref ?? "/"}
+            href={siteConfig.cta.href}
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 active:bg-indigo-800 transition-colors"
           >
-            {siteConfig.ctaLabel ?? "Get Started"}
+            {siteConfig.cta.label}
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
               <path d="M2.5 7h9M8 3.5L11.5 7 8 10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>

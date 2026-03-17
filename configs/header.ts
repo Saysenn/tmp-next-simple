@@ -2,6 +2,7 @@
 
 export type LogoType =
   | "text"        // bold site name only
+  | "image"       // image only, larger size — no text
   | "image-text"  // image + site name
   | "icon-text";  // geometric icon + site name
 
@@ -22,6 +23,12 @@ export type NavLink = {
   external?: boolean;
 };
 
+export type CtaConfig = {
+  enabled: boolean; // toggle CTA button on/off across all header types
+  label: string;
+  href: string;
+};
+
 export type HeaderConfig = {
   name: string;
   description: string;
@@ -31,8 +38,7 @@ export type HeaderConfig = {
   headerType: HeaderType;
   mobileMenuType: MobileMenuType;
   headerSticky: boolean;
-  ctaLabel?: string; // used when headerType is "cta"
-  ctaHref?: string;  // used when headerType is "cta"
+  cta: CtaConfig;
 };
 
 export const siteConfig: HeaderConfig = {
@@ -40,20 +46,23 @@ export const siteConfig: HeaderConfig = {
   description: "Your app description here.",
   copyright: `© ${new Date().getFullYear()} MyApp. All rights reserved.`,
 
-  // "text" | "image-text" | "icon-text"
+  // "text" | "image" | "image-text" | "icon-text"
   logoType: "icon-text",
   logoImageSrc: "/logo.png",
 
   // "nav" | "cta" | "menu-only" | "centered-logo"
-  headerType: "cta",
+  headerType: "nav",
 
   // "drawer" | "dropdown" | "fullscreen"
   mobileMenuType: "drawer",
 
   headerSticky: true,
 
-  ctaLabel: "Get Started",
-  ctaHref: "/get-started",
+  cta: {
+    enabled: true,
+    label: "Get Started",
+    href: "/get-started",
+  },
 };
 
 export const headerNav: NavLink[] = [

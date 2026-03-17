@@ -84,14 +84,27 @@ function NavHeader() {
         } bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700`}
       >
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex items-center h-16">
             <Logo
               type={siteConfig.logoType}
               imageSrc={siteConfig.logoImageSrc}
               name={siteConfig.name}
             />
-            <DesktopNav pathname={pathname} />
-            <HamburgerButton open={menuOpen} onClick={() => setMenuOpen((v) => !v)} />
+            <div className="ml-auto flex items-center gap-2">
+              <DesktopNav pathname={pathname} />
+              {siteConfig.cta.enabled && (
+                <Link
+                  href={siteConfig.cta.href}
+                  className="hidden md:inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 active:bg-indigo-800 transition-colors"
+                >
+                  {siteConfig.cta.label}
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                    <path d="M2.5 7h9M8 3.5L11.5 7 8 10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </Link>
+              )}
+              <HamburgerButton open={menuOpen} onClick={() => setMenuOpen((v) => !v)} />
+            </div>
           </div>
           {isDropdown && <DropdownHeader {...menuProps} />}
         </div>
