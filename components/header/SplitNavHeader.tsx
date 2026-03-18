@@ -1,0 +1,110 @@
+"use client";
+
+// SplitNavHeader — 3-column layout: Nav links | Logo (center) | CTA
+// Mobile collapses to Logo + hamburger (uses mobileMenuType from config)
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { headerNav, siteConfig } from "@/configs/header";
+import Logo from "@/components/header/Logo";
+import DrawerHeader from "@/components/header/DrawerHeader";
+import DropdownHeader from "@/components/header/DropdownHeader";
+import FullscreenHeader from "@/components/header/FullscreenHeader";
+
+function HamburgerButton({ open, onClick }: { open: boolean; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={open ? "Close menu" : "Open menu"}
+      aria-expanded={open}
+      className="md:hidden flex flex-col justify-center items-center w-9 h-9 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+    >
+      <span className={`block w-5 h-0.5 bg-current transition-all duration-300 ${open ? "rotate-45 translate-y-1" : ""}`} />
+      <span className={`block w-5 h-0.5 bg-current mt-1 transition-all duration-300 ${open ? "opacity-0" : ""}`} />
+      <span className={`block w-5 h-0.5 bg-current mt-1 transition-all duration-300 ${open ? "-rotate-45 -translate-y-2" : ""}`} />
+    </button>
+  );
+}
+
+export default function SplitNavHeader() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const type = siteConfig.mobileMenuType;
+  const isDropdown = type === "dropdown";
+
+  useEffect(() => { setMenuOpen(false); }, [pathname]);
+  useEffect(() => {
+    document.body.style.overflow = menuOpen && !isDropdown ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [menuOpen, isDropdown]);
+
+  const menuProps = { open: menuOpen, onClose: () => setMenuOpen(false), pathname };
+
+  return (
+    <>
+      <header
+        className={`${
+          siteConfig.headerSticky ? "sticky top-0 z-50" : "relative"
+        } bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700`}
+      >
+        <div className="relative max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-3 grid-cols-2 items-center h-16">
+
+            {/* Col 1: Nav links — desktop only */}
+            <nav className="hidden md:flex items-center gap-1">
+              {headerNav.map((link) => {
+                const isActive = pathname === link.href;
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    target={link.external ? "_blank" : undefined}
+                    rel={link.external ? "noopener noreferrer" : undefined}
+                    className={`whitespace-nowrap px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                      isActive
+                        ? "bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400"
+                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-800"
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
+            </nav>
+
+            {/* Col 2: Logo — always centered */}
+            <div className="flex items-center justify-center">
+              <Logo
+                type={siteConfig.logoType}
+                imageSrc={siteConfig.logoImageSrc}
+                name={siteConfig.name}
+              />
+            </div>
+
+            {/* Col 3: CTA + mobile hamburger */}
+            <div className="flex items-center justify-end gap-2">
+              {siteConfig.cta.enabled && (
+                <Link
+                  href={siteConfig.cta.href}
+                  className="hidden md:inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 active:bg-indigo-800 transition-colors"
+                >
+                  {siteConfig.cta.label}
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                    <path d="M2.5 7h9M8 3.5L11.5 7 8 10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </Link>
+              )}
+              <HamburgerButton open={menuOpen} onClick={() => setMenuOpen((v) => !v)} />
+            </div>
+
+          </div>
+          {isDropdown && <DropdownHeader {...menuProps} />}
+        </div>
+      </header>
+      {type === "drawer" && <DrawerHeader {...menuProps} />}
+      {type === "fullscreen" && <FullscreenHeader {...menuProps} />}
+    </>
+  );
+}

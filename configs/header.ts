@@ -14,6 +14,7 @@ export type MobileMenuType =
 export type HeaderType =
   | "nav"            // logo + desktop nav + mobile hamburger (default)
   | "floating-nav"   // 3-col: logo | glass pill nav (centered) | cta
+  | "split-nav"      // 3-col: nav links | logo (centered) | cta
   | "cta"            // logo + single CTA button, no nav
   | "menu-only"      // logo + Menu button on all screen sizes
   | "centered-logo"; // centered logo only, no nav
@@ -59,8 +60,8 @@ export const siteConfig: HeaderConfig = {
   logoType: "icon-text",
   logoImageSrc: "/logo.png",
 
-  // "nav" | "floating-nav" | "cta" | "menu-only" | "centered-logo"
-  headerType: "floating-nav",
+  // "nav" | "floating-nav" | "split-nav" | "cta" | "menu-only" | "centered-logo"
+  headerType: "split-nav",
 
   // "drawer" | "dropdown" | "fullscreen"
   mobileMenuType: "drawer",
@@ -80,7 +81,6 @@ export const siteConfig: HeaderConfig = {
 export const headerNav: NavLink[] = [
   { label: "Home", href: "/" },
   { label: "About Us", href: "/about" },
-  { label: "Why Choose Us", href: "/why-us" },
   { label: "Services", href: "/services" },
-  { label: "Contact Us", href: "/contact" },
+  { label: "Contact", href: "/contact" },
 ];

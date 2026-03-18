@@ -3,6 +3,7 @@
 // Header switcher — change headerType in configs/header.ts to switch layouts.
 // "nav"           → logo + desktop nav + mobile hamburger
 // "floating-nav"  → 3-col: logo | glass pill nav (centered) | cta
+// "split-nav"     → 3-col: nav links | logo (centered) | cta
 // "cta"           → logo + single CTA button
 // "menu-only"     → logo + Menu button on all sizes
 // "centered-logo" → centered logo only, no nav
@@ -16,6 +17,7 @@ import CTAHeader from "@/components/header/CTAHeader";
 import MenuOnlyHeader from "@/components/header/MenuOnlyHeader";
 import CenteredLogoHeader from "@/components/header/CenteredLogoHeader";
 import FloatingNavHeader from "@/components/header/FloatingNavHeader";
+import SplitNavHeader from "@/components/header/SplitNavHeader";
 import DrawerHeader from "@/components/header/DrawerHeader";
 import DropdownHeader from "@/components/header/DropdownHeader";
 import FullscreenHeader from "@/components/header/FullscreenHeader";
@@ -144,5 +146,6 @@ export default function Header() {
   if (siteConfig.headerType === "menu-only") return <MenuOnlyHeader />;
   if (siteConfig.headerType === "centered-logo") return <CenteredLogoHeader />;
   if (siteConfig.headerType === "floating-nav") return <FloatingNavHeader />;
+  if (siteConfig.headerType === "split-nav") return <SplitNavHeader />;
   return <NavHeader />;
 }
