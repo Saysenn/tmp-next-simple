@@ -144,6 +144,45 @@ See `.claude/legal.md` for the full ruleset. Summary:
 - **Footer layout standard**: 4 columns — (1) Logo + description + social icons, (2) Company links, (3) Legal links, (4) Contact info. **Strictly ask the user before building the footer: "Do you want to proceed with the standard 4-column footer layout (Logo/Description/Socials | Company | Legal | Contact)?" — never implement without explicit confirmation.**
 - **GDPR/CCPA**: Forms need consent checkboxes, API routes must not log PII, all outbound emails must include company address and opt-out.
 
+# Styling Rules
+
+## Color Scheme — Never Hardcode Colors
+
+- **All accent colors** must use CSS variables from `app/globals.css` (`var(--accent)`, `var(--accent-hover)`, `var(--accent-light)`, etc.) — never hardcode hex values or Tailwind color classes like `indigo-600` for brand colors
+- To change the color scheme, tell the user: **"Adjust the CSS variables in `app/globals.css` — change `--accent` to retheme the whole site"**
+- Background, text, and border colors should use the defined variables where possible
+
+## Layout — Never Force a Structure
+
+- **Never impose a specific page layout or section order** without asking first
+- **Never add sections** (hero, features, testimonials, pricing, FAQ, etc.) beyond what was asked
+- **Never assume a grid or column count** — ask if the layout preference isn't explicit
+- Simple, clean, and minimal is the default — let the user drive visual decisions
+- If unsure about a layout choice, describe the options and ask before building
+
+## Component Styling — Defaults Only
+
+- Use Tailwind utility classes for all styling — no inline `style=` props unless unavoidable
+- Default to the project's existing spacing, typography, and color patterns — don't introduce new design languages
+- Never add animations or transitions that weren't asked for — Tailwind hover/focus transitions are fine, GSAP only when explicitly requested
+
+## UI/UX Craftsmanship — Think Like a Senior Designer
+
+Every section and component you build must feel intentional and polished. Before writing JSX, ask yourself: *"Would a senior UI/UX designer be proud of this?"*
+
+- **Avoid cookie-cutter layouts** — don't default to the same centered-heading + paragraph + button pattern every time. Vary alignment (left-aligned hero, offset grids, asymmetric splits), whitespace, and visual hierarchy
+- **Think in contrast and rhythm** — alternate dense and breathable sections, vary type sizes deliberately, use spacing to guide the eye
+- **Use visual anchors** — subtle background tints, gradient accents, bordered cards, or decorative elements to break monotony without clutter
+- **Typography matters** — use size, weight, and color contrast to establish clear hierarchy (headline → subheading → body → caption). Never make everything the same size
+- **Responsive means intentional at every breakpoint** — mobile layout should be a deliberate design decision, not just stacked columns
+- **Micro-details count** — rounded corners, shadow depth, icon sizing, and padding consistency signal quality. Match them across the page
+- **When in doubt, go asymmetric** — a left-aligned stat block, an offset image, a pull quote in a side column — these signal craft over templates
+- **Leverage the right UI pattern for the content:**
+  - **Breadcrumbs** — use on any page deeper than 1 level (e.g. blog post, service detail, docs). Never make users guess where they are
+  - **Accordions** — use for FAQs, feature breakdowns, long content lists. Prefer over walls of text
+  - **Carousels (Swiper)** — use for testimonials, portfolio items, team members, logo grids, or any repeating card set with 4+ items. Always import from `@/lib/infra/swiper.ts`
+  - Choose the pattern that best serves the content — don't force flat lists when a smarter component exists
+
 # Core Principles
 
 - **Simplicity First**: Make every change as simple as possible. Impact minimal code.
