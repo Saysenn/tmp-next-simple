@@ -59,10 +59,19 @@
 | --------------------- | -------------------------------------------------------------------------------------------------------- |
 | `lib/infra/axios.ts`  | Singleton HTTP client — reusable `get`, `post`, `put`, `delete` with auto 401 redirect                   |
 | `lib/infra/api.ts`    | **All API URLs live here**, grouped by domain. Add new endpoints here, never hardcode URLs in components |
+| `lib/infra/gsap.ts`   | GSAP singleton — plugins registered here. **Always import `gsap` and `ScrollTrigger` from here, never from `gsap` directly** |
+| `lib/infra/swiper.ts` | Swiper singleton — modules + CSS imported here. **Always import Swiper modules from here, never from `swiper` directly** |
 | `lib/utils/format.ts` | **ALL** formatting/conversion helpers go here — dates, durations, initials, input converters, ms→hours, etc. NEVER define these inline in components |
 | `lib/utils/cn.ts`     | Tailwind class merging ONLY (`cn`) — not for general utilities                                           |
 | `configs/`            | App-wide constants (RBAC rules, auth routes, etc.)                                                       |
 | `providers/`          | React context providers — check here before writing a new one                                            |
+
+## Animations & Carousels — Mandatory libraries
+
+- **Animations**: always use GSAP (`@/lib/infra/gsap.ts`) — never use raw CSS `@keyframes` or other JS animation libraries (Framer Motion, AOS, etc.) for complex animations
+- **Scroll-triggered animations**: use `ScrollTrigger` from `@/lib/infra/gsap.ts` — never `IntersectionObserver` manually for animation purposes
+- **Carousels / sliders**: always use Swiper (`swiper/react`) with modules from `@/lib/infra/swiper.ts` — never build custom carousel logic or use other libraries (Embla, Keen Slider, etc.)
+- Simple CSS transitions (hover, fade, slide) are fine with Tailwind — GSAP is for multi-step or scroll-driven sequences
 
 ## Key utility functions already in `lib/utils/format.ts`
 
