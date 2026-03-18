@@ -115,6 +115,20 @@ Apply whenever building forms, API routes, or data-handling features:
 
 ---
 
+## Default Pages — What to Build by Default
+
+**Always build these 5 pages by default, nothing more:**
+
+| Page    | Route      |
+| ------- | ---------- |
+| Home    | `/`        |
+| About   | `/about`   |
+| Contact | `/contact` |
+| Terms   | `/terms`   |
+| Privacy | `/privacy` |
+
+**Never add extra pages (Services, Why Us, FAQ, Pricing, Blog, etc.) without explicitly asking the user first.** Ask once, clearly: "Do you want a Services page?" — if they say no or don't respond, skip it.
+
 ## Page-Level Requirements
 
 ### Homepage — Reviews / Testimonials
