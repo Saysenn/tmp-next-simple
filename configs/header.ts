@@ -13,6 +13,7 @@ export type MobileMenuType =
 
 export type HeaderType =
   | "nav"            // logo + desktop nav + mobile hamburger (default)
+  | "floating-nav"   // 3-col: logo | glass pill nav (centered) | cta
   | "cta"            // logo + single CTA button, no nav
   | "menu-only"      // logo + Menu button on all screen sizes
   | "centered-logo"; // centered logo only, no nav
@@ -58,8 +59,8 @@ export const siteConfig: HeaderConfig = {
   logoType: "icon-text",
   logoImageSrc: "/logo.png",
 
-  // "nav" | "cta" | "menu-only" | "centered-logo"
-  headerType: "nav",
+  // "nav" | "floating-nav" | "cta" | "menu-only" | "centered-logo"
+  headerType: "floating-nav",
 
   // "drawer" | "dropdown" | "fullscreen"
   mobileMenuType: "drawer",
@@ -68,7 +69,7 @@ export const siteConfig: HeaderConfig = {
 
   // "bg-fill" | "underline-center" | "underline-left" | "text-accent" | "dot-below"
   navLinkStyle: "bg-fill",
-
+ 
   cta: {
     enabled: true,
     label: "Get Started",

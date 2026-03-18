@@ -1,26 +1,16 @@
 "use client";
 
-// Header switcher — change headerType in configs/header.ts to switch layouts.
-// "nav"           → logo + desktop nav + mobile hamburger
-// "floating-nav"  → 3-col: logo | glass pill nav (centered) | cta
-// "cta"           → logo + single CTA button
-// "menu-only"     → logo + Menu button on all sizes
-// "centered-logo" → centered logo only, no nav
+// FloatingNavHeader — 3-column layout: Logo | Glass pill nav | CTA
+// Mobile collapses to Logo + hamburger (uses mobileMenuType from config)
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { headerNav, siteConfig } from "@/configs/header";
 import Logo from "@/components/header/Logo";
-import CTAHeader from "@/components/header/CTAHeader";
-import MenuOnlyHeader from "@/components/header/MenuOnlyHeader";
-import CenteredLogoHeader from "@/components/header/CenteredLogoHeader";
-import FloatingNavHeader from "@/components/header/FloatingNavHeader";
 import DrawerHeader from "@/components/header/DrawerHeader";
 import DropdownHeader from "@/components/header/DropdownHeader";
 import FullscreenHeader from "@/components/header/FullscreenHeader";
-
-// ─── NavHeader (default) ──────────────────────────────────────
 
 function HamburgerButton({ open, onClick }: { open: boolean; onClick: () => void }) {
   return (
@@ -38,33 +28,9 @@ function HamburgerButton({ open, onClick }: { open: boolean; onClick: () => void
   );
 }
 
-const navLinkClass: Record<string, (active: boolean) => string> = {
-  "bg-fill": (a) =>
-    `px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-      a ? "bg-indigo-50 text-indigo-700" : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-    }`,
-  "underline-center": (a) =>
-    `nav-underline-center px-2 py-1.5 text-sm font-medium transition-colors ${
-      a ? "text-indigo-600 is-active" : "text-gray-600 hover:text-indigo-600"
-    }`,
-  "underline-left": (a) =>
-    `nav-underline-left px-2 py-1.5 text-sm font-medium transition-colors ${
-      a ? "text-indigo-600 is-active" : "text-gray-600 hover:text-indigo-600"
-    }`,
-  "text-accent": (a) =>
-    `px-3 py-1.5 text-sm font-medium transition-colors ${
-      a ? "text-indigo-600 font-semibold" : "text-gray-600 hover:text-indigo-600"
-    }`,
-  "dot-below": (a) =>
-    `nav-dot-below px-3 py-2 text-sm font-medium transition-colors ${
-      a ? "text-indigo-600 is-active" : "text-gray-600 hover:text-indigo-600"
-    }`,
-};
-
-function DesktopNav({ pathname }: { pathname: string }) {
-  const getClass = navLinkClass[siteConfig.navLinkStyle] ?? navLinkClass["bg-fill"];
+function GlassNav({ pathname }: { pathname: string }) {
   return (
-    <nav className="hidden md:flex items-center gap-1">
+    <nav className="hidden md:flex items-center gap-0.5 bg-white/70 dark:bg-gray-800/70 backdrop-blur-md border border-gray-200/60 dark:border-gray-700/40 rounded-full px-2 py-1 shadow-sm">
       {headerNav.map((link) => {
         const isActive = pathname === link.href;
         return (
@@ -73,7 +39,11 @@ function DesktopNav({ pathname }: { pathname: string }) {
             href={link.href}
             target={link.external ? "_blank" : undefined}
             rel={link.external ? "noopener noreferrer" : undefined}
-            className={getClass(isActive)}
+            className={`whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
+              isActive
+                ? "bg-white dark:bg-gray-700 text-indigo-600 dark:text-indigo-400 shadow-sm"
+                : "text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-white/60 dark:hover:bg-gray-700/60"
+            }`}
           >
             {link.label}
           </Link>
@@ -83,14 +53,13 @@ function DesktopNav({ pathname }: { pathname: string }) {
   );
 }
 
-function NavHeader() {
+export default function FloatingNavHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
   const type = siteConfig.mobileMenuType;
   const isDropdown = type === "dropdown";
 
   useEffect(() => { setMenuOpen(false); }, [pathname]);
-
   useEffect(() => {
     document.body.style.overflow = menuOpen && !isDropdown ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
@@ -103,17 +72,27 @@ function NavHeader() {
       <header
         className={`${
           siteConfig.headerSticky ? "sticky top-0 z-50" : "relative"
-        } bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700`}
+        }`}
       >
         <div className="relative max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center h-16">
-            <Logo
-              type={siteConfig.logoType}
-              imageSrc={siteConfig.logoImageSrc}
-              name={siteConfig.name}
-            />
-            <div className="ml-auto flex items-center gap-2">
-              <DesktopNav pathname={pathname} />
+          <div className="grid md:grid-cols-3 grid-cols-2 items-center h-16 py-3">
+
+            {/* Col 1: Logo */}
+            <div className="flex items-center">
+              <Logo
+                type={siteConfig.logoType}
+                imageSrc={siteConfig.logoImageSrc}
+                name={siteConfig.name}
+              />
+            </div>
+
+            {/* Col 2: Glass pill nav — desktop only */}
+            <div className="hidden md:flex justify-center">
+              <GlassNav pathname={pathname} />
+            </div>
+
+            {/* Col 3: CTA + hamburger */}
+            <div className="flex items-center justify-end gap-2">
               {siteConfig.cta.enabled && (
                 <Link
                   href={siteConfig.cta.href}
@@ -127,6 +106,7 @@ function NavHeader() {
               )}
               <HamburgerButton open={menuOpen} onClick={() => setMenuOpen((v) => !v)} />
             </div>
+
           </div>
           {isDropdown && <DropdownHeader {...menuProps} />}
         </div>
@@ -135,14 +115,4 @@ function NavHeader() {
       {type === "fullscreen" && <FullscreenHeader {...menuProps} />}
     </>
   );
-}
-
-// ─── Switcher ─────────────────────────────────────────────────
-
-export default function Header() {
-  if (siteConfig.headerType === "cta") return <CTAHeader />;
-  if (siteConfig.headerType === "menu-only") return <MenuOnlyHeader />;
-  if (siteConfig.headerType === "centered-logo") return <CenteredLogoHeader />;
-  if (siteConfig.headerType === "floating-nav") return <FloatingNavHeader />;
-  return <NavHeader />;
 }
