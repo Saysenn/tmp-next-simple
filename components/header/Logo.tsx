@@ -35,7 +35,7 @@ export default function Logo({ type, name, imageSrc }: LogoProps) {
     return (
       <Link href="/" aria-label={name}>
         {imageSrc && (
-          <Image src={imageSrc} alt={name} width={0} height={0} sizes="100vw" className="h-10 w-auto" />
+          <Image src={imageSrc} alt={name} width={140} height={40} className="h-10 w-auto" priority />
         )}
       </Link>
     );
@@ -45,7 +45,7 @@ export default function Logo({ type, name, imageSrc }: LogoProps) {
     return (
       <Link href="/" className="flex items-center gap-2.5 text-lg font-semibold">
         {imageSrc && (
-          <Image src={imageSrc} alt={name} width={28} height={28} className="rounded-lg" />
+          <Image src={imageSrc} alt={name} width={28} height={28} className="rounded-lg" priority />
         )}
         <span>{name}</span>
       </Link>

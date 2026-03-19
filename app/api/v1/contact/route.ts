@@ -90,7 +90,6 @@ export async function POST(request: NextRequest) {
 
     // Honeypot — silently accept to avoid alerting bots
     if (body.website) {
-      console.log("[Security] Honeypot triggered");
       return NextResponse.json({ success: true, message: "Your inquiry has been sent successfully" });
     }
 

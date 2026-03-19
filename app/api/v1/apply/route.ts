@@ -66,8 +66,8 @@ function validateMagicBytes(buffer: Buffer, mimeType: string): boolean {
   }
 
   if (mimeType === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
-    // ZIP/PK format: 50 4B
-    return buffer[0] === 0x50 && buffer[1] === 0x4B;
+    // ZIP local file header: PK\x03\x04 — more specific than bare PK check
+    return buffer[0] === 0x50 && buffer[1] === 0x4B && buffer[2] === 0x03 && buffer[3] === 0x04;
   }
 
   return false;
@@ -114,7 +114,6 @@ export async function POST(request: NextRequest) {
     // ── Honeypot ──
     const honeypot = formData.get("website");
     if (honeypot) {
-      console.log("[Security] Honeypot triggered on apply route");
       return NextResponse.json({ success: true, message: "Your application has been submitted successfully." });
     }
 

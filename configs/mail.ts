@@ -6,6 +6,7 @@ export type MailConfig = {
   provider: EmailProvider;
   fromName: string;
   contactEmail: string; // where form submissions are delivered
+  siteUrl: string;      // used in email footers/links — set NEXT_PUBLIC_SITE_URL in .env
   resend: {
     apiKey: string;
     fromEmail: string;
@@ -26,6 +27,7 @@ export const mailConfig: MailConfig = {
 
   fromName: process.env.MAIL_FROM_NAME || "MyApp",
   contactEmail: process.env.CONTACT_EMAIL || "",
+  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
 
   resend: {
     apiKey: process.env.RESEND_API_KEY || "",

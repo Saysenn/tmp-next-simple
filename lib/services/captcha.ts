@@ -17,34 +17,39 @@ async function verifyTurnstile(token: string): Promise<boolean> {
   const secret = process.env.TURNSTILE_SECRET_KEY;
   if (!secret) return false;
 
-  const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({ secret, response: token }),
-  });
-
-  const data: TurnstileResponse = await res.json();
-  return data.success;
+  try {
+    const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ secret, response: token }),
+      signal: AbortSignal.timeout(5000),
+    });
+    const data: TurnstileResponse = await res.json();
+    return data.success;
+  } catch {
+    return false;
+  }
 }
 
 async function verifyRecaptcha(token: string): Promise<boolean> {
   const secret = process.env.RECAPTCHA_SECRET_KEY;
   if (!secret) return false;
 
-  const res = await fetch("https://www.google.com/recaptcha/api/siteverify", {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({ secret, response: token }),
-  });
-
-  const data: RecaptchaResponse = await res.json();
-
-  // v3: require score >= 0.5 (human threshold)
-  if (data.score !== undefined) {
-    return data.success && data.score >= 0.5;
+  try {
+    const res = await fetch("https://www.google.com/recaptcha/api/siteverify", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ secret, response: token }),
+      signal: AbortSignal.timeout(5000),
+    });
+    const data: RecaptchaResponse = await res.json();
+    if (data.score !== undefined) {
+      return data.success && data.score >= 0.5;
+    }
+    return data.success;
+  } catch {
+    return false;
   }
-
-  return data.success;
 }
 
 export async function verifyCaptchaToken(

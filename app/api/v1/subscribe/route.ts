@@ -73,7 +73,6 @@ export async function POST(request: NextRequest) {
 
     // Honeypot — silently accept to avoid alerting bots
     if (body.website) {
-      console.log("[Security] Subscribe honeypot triggered");
       return NextResponse.json({ success: true, message: "You've been added to the waitlist!" });
     }
 

@@ -58,7 +58,7 @@ export const siteConfig: HeaderConfig = {
 
   // "text" | "image" | "image-text" | "icon-text"
   logoType: "icon-text",
-  logoImageSrc: "/logo.png",
+  logoImageSrc: undefined, // set to "/your-logo.png" when you have an image
 
   // "nav" | "floating-nav" | "split-nav" | "cta" | "menu-only" | "centered-logo"
   headerType: "split-nav",

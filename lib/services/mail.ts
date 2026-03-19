@@ -16,6 +16,10 @@ export function sanitizeInput(input: string): string {
 
 /** Blocks disposable, test, and suspicious email addresses */
 export function validateEmailStrict(email: string): { valid: boolean; error?: string } {
+  if (/[\r\n]/.test(email)) {
+    return { valid: false, error: "Invalid email format" };
+  }
+
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
     return { valid: false, error: "Invalid email format" };
@@ -118,7 +122,7 @@ async function sendViaResend(options: SendEmailOptions) {
     throw new Error(error.message);
   }
 
-  console.log("[Resend] Email sent successfully");
+  // intentionally no log — avoids PII in logs
 }
 
 async function sendViaSMTP(options: SendEmailOptions) {
@@ -142,7 +146,7 @@ async function sendViaSMTP(options: SendEmailOptions) {
     } : {}),
   });
 
-  console.log("[SMTP] Email sent successfully");
+  // intentionally no log — avoids PII in logs
 }
 
 /** Send via the provider configured in configs/mail.ts. Logs when unconfigured. */
@@ -154,7 +158,6 @@ export async function sendEmail(options: SendEmailOptions) {
   } else if (provider === "smtp" && smtp.host) {
     await sendViaSMTP(options);
   } else {
-    console.warn("[Mail] No provider configured. Logging email:");
-    console.log({ to: options.to, subject: options.subject, timestamp: new Date().toISOString() });
+    console.warn("[Mail] No provider configured — email not sent.");
   }
 }
