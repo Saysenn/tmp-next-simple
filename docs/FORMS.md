@@ -36,7 +36,7 @@ subscribeFormType: "waitlist",  // full hero with social proof + role dropdown
 | `roleOptions` | see config | dropdown options |
 | `requireCaptcha` | `false` | require CAPTCHA before submit |
 
-Hide a form entirely: `enableContactForm: false` / `enableSubscribeForm: false`
+Hide a form entirely: `enableContactForm: false` / `enableSubscribeForm: false` / `enableApplicationForm: false`
 
 ---
 
@@ -67,12 +67,34 @@ No provider configured → submissions are logged to the console (dev fallback).
 
 ---
 
+## Application / CV form
+
+```tsx
+import ApplicationForm from "@/components/forms/ApplicationForm";
+// Drop anywhere — fields controlled by formsConfig.applicationForm
+<ApplicationForm />
+```
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `showPhone` | `true` | show optional phone field |
+| `showPosition` | `true` | show "position applied for" field |
+| `showCoverLetter` | `true` | show optional cover letter textarea |
+| `requireCaptcha` | `false` | require CAPTCHA before submit |
+| `maxFileSizeMb` | `5` | max CV file size in MB |
+| `allowedFileTypes` | `["pdf","doc","docx"]` | accepted file extensions |
+
+Security applied on every submission: rate-limited (3 per 10 min) · honeypot · email validation · MIME type check · file extension check · magic byte validation · filename sanitisation. CV is attached directly to the notification email — never stored on disk.
+
+---
+
 ## CAPTCHA
 
 ```ts
 captchaProvider: "turnstile",   // or "recaptcha-v2" | "recaptcha-v3"
-contactForm:   { requireCaptcha: true },
-subscribeForm: { requireCaptcha: true },
+contactForm:       { requireCaptcha: true },
+subscribeForm:     { requireCaptcha: true },
+applicationForm:   { requireCaptcha: true },
 ```
 
 | Provider | Type | Env vars |
@@ -91,8 +113,10 @@ reCAPTCHA v3 applies a score threshold of `0.5` server-side.
 |-------|---------|
 | `POST /api/v1/contact` | contact form submissions |
 | `POST /api/v1/subscribe` | waitlist signups |
+| `POST /api/v1/apply` | CV / job application submissions (multipart/form-data) |
 
-Both routes: rate-limited · honeypot · email validation · HTML sanitization · optional CAPTCHA.
+All routes: rate-limited · honeypot · email validation · HTML sanitisation · optional CAPTCHA.
+Apply route additionally: MIME type check · file extension check · magic byte validation · 5MB cap.
 
 ---
 
@@ -119,8 +143,13 @@ components/forms/
 app/api/v1/
   contact/route.ts
   subscribe/route.ts
+  apply/route.ts          ← multipart, file validation, attachment send
+
+components/forms/
+  ApplicationForm.tsx     ← CV upload + optional fields
 
 emails/
   ContactFormEmail.tsx
   SubscribeEmail.tsx
+  ApplicationEmail.tsx    ← CV application notification
 ```

@@ -3,6 +3,7 @@
 
 export type ContactEmailTemplate = "bold" | "classic" | "minimal";
 export type SubscribeEmailTemplate = "bold" | "classic" | "minimal";
+export type ApplicationEmailTemplate = "minimal";
 
 export const emailTemplatesConfig = {
   /** Contact form notification email design: "bold" | "classic" | "minimal" */
@@ -10,4 +11,7 @@ export const emailTemplatesConfig = {
 
   /** Subscribe/waitlist notification email design: "bold" | "classic" | "minimal" */
   subscribeTemplate: "minimal" as SubscribeEmailTemplate,
+
+  /** Application/CV form notification email design: "minimal" */
+  applicationTemplate: "minimal" as ApplicationEmailTemplate,
 };

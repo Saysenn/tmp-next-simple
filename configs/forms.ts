@@ -14,11 +14,14 @@ export type CaptchaProvider =
   | "recaptcha-v2"   // Google reCAPTCHA v2 — NEXT_PUBLIC_RECAPTCHA_SITE_KEY + RECAPTCHA_SECRET_KEY
   | "recaptcha-v3";  // Google reCAPTCHA v3 — same keys as v2
 
+export type AllowedCvFileType = "pdf" | "doc" | "docx";
+
 export type FormsConfig = {
   contactFormType: ContactFormType;
   subscribeFormType: SubscribeFormType;
   enableContactForm: boolean;
   enableSubscribeForm: boolean;
+  enableApplicationForm: boolean;
   captchaProvider: CaptchaProvider;
   contactForm: {
     showPhone: boolean;
@@ -31,6 +34,14 @@ export type FormsConfig = {
     roleOptions: string[];
     requireCaptcha: boolean;
   };
+  applicationForm: {
+    showPhone: boolean;       // show optional phone field
+    showPosition: boolean;    // show optional "position applied for" field
+    showCoverLetter: boolean; // show optional cover letter textarea
+    requireCaptcha: boolean;
+    maxFileSizeMb: number;    // max CV file size (default: 5)
+    allowedFileTypes: AllowedCvFileType[]; // accepted file types
+  };
 };
 
 export const formsConfig: FormsConfig = {
@@ -42,6 +53,7 @@ export const formsConfig: FormsConfig = {
 
   enableContactForm: true,
   enableSubscribeForm: true,
+  enableApplicationForm: true,
 
   // "turnstile" | "recaptcha-v2" | "recaptcha-v3"
   captchaProvider: "turnstile",
@@ -49,6 +61,16 @@ export const formsConfig: FormsConfig = {
   contactForm: {
     showPhone: true,
     requireCaptcha: false,
+  },
+
+  applicationForm: {
+    showPhone: true,
+    showPosition: true,
+    showCoverLetter: true,
+    requireCaptcha: false,
+    maxFileSizeMb: 5,
+    // "pdf" | "doc" | "docx"
+    allowedFileTypes: ["pdf", "doc", "docx"] as ("pdf" | "doc" | "docx")[],
   },
 
   subscribeForm: {

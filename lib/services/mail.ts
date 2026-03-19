@@ -81,12 +81,19 @@ export function validateEmailStrict(email: string): { valid: boolean; error?: st
   return { valid: true };
 }
 
+export type EmailAttachment = {
+  filename: string;
+  content: Buffer;
+  contentType: string;
+};
+
 type SendEmailOptions = {
   to: string;
   replyTo?: string;
   subject: string;
   html: string;
   text?: string; // plain-text fallback (SMTP only)
+  attachments?: EmailAttachment[];
 };
 
 async function sendViaResend(options: SendEmailOptions) {
@@ -99,6 +106,12 @@ async function sendViaResend(options: SendEmailOptions) {
     ...(options.replyTo ? { replyTo: [options.replyTo] } : {}),
     subject: options.subject,
     html: options.html,
+    ...(options.attachments?.length ? {
+      attachments: options.attachments.map((a) => ({
+        filename: a.filename,
+        content: a.content,
+      })),
+    } : {}),
   });
 
   if (error) {
@@ -120,6 +133,13 @@ async function sendViaSMTP(options: SendEmailOptions) {
     subject: options.subject,
     html: options.html,
     ...(options.text ? { text: options.text } : {}),
+    ...(options.attachments?.length ? {
+      attachments: options.attachments.map((a) => ({
+        filename: a.filename,
+        content: a.content,
+        contentType: a.contentType,
+      })),
+    } : {}),
   });
 
   console.log("[SMTP] Email sent successfully");

@@ -8,6 +8,9 @@ export { default as SubscribeEmailBold } from "./SubscribeEmailBold";
 export { default as SubscribeEmailClassic } from "./SubscribeEmailClassic";
 export { default as SubscribeEmailMinimal } from "./SubscribeEmailMinimal";
 
+// Application / CV form email templates
+export { default as ApplicationEmail } from "./ApplicationEmail";
+
 // Legacy (kept for reference)
 export { default as ContactFormEmail } from "./ContactFormEmail";
 export { default as SubscribeEmail } from "./SubscribeEmail";

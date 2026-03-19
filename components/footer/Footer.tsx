@@ -17,6 +17,7 @@ import FooterMinimal from "./FooterMinimal";
 import FooterCentered from "./FooterCentered";
 import FooterBrand from "./FooterBrand";
 import FooterSplit from "./FooterSplit";
+import FooterRecruit from "./FooterRecruit";
 
 const props = { brand: headerConfig, config: footerConfig };
 
@@ -25,5 +26,6 @@ export default function Footer() {
   if (footerLayout === "centered") return <FooterCentered {...props} />;
   if (footerLayout === "brand")    return <FooterBrand    {...props} />;
   if (footerLayout === "split")    return <FooterSplit    {...props} />;
+  if (footerLayout === "recruit")  return <FooterRecruit  {...props} />;
   return <FooterColumns {...props} />;  // default: "columns"
 }

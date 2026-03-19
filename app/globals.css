@@ -15,11 +15,16 @@
   --bg-soft: #f9fafb;         /* gray-50 */
   --bg-subtle: #f3f4f6;       /* gray-100 */
 
-  /* Text */
+  /* Text — light backgrounds */
   --text-heading: #111827;    /* gray-900 */
   --text-body: #374151;       /* gray-700 */
   --text-muted: #6b7280;      /* gray-500 */
   --text-faint: #9ca3af;      /* gray-400 */
+
+  /* Text — dark backgrounds (use these on dark sections/cards) */
+  --text-on-dark: #f9fafb;         /* gray-50  — primary text on dark */
+  --text-on-dark-muted: #d1d5db;   /* gray-300 — secondary text on dark */
+  --text-on-dark-faint: #9ca3af;   /* gray-400 — captions on dark */
 
   /* Borders */
   --border: #e5e7eb;          /* gray-200 */
@@ -150,10 +155,18 @@ small, .text-caption {
    Use these instead of hardcoding indigo- classes in components.
    These respect the single --accent variable above.
 =========================== */
-.accent-text  { color: var(--accent); }
-.accent-bg    { background-color: var(--accent); }
-.accent-light { background-color: var(--accent-light); }
+.accent-text   { color: var(--accent); }
+.accent-bg     { background-color: var(--accent); }
+.accent-light  { background-color: var(--accent-light); }
 .accent-border { border-color: var(--accent); }
+
+/* ===========================
+   TEXT ON DARK UTILITIES
+   Use on sections/cards with dark backgrounds.
+=========================== */
+.text-on-dark       { color: var(--text-on-dark); }
+.text-on-dark-muted { color: var(--text-on-dark-muted); }
+.text-on-dark-faint { color: var(--text-on-dark-faint); }
 
 /* ===========================
    BACKGROUND UTILITIES
