@@ -183,6 +183,12 @@ Every section and component you build must feel intentional and polished. Before
   - **Carousels (Swiper)** — use for testimonials, portfolio items, team members, logo grids, or any repeating card set with 4+ items. Always import from `@/lib/infra/swiper.ts`
   - Choose the pattern that best serves the content — don't force flat lists when a smarter component exists
 
+# Language
+
+- **British English only** — use British spellings in all copy, UI text, comments, and documentation
+- Common differences: enquire (not inquire), colour (not color), organise (not organize), analyse (not analyze), centre (not center), licence/n (not license/n), realise (not realize), travelling (not traveling)
+- This applies to user-facing strings, placeholder text, form labels, email templates, and docs — not to code identifiers (variable/function names stay in standard ASCII)
+
 # Core Principles
 
 - **Simplicity First**: Make every change as simple as possible. Impact minimal code.
