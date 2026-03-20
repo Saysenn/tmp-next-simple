@@ -170,9 +170,13 @@ See `.claude/legal.md` for the full ruleset. Summary:
 
 Every section and component you build must feel intentional and polished. Before writing JSX, ask yourself: *"Would a senior UI/UX designer be proud of this?"*
 
-- **Typography matters** — use size, weight, and colour contrast to establish clear hierarchy (headline → subheading → body → caption). Never make everything the same size
-- **Micro-details count** — rounded corners, shadow depth, icon sizing, and padding consistency signal quality. Match them across the page
+- **Avoid cookie-cutter layouts** — don't default to the same centered-heading + paragraph + button pattern every time. Vary alignment (left-aligned hero, offset grids, asymmetric splits), whitespace, and visual hierarchy
+- **Think in contrast and rhythm** — alternate dense and breathable sections, vary type sizes deliberately, use spacing to guide the eye
+- **Use visual anchors** — subtle background tints, gradient accents, bordered cards, or decorative elements to break monotony without clutter
+- **Typography matters** — use size, weight, and color contrast to establish clear hierarchy (headline → subheading → body → caption). Never make everything the same size
 - **Responsive means intentional at every breakpoint** — mobile layout should be a deliberate design decision, not just stacked columns
+- **Micro-details count** — rounded corners, shadow depth, icon sizing, and padding consistency signal quality. Match them across the page
+- **When in doubt, go asymmetric** — a left-aligned stat block, an offset image, a pull quote in a side column — these signal craft over templates
 - **Leverage the right UI pattern for the content:**
   - **Breadcrumbs** — use on any page deeper than 1 level (e.g. blog post, service detail, docs). Never make users guess where they are
   - **Accordions** — use for FAQs, feature breakdowns, long content lists. Prefer over walls of text
@@ -184,6 +188,12 @@ Every section and component you build must feel intentional and polished. Before
 - **British English only** — use British spellings in all copy, UI text, comments, and documentation
 - Common differences: enquire (not inquire), colour (not color), organise (not organize), analyse (not analyze), centre (not center), licence/n (not license/n), realise (not realize), travelling (not traveling)
 - This applies to user-facing strings, placeholder text, form labels, email templates, and docs — not to code identifiers (variable/function names stay in standard ASCII)
+
+# Navigation Behaviour
+
+- **Scroll to top on navigation**: When a user clicks any nav link, the page must always start at the top. This is the intended UX — never preserve scroll position across route changes.
+- Do not use `scroll={false}` on `<Link>` components unless explicitly asked.
+- Do not add any `scrollRestoration` logic or `window.scrollTo` overrides that would break this default.
 
 # Core Principles
 
