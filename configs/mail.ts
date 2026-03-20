@@ -7,6 +7,7 @@ export type MailConfig = {
   fromName: string;
   contactEmail: string; // where form submissions are delivered
   siteUrl: string;      // used in email footers/links — set NEXT_PUBLIC_SITE_URL in .env
+  logoUrl?: string;     // optional logo image URL shown in email headers
   resend: {
     apiKey: string;
     fromEmail: string;
@@ -28,6 +29,7 @@ export const mailConfig: MailConfig = {
   fromName: process.env.MAIL_FROM_NAME || "MyApp",
   contactEmail: process.env.CONTACT_EMAIL || "",
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
+  logoUrl: process.env.NEXT_PUBLIC_LOGO_URL || undefined,
 
   resend: {
     apiKey: process.env.RESEND_API_KEY || "",
