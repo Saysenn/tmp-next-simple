@@ -22,10 +22,17 @@ export type FormsConfig = {
   enableContactForm: boolean;
   enableSubscribeForm: boolean;
   enableApplicationForm: boolean;
+  enableContactCVForm: boolean;
   captchaProvider: CaptchaProvider;
   contactForm: {
     showPhone: boolean;
     requireCaptcha: boolean;
+  };
+  contactCVForm: {
+    showPhone: boolean;      // show phone field (required when shown)
+    requireCaptcha: boolean;
+    maxFileSizeMb: number;
+    allowedFileTypes: AllowedCvFileType[];
   };
   subscribeForm: {
     showNameField: boolean;
@@ -54,6 +61,7 @@ export const formsConfig: FormsConfig = {
   enableContactForm: true,
   enableSubscribeForm: true,
   enableApplicationForm: true,
+  enableContactCVForm: true,
 
   // "turnstile" | "recaptcha-v2" | "recaptcha-v3"
   captchaProvider: "turnstile",
@@ -71,6 +79,14 @@ export const formsConfig: FormsConfig = {
     maxFileSizeMb: 5,
     // "pdf" | "doc" | "docx"
     allowedFileTypes: ["pdf", "doc", "docx"] as ("pdf" | "doc" | "docx")[],
+  },
+
+  contactCVForm: {
+    showPhone: true,
+    requireCaptcha: false,
+    maxFileSizeMb: 5,
+    // "pdf" | "doc" | "docx"
+    allowedFileTypes: ["pdf", "doc", "docx"] as AllowedCvFileType[],
   },
 
   subscribeForm: {
