@@ -16,6 +16,9 @@ const nextConfig: NextConfig = {
   async headers() {
     return [{ source: "/(.*)", headers: securityHeaders }];
   },
+  turbopack: {
+    root: __dirname,
+  },
 };
 
 export default nextConfig;
