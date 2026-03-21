@@ -21,71 +21,63 @@ Payroll should be described lightly as workforce support, contractor management,
 Do not include technical tax or payroll explanations.
 Ensure the brand sounds like an independent recruitment company.
 Avoid using hyphens as bullet points in paragraphs or headings.
+Do not use hyphens, em dashes, or en dashes anywhere in visible content. Rephrase sentences instead.
+
+CONTENT RULES — STRICTLY FOLLOW:
+Keep all content concise. Less is more. Do not pad paragraphs.
+Do not fabricate stats, testimonials, years of experience, or placement numbers. The company may be new.
+Do not repeat the same message across multiple pages. Each page must serve a distinct purpose.
+Do not add sections, pages, or content beyond what was explicitly requested.
+Avoid any claims that cannot be verified (e.g. "UK-wide network", "hundreds of placements").
+Startup-friendly tone: honest, direct, no bluffing.
+
+PAGE ORDER AND SECTION ORDER:
+Services page section order: Intro, Workforce Support, Practice Areas, CTA.
+Workforce Support always comes before Practice Areas on the Services page.
+
+COMPLIANCE CONTENT — WHAT TO INCLUDE:
+These are the compliance items managed by the agency. Include them on the Candidates page and Services page where relevant:
+- DBS and Disclosure checks (registered to process, no cost to candidate)
+- Social Work England registration verification
+- Right to work checks (passport, visa documentation)
+- CV presentation and formatting
+- Employment references (minimum five years)
+- Dedicated consultant managing registration and placement
+
+PAYMENT CONTENT — WHAT TO INCLUDE:
+Include on Candidates page and Services page only. Keep brief.
+- Contractors paid accurately on a regular basis
+- No invoicing required from the candidate
+- All payment administration handled by the agency
+- Do not specify weekly or monthly without confirming with the client first
 
 GENERATE CONTENT FOR:
 
- 1.⁠ ⁠HOME PAGE
-   Include a strong headline.
-   Write a short introduction.
-   Provide a clear overview of services.
-   Mention sectors briefly.
-   Include call to actions such as Hire Talent and Submit Your CV.
+ 1. HOME PAGE
+   Strong headline, short intro, two-path cards (For Candidates, For Clients), 3-step How We Work, Sectors snapshot (list only, link to Services), contact strip.
 
- 2.⁠ ⁠ABOUT PAGE
-   Provide a company overview.
-   Highlight industry expertise.
-   Include mission or values if appropriate.
-   Ensure a professional positioning.
+ 2. ABOUT PAGE
+   Who we are, what we focus on (4 cards), values (3), map, CTA.
 
- 3.⁠ ⁠SERVICES PAGE
+ 3. SERVICES PAGE
+   Intro with placement types (Permanent, Temporary, Contract), Workforce Support section (Onboarding, Compliance, Payments), Practice Areas grid, CTA.
 
-Recruitment Services as the main focus
-Include permanent recruitment.
-Include temporary staffing.
-Include contract recruitment.
+ 4. CLIENTS PAGE
+   Intro, What We Offer (3 col grid), How It Works (Swiper), Organisations We Serve, CTA with enquiry button in hero.
 
-Workforce Support as a secondary section
-Include candidate onboarding.
-Include compliance.
-Include smooth and reliable payment processing.
+ 5. CANDIDATES PAGE
+   Intro, Compliance grid (alternating 3-col dark/light), Payments section, CV submission form embedded directly, useful links.
 
- 4.⁠ ⁠SECTORS OR SPECIALISMS PAGE
-   Break content into two to four sector areas based on the industry.
-   Describe the types of roles covered.
-   Keep content concise and clear.
-
- 5.⁠ ⁠JOBS PAGE
-   Write an introduction encouraging applications.
-   Mention current opportunities.
-   Encourage CV submission if no roles are listed.
-
- 6.⁠ ⁠CANDIDATES PAGE
-   Explain benefits of registering.
-   Include career support.
-   Mention reliable or weekly payments.
-   Include a strong call to action for CV submission.
-
- 7.⁠ ⁠CLIENTS PAGE
-   Explain benefits for employers.
-   Highlight fast hiring.
-   Mention pre screened candidates.
-   Position as a fully managed workforce solution.
-
- 8.⁠ ⁠CONTACT PAGE
-   Write a short contact message.
-   Encourage users to get in touch.
-   Keep details generic with no real contact information.
+ 6. CONTACT PAGE
+   Hero, Contact details column with office hours, ContactForm column, Map.
 
 LEGAL PAGES:
-
- 9.⁠ ⁠PRIVACY POLICY in basic UK GDPR style
-10.⁠ ⁠TERMS AND CONDITIONS for general website use
-11.⁠ ⁠COOKIE POLICY
-12.⁠ ⁠MODERN SLAVERY STATEMENT in a simple compliance format
+ 7. Privacy Policy in basic UK GDPR style
+ 8. Terms and Conditions for general website use
+ 9. Modern Slavery Statement in a simple compliance format
 
 ADDITIONAL RULES:
 Keep content generic but professional.
-Do not include real addresses or phone numbers.
+Avoid repetition across pages.
 Do not mention any parent or backend company.
 Ensure the website feels like a standalone recruitment brand.
-Avoid repetition across pages.
