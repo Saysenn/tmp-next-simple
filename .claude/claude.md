@@ -82,18 +82,19 @@ Input helpers: `toDateInput` (ISO → `<input type="date">` value), `toIntInput`
 
 **DRY rule**: Before writing any formatting/conversion function in a component, check `lib/utils/format.ts` first. If it doesn't exist there, add it there — never inline it.
 
-## UI Components — Always use shadcn/ui wrappers, never raw HTML equivalents
+## UI Components — shadcn/ui available but not mandatory
 
-| Need                | Use (from `@/components/ui/`)                                                      |
+shadcn/ui components are available in `@/components/ui/` and can be used when convenient:
+
+| Need                | Available component                                                                |
 | ------------------- | ---------------------------------------------------------------------------------- |
 | Dropdown/select     | `SelectRoot`, `SelectTrigger`, `SelectValue`, `SelectContent`, `SelectItem`        |
 | Dialog/modal        | `DialogRoot`, `DialogTrigger`, `DialogContent`, `DialogHeader`, `DialogTitle`      |
 | Button              | `Button` — supports `variant`, `size`, `isLoading` props                           |
-| Text input          | `Input` — never raw `<input>` except inside shadcn components                      |
-| Label               | `Label` — pairs with `htmlFor`                                                     |
+| Text input          | `Input` — pairs with `Label`                                                       |
 | Card layout         | `Card`, `CardHeader`, `CardTitle`, `CardDescription`, `CardContent`                |
 
-**Never use raw `<select>`, `<input>` (standalone), or `<button>` directly in page/feature components.**
+Raw HTML elements (`<input>`, `<button>`, `<select>`, `<textarea>`) are perfectly acceptable — use whichever keeps the code simpler and consistent with the surrounding component.
 
 ## HTTP Requests — Layer order: api.ts → axios.ts → React Query
 
@@ -148,17 +149,15 @@ See `.claude/legal.md` for the full ruleset. Summary:
 
 ## Color Scheme — Never Hardcode Colors
 
-- **All accent colors** must use CSS variables from `app/globals.css` (`var(--accent)`, `var(--accent-hover)`, `var(--accent-light)`, etc.) — never hardcode hex values or Tailwind color classes like `indigo-600` for brand colors
-- To change the color scheme, tell the user: **"Adjust the CSS variables in `app/globals.css` — change `--accent` to retheme the whole site"**
-- Background, text, and border colors should use the defined variables where possible
+- **All accent/brand colors** must use CSS variables from `app/globals.css` (`var(--accent)`, `var(--accent-hover)`, `var(--accent-light)`, etc.) — never hardcode hex values or Tailwind color classes like `indigo-600` for brand colors
+- Neutral colors (`gray-*`, `white`, `black`) are fine as Tailwind classes
+- To retheme, always tell the user: **"Adjust the CSS variables in `app/globals.css` — change `--accent` to retheme the whole site"**
 
 ## Layout — Never Force a Structure
 
 - **Never impose a specific page layout or section order** without asking first
 - **Never add sections** (hero, features, testimonials, pricing, FAQ, etc.) beyond what was asked
-- **Never assume a grid or column count** — ask if the layout preference isn't explicit
-- Simple, clean, and minimal is the default — let the user drive visual decisions
-- If unsure about a layout choice, describe the options and ask before building
+- If unsure about layout *structure* (number of sections, page order), ask before building
 
 ## Component Styling — Defaults Only
 
