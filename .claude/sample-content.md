@@ -7,17 +7,17 @@ All user-facing text across the site. Reuse and tailor for other company website
 
 ### Hero
 **Heading:** We Put Social Workers First
-**Subheading:** A specialist recruitment agency connecting qualified social work professionals with local authorities, NHS trusts, and charities across the UK.
+**Subheading:** Specialist locum recruitment and contractor payroll services across the social care sector. We source qualified social workers up to senior management level for local authorities, NHS trusts, and charities across the UK.
 **CTAs:** Hire Talent | Submit Your CV
 
 ---
 
 ### Who We Are
 **Eyebrow:** About Us
-**Heading:** Specialist Social Work Recruitment
-**Para 1:** Social Work First Payroll is an independent recruitment agency focused exclusively on the social care sector. We place post ASYE qualified social workers up to Senior Management level across children's services, adults' services, and specialist practice areas.
-**Para 2:** We work with local authorities, NHS trusts, charities, and private organisations. Our goal is to match the right professionals to the right roles, quickly and compliantly.
-**Para 3:** We also manage all contractor payroll administration on your behalf. Clients receive a single monthly invoice and candidates are paid accurately and on time, with no payment chasing required from either side.
+**Heading:** Social Work Recruitment and Payroll
+**Para 1:** We source the best locum opportunities within the social care market, from post ASYE qualified social workers up to senior management level, across every specialism in the sector.
+**Para 2:** As specialists in social care, we understand the challenges local authorities and social workers face day to day. We use that expertise to guide all parties and ensure longevity on every placement.
+**Para 3:** We also manage all contractor payroll administration on your behalf. Clients receive a single monthly invoice and candidates are paid accurately and on time.
 **CTA:** About Us
 
 **Card — For Candidates:**
@@ -371,9 +371,11 @@ Onboarding, compliance, and payroll administration are all managed by us from da
 
 When adapting this content for another company:
 
-1. **Sector names and specialism lists** — replace with the sectors that company recruits in
-2. **Compliance items** — keep DBS, right to work, references; swap "Social Work England" for the relevant professional register (e.g. NMC for nursing, HCPC for allied health)
-3. **Qualification references** — swap "post ASYE" for the equivalent entry level for that sector
-4. **Organisations served** — update the client types to match that sector (e.g. hospitals, GP practices, schools)
-5. **Payment frequency** — confirm whether weekly or monthly before writing
-6. **Company name and contact info** — always in `configs/footer.ts`, never hardcoded
+1. **Locum vs permanent focus** — this site is locum/interim first. If the company also does permanent placement, add it as secondary. If purely permanent, remove "locum" references throughout.
+2. **Sector names and specialism lists** — replace with the sectors that company recruits in
+3. **Compliance items** — keep DBS, right to work, references; swap "Social Work England" for the relevant professional register (e.g. NMC for nursing, HCPC for allied health)
+4. **Qualification references** — swap "post ASYE" for the equivalent entry level for that sector
+5. **Organisations served** — update the client types to match that sector (e.g. hospitals, GP practices, schools)
+6. **Payroll service** — only include payroll/payment admin content if the company actually offers this. If recruitment only, remove all payroll references.
+7. **Payment frequency** — confirm whether weekly or monthly before writing
+8. **Company name and contact info** — always in `configs/footer.ts`, never hardcoded

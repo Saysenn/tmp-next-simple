@@ -1,115 +1,138 @@
-You are a senior web developer, conversion copywriter, and SEO strategist.
+GLOBAL RULES: Always follow @.claude/CLAUDE.md, @.claude/legal.md, @.claude/pages.md, and @.claude/animate.md — these govern code style, legal compliance, page structure, and animation patterns.
 
-Your task is to create a complete, high-converting, startup-friendly website for a UK-based company offering PURE PAYE payroll services and recruitment.
+---
 
-IMPORTANT RULES: use the @rec-pay-content.md and @sample-content.md for full content reference.
+# HOW THIS PROMPT WORKS
 
-1. CONTENT STRATEGY 
-- Follow a proven structure used in high-converting payroll/recruitment websites.
-- DO NOT copy wording from previous websites.
-- REWRITE everything to be 100% unique while keeping the same core ideas and structure.
-- Maintain clarity, simplicity, and professionalism.
-- Avoid fluff, buzzwords, and generic agency language.
+Every time this prompt runs, follow these 5 stages in order. Do not skip any stage. Do not build anything until Stage 3 is fully confirmed.
 
-2. POSITIONING
-- The company MUST be positioned as:
-  - Pure PAYE payroll provider (NO umbrella, NO CIS, NO accounting services)
-  - Recruitment focused on specific sectors (e.g., care, NHS, education)
-- Emphasize:
-  - Simplicity
-  - Compliance (HMRC, RTI)
-  - Reliability (on-time payroll)
-  - Speed (fast onboarding)
+---
 
-3. STARTUP-FRIENDLY TONE
-- Content must appeal to:
-  - Startups
-  - Small businesses
-  - Growing teams
-- Include messaging like:
-  - "simple to start"
-  - "no long-term contracts"
-  - "set up in days"
-  - "no software to manage"
+# Stage 1 — Pre-Flight Asset Checks
 
-4. SEO OPTIMIZATION
-- Naturally include keywords like:
-  - UK payroll services
-  - outsourced payroll UK
-  - PAYE payroll provider
-  - recruitment agency UK
-- Do NOT keyword stuff.
-- Use headings that are SEO-friendly.
+Run these before asking the user anything.
 
-5. REQUIRED PAGES
-Generate full content for:
-- Home
-- About
-- Services
-- Contact
+**Check A — Required files in `/public`:**
+Look for `public/bg.webp` and `public/logo.webp`. If either is missing, stop and say:
+> "`[filename]` is missing from `/public`. Please add it before we proceed — it is needed for the hero background and header logo."
 
-6. REQUIRED SECTIONS (VERY IMPORTANT)
+Do not move forward until both files exist.
 
-HOME must include:
-- Strong hero (clear value proposition)
-- "Why Choose Us"
-- "For Startups / Small Businesses"
-- Services overview (Payroll + Recruitment)
-- Payroll process section
-- Industries served (SEO section)
-- CTA sections
+**Check B — Design references:**
+If no design images (mockups, screenshots, Figma exports, brand guides) were attached to this message, ask once:
+> "No design references were attached. Would you like to add some before I start, or shall I proceed using the default template layout? You can share references later to refine."
 
-ABOUT must include:
-- Who we are
-- Mission
-- Values
-- What makes us different
-- Company credibility section
+Wait for their answer before continuing.
 
-SERVICES must include:
-- Detailed payroll services
-- HMRC compliance explanation
-- Payroll vs in-house comparison
-- Recruitment services
-- Recruitment process
-- Startup payroll support section
+---
 
-CONTACT must include:
-- Strong CTA ("Get a quote", "Start payroll")
-- Contact details
-- Simple explanation of what happens after enquiry
-- FAQ section
+# Stage 2 — Company Intake
 
-7. LEGAL AWARENESS
-- Content must reflect UK compliance awareness (HMRC, RTI, PAYE)
-- Do NOT mention umbrella, CIS, or unrelated services
+Ask all questions below before building anything. Present them as a single grouped message so the user can answer in one reply. Mark each group clearly.
 
-8. WRITING STYLE
-- Clear, concise, professional
-- Slightly conversational but still authoritative
-- Avoid long paragraphs (keep readable)
-- Use bullet points where appropriate
+---
 
-9. FRONTEND / UI INSTRUCTIONS
-- Follow rules in @claude.md
-- Ensure responsive layout
-- Use clean spacing and proper alignment
-- Use swiper for testimonials or sliders if needed
-- Keep design minimal, modern, and professional
+**GROUP A — Company Basics** *(all required)*
+1. Company name
+2. Tagline or one-line description (if any)
+3. Full registered address
+4. City and country
+5. Email address
+6. Phone number
+7. Website domain (if already known)
 
-10. STYLING
-- Use @globals.css for color scheme
-- Ensure accessibility and readability
+**GROUP B — What They Do** *(all required)*
+8. Primary service or product
+9. Secondary services (up to 3)
+10. Industry or sector
+11. Target clients (e.g. local authorities, SMEs, NHS trusts, private companies)
+12. Target candidates or end users (if relevant — e.g. social workers, contractors, job seekers)
 
-11. COMPANY INFO
-- Ask me first for:
-  - Company name
-  - Address
-  - Email
-  - Phone
-  - Target sectors (if different)
-- Then generate content based on those details
+**GROUP C — Tone & Positioning** *(all required)*
+13. Brand tone (e.g. corporate, friendly, premium, modern, trustworthy)
+14. Unique selling points (e.g. fast turnaround, no hidden fees, specialist focus)
+15. Words, phrases, or services to avoid mentioning entirely
 
-OUTPUT FORMAT:
-- Clean structured content per page
-- Ready to be used in production (no explanations)
+**GROUP D — Pages to Build** *(all required — confirm each one)*
+16. Home — always included
+17. About — include?
+18. Services — include?
+19. Clients page (hero CTA scrolls to contact form) — include?
+20. Candidates page (hero CTA scrolls to application form) — include?
+21. Contact — always included
+22. Terms & Privacy — always included
+23. Modern Slavery / Anti-Slavery statement — include? (recommended for recruitment/payroll)
+24. Any other pages? (do not assume — ask explicitly)
+
+**GROUP E — Branding** *(optional — skip if not provided)*
+25. Logo already in `public/logo.webp`? Confirm or provide path
+26. Primary brand colour (hex or plain description)
+27. Font preference (or leave as project default)
+
+**GROUP F — Header & Footer**
+28. Which header type to use? (nav / floating-nav / split-nav / stacked — default: nav)
+29. CTA button in header — enabled? If yes, label and link
+30. Footer: standard 4-column layout (Logo+Socials | Company | Legal | Contact)? Confirm before building.
+
+---
+
+Once the user has answered all groups, move to Stage 3. Do not start writing code or content before then.
+
+---
+
+# Stage 3 — Confirm Before Building
+
+Summarise everything collected in a short table:
+
+| Field | Value |
+|---|---|
+| Company name | ... |
+| Primary service | ... |
+| Pages to build | ... |
+| Header type | ... |
+| Tone | ... |
+| Anything to avoid | ... |
+
+Then ask:
+> "Does this look correct? I'll proceed once you confirm."
+
+Do not build anything until the user confirms.
+
+---
+
+# Stage 4 — Generate Content
+
+Once confirmed:
+
+1. Write all company details into `configs/footer.ts` as the single source of truth — never hardcode inline
+2. Open `@.claude/sample-content.md` and rewrite it using the confirmed details:
+   - Replace all placeholder names, sector references, and service descriptions
+   - Keep the same page and section structure unless the user requested changes
+   - For recruitment/workforce companies, follow `@.claude/rec-pay-content-logic.md` in addition
+   - British English throughout — see CLAUDE.md Language section
+   - Do not fabricate stats, testimonials, years of experience, or placement numbers
+   - Do not add sections beyond what was confirmed in Stage 2
+
+---
+
+# Stage 5 — Build Pages
+
+Build only the confirmed pages, in this order: Home → About → Services (if any) → Clients (if any) → Candidates (if any) → Contact → Legal pages.
+
+For each page:
+- Pull content from the updated `sample-content.md`
+- Follow section order and UX rules from `@.claude/pages.md`
+- Apply animation patterns from `@.claude/animate.md`
+- Follow all styling and component rules from `@.claude/CLAUDE.md`
+- Never hardcode company info — always reference `configs/footer.ts`
+
+---
+
+# Content Rules (apply throughout)
+
+- No fabricated stats, reviews, years of experience, or placement numbers
+- No repeated messaging across pages — each page must serve a distinct purpose
+- No sections or pages beyond what was confirmed
+- No unverifiable claims (e.g. "UK-wide network", "thousands of placements")
+- Concise copy — less is more, never pad
+- Honest, direct tone — no bluffing, no generic agency language
