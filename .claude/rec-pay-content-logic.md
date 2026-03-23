@@ -1,3 +1,7 @@
+GLOBAL RULES: Always follow @.claude/CLAUDE.md, @.claude/legal.md, @.claude/pages.md, and @.claude/animate.md — these govern code style, legal compliance, page structure, and animation patterns.
+
+---
+
 Create full professional website content for a UK based recruitment agency with light workforce support and payment services.
 
 COMPANY DETAILS:

@@ -115,45 +115,12 @@ Apply whenever building forms, API routes, or data-handling features:
 
 ---
 
-## Default Pages — What to Build by Default
+## Pages
 
-**Always build these 5 pages by default, nothing more:**
+See `.claude/pages.md` for all page rules — default pages, optional pages (Clients, Candidates, Anti-Slavery), and per-page UX requirements.
 
-| Page    | Route      |
-| ------- | ---------- |
-| Home    | `/`        |
-| About   | `/about`   |
-| Contact | `/contact` |
-| Terms   | `/terms`   |
-| Privacy | `/privacy` |
-
-**Never add extra pages (Services, Why Us, FAQ, Pricing, Blog, etc.) without explicitly asking the user first.** Ask once, clearly: "Do you want a Services page?" — if they say no or don't respond, skip it.
-
-## Page-Level Requirements
-
-### Homepage — Reviews / Testimonials
-Every homepage must include a reviews or testimonials section.
-- Minimum 3 reviews
-- Include reviewer name, role/title, and star rating where available
-- If real reviews exist (Google, Trustpilot), source from there and credit the platform
-- If placeholder reviews are used during build, flag them clearly for the user to replace
-
-### About Page — Map
-The about page must include an embedded map showing the company's location.
-- Use an iframe embed (Google Maps or equivalent) pointing to the confirmed address
-- Always add a descriptive `title` attribute to the iframe for accessibility
-- If the address is not yet confirmed, skip and note it as pending — never embed a wrong location
-
-### Contact Page — Company Info Block
-The contact page must display company details pulled from the config source of truth:
-- Company name
-- Full address
-- Phone number
-- Email address
-- Jurisdiction / registered location (if relevant)
-
-### Footer — Company Info
-The footer must also display the company name, address, and contact email at minimum. Never hardcode — always pull from the config.
+## Footer — Company Info
+The footer must display the company name, address, and contact email at minimum. Never hardcode — always pull from the config.
 
 ---
 

@@ -2,7 +2,7 @@ You are a senior web developer, conversion copywriter, and SEO strategist.
 
 Your task is to create a complete, high-converting, startup-friendly website for a UK-based company offering PURE PAYE payroll services and recruitment.
 
-IMPORTANT RULES: use the @content.md for full content reference.
+IMPORTANT RULES: use the @rec-pay-content.md and @sample-content.md for full content reference.
 
 1. CONTENT STRATEGY 
 - Follow a proven structure used in high-converting payroll/recruitment websites.

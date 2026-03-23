@@ -68,10 +68,11 @@
 
 ## Animations & Carousels — Mandatory libraries
 
-- **Animations**: always use GSAP (`@/lib/infra/gsap.ts`) — never use raw CSS `@keyframes` or other JS animation libraries (Framer Motion, AOS, etc.) for complex animations
-- **Scroll-triggered animations**: use `ScrollTrigger` from `@/lib/infra/gsap.ts` — never `IntersectionObserver` manually for animation purposes
+- **Scroll animations**: use the built-in CSS + IntersectionObserver system — add `data-animate="fade-up"`, `data-animate="stagger"`, or `data-animate="fade-in"` to elements. `PageAnimations` in `app/layout.tsx` handles the rest. See `.claude/animate.md` for full reference.
+- **Hero animations**: use `HeroAnimator` component with `.hero-brand`, `.hero-headline`, `.hero-sub`, `.hero-ctas` class names on hero elements. See `.claude/animate.md`.
+- **Never use**: GSAP, Framer Motion, AOS, or any other JS animation library — the CSS system is intentionally lightweight and smooth
 - **Carousels / sliders**: always use Swiper (`swiper/react`) with modules from `@/lib/infra/swiper.ts` — never build custom carousel logic or use other libraries (Embla, Keen Slider, etc.)
-- Simple CSS transitions (hover, fade, slide) are fine with Tailwind — GSAP is for multi-step or scroll-driven sequences
+- Simple CSS transitions (hover, focus) are fine with Tailwind
 
 ## Key utility functions already in `lib/utils/format.ts`
 
@@ -140,8 +141,7 @@ See `.claude/legal.md` for the full ruleset. Summary:
 - **Cookie banner**: `components/cookie/CookieBannerModal.tsx` — must show on first visit, offer Accept / Reject / Manage Preferences, and gate non-essential scripts behind consent.
 - **Anti-slavery**: Optional but recommended for payroll/labour sectors — route `/anti-slavery`, add to footer legal links if built.
 - **Company info source of truth**: store in a single config file (e.g. `configs/footer.ts`) — never hardcode company details inline in components or pages.
-- **Default pages**: Only build `/`, `/about`, `/contact`, `/terms`, `/privacy` by default. Never add Services, Why Us, FAQ, Pricing, or any other page without asking the user first. Ask once per page — if no confirmation, skip it.
-- **Page requirements**: Homepage must have a reviews section. About page must have a map. Contact page must show company info block. Footer must show company name, address, and email.
+- **Pages**: See `.claude/pages.md` for all page rules — default pages, optional pages (Clients, Candidates, etc.), and per-page UX/content requirements. Never add pages beyond the defaults without asking first.
 - **Footer layout standard**: 4 columns — (1) Logo + description + social icons, (2) Company links, (3) Legal links, (4) Contact info. **Strictly ask the user before building the footer: "Do you want to proceed with the standard 4-column footer layout (Logo/Description/Socials | Company | Legal | Contact)?" — never implement without explicit confirmation.**
 - **GDPR/CCPA**: Forms need consent checkboxes, API routes must not log PII, all outbound emails must include company address and opt-out.
 
