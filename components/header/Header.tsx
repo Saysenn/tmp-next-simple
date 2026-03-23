@@ -18,6 +18,7 @@ import MenuOnlyHeader from "@/components/header/MenuOnlyHeader";
 import CenteredLogoHeader from "@/components/header/CenteredLogoHeader";
 import FloatingNavHeader from "@/components/header/FloatingNavHeader";
 import SplitNavHeader from "@/components/header/SplitNavHeader";
+import StackedHeader from "@/components/header/StackedHeader";
 import DrawerHeader from "@/components/header/DrawerHeader";
 import DropdownHeader from "@/components/header/DropdownHeader";
 import FullscreenHeader from "@/components/header/FullscreenHeader";
@@ -147,5 +148,6 @@ export default function Header() {
   if (siteConfig.headerType === "centered-logo") return <CenteredLogoHeader />;
   if (siteConfig.headerType === "floating-nav") return <FloatingNavHeader />;
   if (siteConfig.headerType === "split-nav") return <SplitNavHeader />;
+  if (siteConfig.headerType === "stacked") return <StackedHeader />;
   return <NavHeader />;
 }

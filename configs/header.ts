@@ -15,6 +15,7 @@ export type HeaderType =
   | "nav"            // logo + desktop nav + mobile hamburger (default)
   | "floating-nav"   // 3-col: logo | glass pill nav (centered) | cta
   | "split-nav"      // 3-col: nav links | logo (centered) | cta
+  | "stacked"        // 2-row: centred logo on top, centred nav below
   | "cta"            // logo + single CTA button, no nav
   | "menu-only"      // logo + Menu button on all screen sizes
   | "centered-logo"; // centered logo only, no nav
