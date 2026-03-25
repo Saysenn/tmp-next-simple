@@ -18,7 +18,8 @@ export type FooterLayout =
   | "brand"     // FooterBrand    — bold brand statement with gradient accent line
   | "split"     // FooterSplit    — two-tone zones: upper (brand+links) / lower (copyright+socials)
   | "info"
-  | "recruit";     // FooterInfo     — plain: logo + company details, no nav menus
+  | "recruit"      // FooterRecruit  — dark gradient: offices + contact + subscribe
+  | "stacked";     // FooterStacked  — centred logo/tagline | 2-col contact/office | nav row | bottom bar
 
 export type SocialIconName =
   | "twitter"
@@ -54,7 +55,7 @@ export type CompanyInfo = {
 
 // ─── Config ───────────────────────────────────────────────────
 
-// Footer layout — switch between: "columns" | "minimal" | "centered" | "brand" | "split" | "info" | "recruit"
+// Footer layout — switch between: "columns" | "minimal" | "centered" | "brand" | "split" | "info" | "recruit" | "stacked"
 export const footerLayout: FooterLayout = "recruit";
 
 // ─── Legal links (used by all footer layouts) ─────────────────
