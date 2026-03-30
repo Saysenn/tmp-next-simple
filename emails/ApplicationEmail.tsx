@@ -1,6 +1,6 @@
 import {
-  Body, Container, Head, Hr, Html,
-  Link, Preview, Section, Text,
+  Body, Button, Container, Head, Hr, Html,
+  Img, Link, Preview, Section, Text,
 } from "@react-email/components";
 import { mailConfig } from "@/configs/mail";
 
@@ -17,6 +17,7 @@ export default function ApplicationEmail({ name, email, phone, position, coverLe
   const year = new Date().getFullYear();
   const siteName = mailConfig.fromName;
   const siteUrl = mailConfig.siteUrl;
+  const logoUrl = mailConfig.logoUrl || `${siteUrl}/logo.webp`;
 
   return (
     <Html>
@@ -24,106 +25,127 @@ export default function ApplicationEmail({ name, email, phone, position, coverLe
       <Preview>New CV application from {name}{position ? ` — ${position}` : ""}</Preview>
       <Body style={main}>
         <Container style={container}>
-          {/* Header */}
-          <Section style={header}>
-            <Text style={label}>APPLICATION FORM</Text>
-            <Text style={title}>New CV Submission</Text>
-            <Text style={date}>
-              {new Date().toLocaleDateString("en-GB", {
-                weekday: "long", year: "numeric", month: "long", day: "numeric",
-              })}
-            </Text>
+
+          {/* Logo header */}
+          <Section style={logoHeader}>
+            <Img src={logoUrl} alt={siteName} height="44" style={logoImg} />
           </Section>
 
-          <Hr style={dividerTop} />
-
-          {/* Applicant details */}
+          {/* Content */}
           <Section style={content}>
-            <table style={{ width: "100%", borderCollapse: "collapse" }}>
-              <tr>
-                <td style={fieldKey}>Name</td>
-                <td style={fieldVal}>{name}</td>
-              </tr>
-              <tr>
-                <td style={fieldKey}>Email</td>
-                <td style={fieldVal}>
-                  <Link href={`mailto:${email}`} style={linkStyle}>{email}</Link>
-                </td>
-              </tr>
-              {phone && (
+            <Text style={heading}>New CV Application</Text>
+            <Text style={subheading}>
+              {new Date().toLocaleDateString("en-GB", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}
+            </Text>
+
+            <Hr style={divider} />
+
+            {/* Applicant card */}
+            <Section style={applicantCard}>
+              <table style={{ width: "100%" }}>
                 <tr>
-                  <td style={fieldKey}>Phone</td>
-                  <td style={fieldVal}>
-                    <Link href={`tel:${phone}`} style={linkStyle}>{phone}</Link>
+                  <td style={avatarCell}>
+                    <div style={avatar}>{name.charAt(0).toUpperCase()}</div>
+                  </td>
+                  <td style={applicantMeta}>
+                    <Text style={applicantName}>{name}</Text>
+                    <Link href={`mailto:${email}`} style={applicantEmail}>{email}</Link>
+                    {phone && (
+                      <Text style={applicantPhone}>
+                        <Link href={`tel:${phone}`} style={phoneLink}>{phone}</Link>
+                      </Text>
+                    )}
+                  </td>
+                  <td style={dateBadgeCell}>
+                    <Text style={dateBadge}>
+                      {new Date().toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
+                    </Text>
                   </td>
                 </tr>
-              )}
-              {position && (
-                <tr>
-                  <td style={fieldKey}>Position</td>
-                  <td style={fieldVal}>{position}</td>
-                </tr>
-              )}
-              {cvFilename && (
-                <tr>
-                  <td style={fieldKey}>CV</td>
-                  <td style={fieldVal}>
-                    <span style={cvBadge}>📎 {cvFilename}</span>
-                  </td>
-                </tr>
-              )}
-            </table>
+              </table>
+            </Section>
+
+            {/* Details */}
+            <Section style={detailsSection}>
+              <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                {position && (
+                  <tr>
+                    <td style={detailLabel}>Position</td>
+                    <td style={detailValue}>{position}</td>
+                  </tr>
+                )}
+                {cvFilename && (
+                  <tr>
+                    <td style={detailLabel}>CV</td>
+                    <td style={detailValue}>
+                      <span style={cvBadge}>📎 {cvFilename}</span>
+                    </td>
+                  </tr>
+                )}
+              </table>
+            </Section>
 
             {coverLetter && (
-              <>
-                <Hr style={dividerMid} />
+              <Section style={msgSection}>
                 <Text style={msgLabel}>Cover Letter</Text>
                 <Text style={msgText}>{coverLetter}</Text>
-              </>
+              </Section>
             )}
 
-            <Hr style={dividerMid} />
-
-            <Text style={replyText}>
-              <Link href={`mailto:${email}`} style={replyLink}>
-                → Reply to {name.split(" ")[0]}
-              </Link>
-            </Text>
+            <Section style={btnSection}>
+              <Button href={`mailto:${email}`} style={replyBtn}>
+                Reply to {name.split(" ")[0]}
+              </Button>
+            </Section>
           </Section>
 
           {/* Footer */}
+          <Hr style={footerDivider} />
           <Section style={footer}>
             <Text style={footerText}>
               {siteName}
               {siteUrl && (
                 <> · <Link href={siteUrl} style={footerLink}>{siteUrl.replace(/^https?:\/\//, "")}</Link></>
               )}
-              {" · "}© {year}
             </Text>
+            <Text style={copyright}>© {year} {siteName}. All rights reserved.</Text>
           </Section>
+
         </Container>
       </Body>
     </Html>
   );
 }
 
-const main = { backgroundColor: "#ffffff", fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" };
-const container = { maxWidth: "560px", margin: "40px auto", backgroundColor: "#ffffff" };
-const header = { padding: "32px 0 24px" };
-const label = { margin: "0 0 6px", color: "#a0aec0", fontSize: "11px", fontWeight: "700", textTransform: "uppercase" as const, letterSpacing: "2px" };
-const title = { margin: "0 0 6px", color: "#1a202c", fontSize: "26px", fontWeight: "700" };
-const date = { margin: "0", color: "#718096", fontSize: "13px" };
-const dividerTop = { borderColor: "#e2e8f0", margin: "0 0 28px" };
-const dividerMid = { borderColor: "#e2e8f0", margin: "24px 0" };
-const content = { padding: "0" };
-const fieldKey = { color: "#a0aec0", fontSize: "12px", fontWeight: "600", textTransform: "uppercase" as const, letterSpacing: "0.5px", padding: "8px 20px 8px 0", width: "80px", verticalAlign: "top" as const };
-const fieldVal = { color: "#2d3748", fontSize: "14px", padding: "8px 0", verticalAlign: "top" as const };
-const linkStyle = { color: "#4f46e5", textDecoration: "none" };
-const cvBadge = { display: "inline-block", fontSize: "13px", color: "#4f46e5", fontWeight: "600" };
-const msgLabel = { margin: "0 0 8px", color: "#a0aec0", fontSize: "12px", fontWeight: "600", textTransform: "uppercase" as const, letterSpacing: "0.5px" };
-const msgText = { margin: "0", color: "#4a5568", fontSize: "15px", lineHeight: "1.7", whiteSpace: "pre-wrap" as const };
-const replyText = { margin: "0" };
-const replyLink = { color: "#4f46e5", fontSize: "14px", fontWeight: "600", textDecoration: "none" };
-const footer = { borderTop: "1px solid #e2e8f0", padding: "20px 0" };
-const footerText = { margin: "0", color: "#a0aec0", fontSize: "12px" };
-const footerLink = { color: "#a0aec0", textDecoration: "none" };
+const main = { backgroundColor: "#f4f4f5", fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" };
+const container = { maxWidth: "600px", margin: "0 auto", backgroundColor: "#ffffff", borderRadius: "8px", overflow: "hidden" as const, boxShadow: "0 1px 3px rgba(0,0,0,0.08)" };
+const logoHeader = { backgroundColor: "#ffffff", padding: "32px 40px 24px", textAlign: "center" as const, borderBottom: "1px solid #e5e7eb" };
+const logoImg = { margin: "0 auto", display: "block" };
+const content = { padding: "36px 40px" };
+const heading = { margin: "0 0 4px", color: "#111827", fontSize: "22px", fontWeight: "700" };
+const subheading = { margin: "0 0 24px", color: "#6b7280", fontSize: "13px" };
+const divider = { borderColor: "#e5e7eb", margin: "0 0 24px" };
+const applicantCard = { backgroundColor: "#f9fafb", borderRadius: "8px", padding: "20px", marginBottom: "20px", border: "1px solid #e5e7eb" };
+const avatarCell = { width: "52px", verticalAlign: "middle" as const };
+const avatar = { width: "46px", height: "46px", backgroundColor: "#111827", borderRadius: "50%", color: "#fff", fontSize: "18px", fontWeight: "700" as const, lineHeight: "46px", textAlign: "center" as const };
+const applicantMeta = { paddingLeft: "14px", verticalAlign: "middle" as const };
+const applicantName = { margin: "0 0 2px", color: "#111827", fontSize: "16px", fontWeight: "700" };
+const applicantEmail = { color: "#4f46e5", fontSize: "13px", textDecoration: "none" };
+const applicantPhone = { margin: "3px 0 0", fontSize: "13px" };
+const phoneLink = { color: "#6b7280", textDecoration: "none" };
+const dateBadgeCell = { textAlign: "right" as const, verticalAlign: "middle" as const };
+const dateBadge = { margin: "0", color: "#9ca3af", fontSize: "12px" };
+const detailsSection = { backgroundColor: "#f9fafb", borderRadius: "6px", padding: "16px 20px", marginBottom: "20px", border: "1px solid #e5e7eb" };
+const detailLabel = { color: "#9ca3af", fontSize: "11px", fontWeight: "600", textTransform: "uppercase" as const, letterSpacing: "0.5px", padding: "6px 16px 6px 0", width: "80px", verticalAlign: "top" as const };
+const detailValue = { color: "#1f2937", fontSize: "14px", padding: "6px 0", verticalAlign: "top" as const };
+const cvBadge = { fontSize: "13px", color: "#4f46e5", fontWeight: "600" };
+const msgSection = { marginBottom: "24px" };
+const msgLabel = { margin: "0 0 8px", color: "#9ca3af", fontSize: "11px", fontWeight: "600", textTransform: "uppercase" as const, letterSpacing: "0.5px" };
+const msgText = { margin: "0", color: "#374151", fontSize: "15px", lineHeight: "1.7", whiteSpace: "pre-wrap" as const, backgroundColor: "#f9fafb", borderRadius: "6px", padding: "16px 20px", border: "1px solid #e5e7eb" };
+const btnSection = { textAlign: "center" as const };
+const replyBtn = { backgroundColor: "#111827", color: "#ffffff", padding: "13px 32px", borderRadius: "6px", fontSize: "14px", fontWeight: "600", textDecoration: "none" };
+const footerDivider = { borderColor: "#e5e7eb", margin: "0" };
+const footer = { backgroundColor: "#f9fafb", padding: "24px 40px", textAlign: "center" as const };
+const footerText = { margin: "0 0 4px", color: "#9ca3af", fontSize: "12px" };
+const footerLink = { color: "#6b7280", textDecoration: "none" };
+const copyright = { margin: "0", color: "#d1d5db", fontSize: "11px" };

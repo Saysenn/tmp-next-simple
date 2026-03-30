@@ -232,7 +232,7 @@ export async function POST(request: NextRequest) {
     await sendEmail({
       to: mailConfig.contactEmail,
       replyTo: email,
-      subject: `[Application] CV from ${name}${position ? ` — ${position}` : ""}`,
+      subject: `CV Application — ${name}${position ? ` (${position})` : ""}`,
       html,
       text,
       ...(cvBuffer ? {

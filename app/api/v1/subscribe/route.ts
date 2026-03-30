@@ -130,7 +130,7 @@ export async function POST(request: NextRequest) {
     await sendEmail({
       to: mailConfig.contactEmail,
       replyTo: email,
-      subject: `[Early Access] New signup from ${name || email}`,
+      subject: `New Subscriber — ${name || email}`,
       html,
     });
 

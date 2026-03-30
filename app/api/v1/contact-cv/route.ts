@@ -189,7 +189,7 @@ export async function POST(request: NextRequest) {
     await sendEmail({
       to: mailConfig.contactEmail,
       replyTo: email,
-      subject: `[Contact] Message from ${name}${cvFilename ? " (CV attached)" : ""}`,
+      subject: `New Enquiry from ${name}${cvFilename ? " — CV Attached" : ""}`,
       html,
       ...(cvBuffer ? {
         attachments: [{ filename: cvFilename, content: cvBuffer, contentType: cvFile!.type }],

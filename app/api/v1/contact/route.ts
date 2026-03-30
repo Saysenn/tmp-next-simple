@@ -153,7 +153,7 @@ export async function POST(request: NextRequest) {
     await sendEmail({
       to: mailConfig.contactEmail,
       replyTo: email,
-      subject: `[Contact Form] Inquiry from ${name}`,
+      subject: `New Enquiry from ${name} — ${mailConfig.fromName}`,
       html,
       text,
     });
