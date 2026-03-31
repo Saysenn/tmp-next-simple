@@ -164,6 +164,7 @@ See `.claude/legal.md` for the full ruleset. Summary:
 - Use Tailwind utility classes for all styling — no inline `style=` props unless unavoidable
 - Default to the project's existing spacing, typography, and color patterns — don't introduce new design languages
 - Never add animations or transitions that weren't asked for — Tailwind hover/focus transitions are fine, GSAP only when explicitly requested
+- **Never add `max-w-*` classes to `<p>` tags** — paragraph width is controlled by its parent container, not the element itself. Adding `max-w-2xl`, `max-w-prose`, or any width constraint directly on a `<p>` breaks layout consistency and fights the grid.
 
 ## UI/UX Craftsmanship — Think Like a Senior Designer
 
