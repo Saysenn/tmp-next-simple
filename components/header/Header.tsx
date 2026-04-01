@@ -33,25 +33,25 @@ import FullscreenHeader from "@/components/header/FullscreenHeader";
 const navLinkClass: Record<string, (active: boolean) => string> = {
   "bg-fill": (a) =>
     `px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-      a ? "bg-gray-100 text-gray-900" : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+      a ? "accent-light accent-text font-semibold" : "hover:accent-light"
     }`,
   "underline-center": (a) =>
     `px-3 py-1.5 text-sm font-medium relative after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:bg-current after:transition-all after:duration-200 ${
-      a ? "after:w-full text-gray-900" : "after:w-0 text-gray-600 hover:after:w-full hover:text-gray-900"
+      a ? "after:w-full accent-text" : "after:w-0 hover:after:w-full"
     }`,
   "underline-left": (a) =>
     `px-3 py-1.5 text-sm font-medium relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-current after:transition-all after:duration-200 ${
-      a ? "after:w-full text-gray-900" : "after:w-0 text-gray-600 hover:after:w-full hover:text-gray-900"
+      a ? "after:w-full accent-text" : "after:w-0 hover:after:w-full"
     }`,
   "text-accent": (a) =>
     `px-3 py-1.5 text-sm font-medium transition-colors ${
-      a ? "text-indigo-600 font-semibold" : "text-gray-600 hover:text-indigo-600"
+      a ? "accent-text font-semibold" : "hover:accent-text"
     }`,
   "dot-below": (a) =>
     `px-3 py-1.5 text-sm font-medium relative ${
       a
-        ? "text-gray-900 after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:bg-gray-900 after:rounded-full"
-        : "text-gray-600 hover:text-gray-900"
+        ? "accent-text after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:accent-bg after:rounded-full"
+        : "hover:accent-text"
     }`,
 };
 
@@ -62,20 +62,28 @@ function getNavClass(active: boolean) {
 
 // ─── DesktopNav ───────────────────────────────────────────────
 
-function DesktopNav({ pathname }: { pathname: string }) {
+function DesktopNav({ pathname, transparent = false }: { pathname: string; transparent?: boolean }) {
   return (
     <nav className="hidden md:flex items-center gap-1">
-      {headerNav.map((link) => (
-        <Link
-          key={link.href}
-          href={link.href}
-          target={link.external ? "_blank" : undefined}
-          rel={link.external ? "noopener noreferrer" : undefined}
-          className={`whitespace-nowrap ${getNavClass(pathname === link.href)}`}
-        >
-          {link.label}
-        </Link>
-      ))}
+      {headerNav.map((link) => {
+        const isActive = pathname === link.href;
+        return (
+          <Link
+            key={link.href}
+            href={link.href}
+            target={link.external ? "_blank" : undefined}
+            rel={link.external ? "noopener noreferrer" : undefined}
+            className="whitespace-nowrap px-3 py-1.5 text-sm font-medium transition-colors duration-200 rounded-md"
+            style={
+              transparent
+                ? { color: isActive ? "var(--nav-color-transparent-active)" : "var(--nav-color-transparent)", fontWeight: isActive ? 600 : 500 }
+                : { color: isActive ? "var(--nav-color-solid-active)" : "var(--nav-color-solid)", fontWeight: isActive ? 600 : 500 }
+            }
+          >
+            {link.label}
+          </Link>
+        );
+      })}
     </nav>
   );
 }
@@ -106,17 +114,11 @@ function NavHeader() {
 
   const menuProps = { open: menuOpen, onClose: () => setMenuOpen(false), pathname };
 
-  // Scroll effect: transparent → solid. Static: always solid.
-  const headerStyle = scrollEffect
-    ? scrolled
-      ? { backgroundColor: "#ffffff", borderBottom: "1px solid rgba(0,0,0,0.08)" }
-      : { backgroundColor: "transparent" }
-    : undefined;
-
+  // header-solid class is defined in globals.css and uses CSS variables — no inline style needed
   const headerClass = `${
     siteConfig.headerSticky ? "fixed top-0 z-50" : "relative"
-  } w-full transition-all duration-300 ${
-    !scrollEffect ? "bg-white/90 backdrop-blur-sm border-b border-gray-200" : ""
+  } w-full transition-[background-color,border-color,backdrop-filter] duration-300 ease-in-out ${
+    !scrollEffect || scrolled ? "header-solid" : ""
   }`;
 
   // Logo: swap to invert src when scroll effect is active and not yet scrolled
@@ -125,14 +127,11 @@ function NavHeader() {
       ? siteConfig.logoInvertImageSrc
       : siteConfig.logoImageSrc;
 
-  // Nav link colour override for transparent state
-  const scrollNavStyle = scrollEffect && !scrolled
-    ? { color: "rgba(255,255,255,0.85)" }
-    : undefined;
+  const transparent = scrollEffect && !scrolled;
 
   return (
     <>
-      <header className={headerClass} style={headerStyle}>
+      <header className={headerClass}>
         <div className="mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-8">
           <div className="flex items-center h-20">
             <Logo
@@ -142,40 +141,16 @@ function NavHeader() {
               size={siteConfig.logoSize}
             />
             <div className="ml-auto flex items-center gap-1">
-              {/* Desktop nav — colour overridden in scroll-effect transparent state */}
-              {scrollEffect && !scrolled ? (
-                <nav className="hidden md:flex items-center gap-1">
-                  {headerNav.map((link) => {
-                    const isActive = pathname === link.href;
-                    return (
-                      <Link
-                        key={link.href}
-                        href={link.href}
-                        target={link.external ? "_blank" : undefined}
-                        rel={link.external ? "noopener noreferrer" : undefined}
-                        className="whitespace-nowrap px-4 py-1.5 text-sm font-medium transition-all duration-200"
-                        style={{
-                          color: isActive ? "var(--accent)" : "rgba(255,255,255,0.85)",
-                          fontWeight: isActive ? 600 : 500,
-                        }}
-                      >
-                        {link.label}
-                      </Link>
-                    );
-                  })}
-                </nav>
-              ) : (
-                <DesktopNav pathname={pathname} />
-              )}
+              <DesktopNav pathname={pathname} transparent={scrollEffect && !scrolled} />
 
               {siteConfig.cta.enabled && (
                 <Link
                   href={siteConfig.cta.href}
                   className="hidden md:inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors ml-2"
                   style={
-                    scrollEffect && !scrolled
-                      ? { background: "rgba(255,255,255,0.15)", color: "#ffffff", backdropFilter: "blur(8px)" }
-                      : { background: "var(--accent)", color: "var(--text-invert, #ffffff)" }
+                    transparent
+                      ? { background: "var(--accent-light)", color: "var(--accent)" }
+                      : { background: "var(--accent)", color: "var(--bg-pure)" }
                   }
                 >
                   {siteConfig.cta.label}
@@ -189,7 +164,7 @@ function NavHeader() {
                 aria-label={menuOpen ? "Close menu" : "Open menu"}
                 aria-expanded={menuOpen}
                 className="md:hidden flex flex-col justify-center items-center w-9 h-9 rounded-md transition-colors ml-1"
-                style={scrollNavStyle ?? { color: "var(--text-heading)" }}
+                style={{ color: transparent ? "var(--nav-color-transparent)" : "var(--nav-color-solid)" }}
               >
                 <span className={`block w-5 h-0.5 bg-current transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-1" : ""}`} />
                 <span className={`block w-5 h-0.5 bg-current mt-1 transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`} />

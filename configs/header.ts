@@ -66,15 +66,15 @@ export const siteConfig: HeaderConfig = {
   copyright: `© ${new Date().getFullYear()} MyApp. All rights reserved.`,
 
   // "text" | "image" | "image-text" | "icon-text"
-  logoType: "icon-text",
-  logoImageSrc: undefined,        // set to "/logo.webp" when you have an image
-  logoInvertImageSrc: undefined,  // set to "/logo-invert.webp" for the transparent header state
+  logoType: "image",
+  logoImageSrc: "/logo.webp",
+  logoInvertImageSrc: "/logo-invert.webp",
 
   // "sm" | "md" | "lg"
   logoSize: "md",
 
   // "nav" | "floating-nav" | "split-nav" | "stacked" | "cta" | "menu-only" | "centered-logo"
-  headerType: "split-nav",
+  headerType: "nav",
 
   // "drawer" | "dropdown" | "fullscreen"
   mobileMenuType: "drawer",
@@ -83,10 +83,10 @@ export const siteConfig: HeaderConfig = {
 
   // when true: header is transparent over hero, becomes solid on scroll
   // requires a hero section with bg image — set logoInvertImageSrc for the transparent state logo
-  headerScrollEffect: false,
+  headerScrollEffect: true,
 
   // "bg-fill" | "underline-center" | "underline-left" | "text-accent" | "dot-below"
-  navLinkStyle: "bg-fill",
+  navLinkStyle: "text-accent",
 
   cta: {
     enabled: true,

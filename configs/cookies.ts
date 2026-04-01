@@ -40,7 +40,7 @@ export const cookiesConfig: CookiesConfig = {
 
   // ── Layout ────────────────────────────────────────────────────────────────
   // Change this to any of: "bar" | "card" | "modal" | "drawer" | "float"
-  cookieBannerVariant: "bar",
+  cookieBannerVariant: "modal",
 
   // ── Storage ───────────────────────────────────────────────────────────────
   cookieExpireDays: 365,

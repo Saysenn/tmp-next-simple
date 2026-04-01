@@ -4,8 +4,8 @@
 // DrawerHeader — Slides in from the LEFT
 //
 // Style: Glassmorphism sidebar panel.
-// - bg-white/90 + backdrop-blur-2xl for frosted glass
-// - Left border active indicator (PerformAI-style)
+// - Uses CSS variables from globals.css for all colours
+// - Left border active indicator
 // - Blurred + dimmed backdrop on the right side
 //
 // IMPORTANT: Must be rendered OUTSIDE <header> to avoid the
@@ -22,28 +22,25 @@ export default function DrawerHeader({ open, onClose, pathname, allSizes = false
   const hide = allSizes ? "" : "md:hidden";
   return (
     <>
-      {/* Backdrop — blurs and dims page content to the right */}
+      {/* Backdrop */}
       <div
-        className={`fixed inset-0 z-60 backdrop-blur-md bg-black/25 transition-opacity duration-300 ${hide} ${
+        className={`fixed inset-0 z-60 backdrop-blur-md transition-opacity duration-300 ${hide} ${
           open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
+        style={{ background: "rgba(0,0,0,0.35)" }}
         onClick={onClose}
         aria-hidden="true"
       />
 
-      {/* Glassmorphism drawer panel */}
+      {/* Drawer panel */}
       <div
-        className={`fixed top-0 left-0 z-70 h-full w-[280px] flex flex-col
-          bg-white/90 dark:bg-gray-950/90
-          backdrop-blur-2xl
-          border-r border-white/40 dark:border-white/10
-          shadow-[4px_0_32px_rgba(0,0,0,0.12)]
-          transition-transform duration-300 ease-out
-          ${hide}
-          ${open ? "translate-x-0" : "-translate-x-full"}`}
+        className={`fixed top-0 left-0 z-70 h-full w-[280px] flex flex-col backdrop-blur-2xl shadow-[4px_0_32px_rgba(0,0,0,0.18)] transition-transform duration-300 ease-out border-r ${hide} ${
+          open ? "translate-x-0" : "-translate-x-full"
+        }`}
+        style={{ background: "var(--bg-header)", borderColor: "var(--border)" }}
       >
         {/* Header row */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200/60 dark:border-gray-700/40">
+        <div className="flex items-center justify-between px-5 py-4 border-b" style={{ borderColor: "var(--border)" }}>
           <Logo
             type={siteConfig.logoType}
             imageSrc={siteConfig.logoImageSrc}
@@ -52,7 +49,8 @@ export default function DrawerHeader({ open, onClose, pathname, allSizes = false
           <button
             onClick={onClose}
             aria-label="Close menu"
-            className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-100/80 dark:hover:bg-gray-800/60 dark:hover:text-white transition-colors"
+            className="w-8 h-8 flex items-center justify-center rounded-lg transition-colors"
+            style={{ color: "var(--nav-color-solid)" }}
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
               <path d="M1.5 1.5l13 13M14.5 1.5l-13 13" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
@@ -60,7 +58,7 @@ export default function DrawerHeader({ open, onClose, pathname, allSizes = false
           </button>
         </div>
 
-        {/* Nav links — PerformAI left border active indicator */}
+        {/* Nav links */}
         <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-0.5">
           {headerNav.map((link) => {
             const isActive = pathname === link.href;
@@ -71,11 +69,12 @@ export default function DrawerHeader({ open, onClose, pathname, allSizes = false
                 target={link.external ? "_blank" : undefined}
                 rel={link.external ? "noopener noreferrer" : undefined}
                 onClick={onClose}
-                className={`flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 border-l-2 ${
+                className="flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 border-l-2"
+                style={
                   isActive
-                    ? "border-l-indigo-500 bg-indigo-50/80 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300"
-                    : "border-l-transparent text-gray-600 hover:text-gray-900 hover:bg-gray-100/70 hover:border-l-gray-300 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-800/50"
-                }`}
+                    ? { borderLeftColor: "var(--accent)", background: "var(--accent-light)", color: "var(--accent)" }
+                    : { borderLeftColor: "transparent", color: "var(--nav-color-solid)" }
+                }
               >
                 {link.label}
               </Link>
@@ -87,7 +86,8 @@ export default function DrawerHeader({ open, onClose, pathname, allSizes = false
               <Link
                 href={siteConfig.cta.href}
                 onClick={onClose}
-                className="flex items-center justify-center gap-1.5 w-full px-4 py-2.5 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 active:bg-indigo-800 transition-colors"
+                className="flex items-center justify-center gap-1.5 w-full px-4 py-2.5 rounded-lg text-sm font-medium transition-colors"
+                style={{ background: "var(--accent)", color: "var(--bg-pure)" }}
               >
                 {siteConfig.cta.label}
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
@@ -99,8 +99,8 @@ export default function DrawerHeader({ open, onClose, pathname, allSizes = false
         </nav>
 
         {/* Footer strip */}
-        <div className="px-5 py-4 border-t border-gray-200/60 dark:border-gray-700/40">
-          <p className="text-xs text-gray-400 dark:text-gray-600">{siteConfig.name}</p>
+        <div className="px-5 py-4 border-t" style={{ borderColor: "var(--border)" }}>
+          <p className="text-xs" style={{ color: "var(--nav-color-solid)", opacity: 0.5 }}>{siteConfig.name}</p>
         </div>
       </div>
     </>

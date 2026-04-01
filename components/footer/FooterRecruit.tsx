@@ -13,7 +13,7 @@ import type { FooterConfig, HeaderConfig } from "@/lib/config";
 import { socialLinks } from "@/configs/footer";
 
 interface Props {
-  brand: Pick<HeaderConfig, "logo" | "logoType" | "logoImageSrc">;
+  brand: Pick<HeaderConfig, "logo" | "logoType" | "logoImageSrc" | "logoInvertImageSrc">;
   config: FooterConfig;
 }
 
@@ -46,11 +46,11 @@ export default function FooterRecruit({ brand, config }: Props) {
     <footer style={{ background: "var(--gradient-footer)" }}>
       {/* Top row — logo + socials */}
       <div className="mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-8 pt-10 pb-6 flex items-center justify-between gap-4 flex-wrap border-b border-white/10">
-        <div className="flex-shrink-0">
-          {brand.logoImageSrc ? (
+        <div className="shrink-0">
+          {(brand.logoInvertImageSrc ?? brand.logoImageSrc) ? (
             <div className="relative w-[160px] h-[56px]">
               <Image
-                src={brand.logoImageSrc}
+                src={(brand.logoInvertImageSrc ?? brand.logoImageSrc)!}
                 alt={brand.logo}
                 fill
                 sizes="160px"

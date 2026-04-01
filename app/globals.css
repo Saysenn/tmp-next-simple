@@ -5,35 +5,46 @@
 =========================== */
 :root {
   /* Single accent — change this one value to retheme the whole site */
-  --accent: #4f46e5;          /* indigo-600 */
-  --accent-hover: #4338ca;    /* indigo-700 */
-  --accent-light: #e0e7ff;    /* indigo-100 */
-  --accent-muted: #6366f1;    /* indigo-500 */
+  --accent: #6ed39a;
+  --accent-hover: #5bc489;
+  --accent-light: rgba(110, 211, 154, 0.12);
+  --accent-muted: rgba(110, 211, 154, 0.55);
 
   /* Backgrounds */
-  --bg-base: #ffffff;
-  --bg-soft: #f9fafb;         /* gray-50 */
-  --bg-subtle: #f3f4f6;       /* gray-100 */
+  --bg-pure: #062125;
+  --bg-base: #083433;
+  --bg-soft: #052022;
+  --bg-subtle: #062125;
+  
+  /* Header scroll effect — only used when headerScrollEffect: true in configs/header.ts
+     --bg-header: scrolled header bg. Match nav colors to contrast against it.
+     -solid vars: nav colors on scrolled header. White bg → dark text. Dark bg → light text.
+     -transparent vars: nav colors on transparent header over hero. Usually white. */
+  --bg-header: rgba(255, 255, 255, 0.92);
+  --nav-color-solid: #111827;
+  --nav-color-solid-active: var(--accent);
+  --nav-color-transparent: rgba(255, 255, 255, 0.85);
+  --nav-color-transparent-active: var(--accent);
 
-  /* Text — light backgrounds */
-  --text-heading: #111827;    /* gray-900 */
-  --text-body: #374151;       /* gray-700 */
-  --text-muted: #6b7280;      /* gray-500 */
-  --text-faint: #9ca3af;      /* gray-400 */
+  /* Text — dark theme */
+  --text-heading: #f0fdf4;
+  --text-body: #d1fae5;
+  --text-muted: #6ee7b7;
+  --text-faint: #4ade80;
 
-  /* Text — dark backgrounds (use these on dark sections/cards) */
-  --text-on-dark: #f9fafb;         /* gray-50  — primary text on dark */
-  --text-on-dark-muted: #d1d5db;   /* gray-300 — secondary text on dark */
-  --text-on-dark-faint: #9ca3af;   /* gray-400 — captions on dark */
+  /* Text — on dark surfaces */
+  --text-on-dark: #f0fdf4;
+  --text-on-dark-muted: #d1fae5;
+  --text-on-dark-faint: #6ee7b7;
 
   /* Borders */
-  --border: #e5e7eb;          /* gray-200 */
-  --border-strong: #d1d5db;   /* gray-300 */
+  --border: rgba(110, 211, 154, 0.15);
+  --border-strong: rgba(110, 211, 154, 0.3);
 
-  /* Gradients — tweak to taste */
-  --gradient-hero: linear-gradient(135deg, #f0f4ff 0%, #fafbff 60%, #f5f3ff 100%);
-  --gradient-card: linear-gradient(to bottom right, #f0f4ff, #fafbff);
-  --gradient-accent: linear-gradient(to right, var(--accent), #7c3aed);
+  /* Gradients */
+  --gradient-hero: linear-gradient(135deg, #062125 0%, #083433 60%, #052022 100%);
+  --gradient-card: linear-gradient(to bottom right, #083433, #062125);
+  --gradient-accent: linear-gradient(to right, var(--accent), #34d399);
 }
 
 /* ===========================
@@ -178,6 +189,49 @@ small, .text-caption {
 .bg-subtle  { background-color: var(--bg-subtle); }
 
 /* ===========================
+   SECTION THEMES
+   Add class="section-dark" or class="section-light" to any <section>.
+   All children use var(--section-*) so the same markup works in both contexts.
+   Change --section-accent per section type to keep sections visually alive.
+=========================== */
+.section-dark {
+  --section-bg:       var(--bg-base);
+  --section-heading:  var(--text-heading);
+  --section-body:     var(--text-body);
+  --section-muted:    var(--text-muted);
+  --section-border:   var(--border);
+  --section-accent:   var(--accent);
+  --section-accent-light: var(--accent-light);
+  --section-btn-bg:   var(--accent);
+  --section-btn-text: var(--bg-pure);
+  background-color: var(--section-bg);
+}
+
+.section-light {
+  --section-bg:       #ffffff;
+  --section-heading:  #111827;
+  --section-body:     #374151;
+  --section-muted:    #6b7280;
+  --section-border:   #e5e7eb;
+  --section-accent:   var(--accent);
+  --section-accent-light: rgba(110, 211, 154, 0.12);
+  --section-btn-bg:   var(--accent);
+  --section-btn-text: #111827;
+  background-color: var(--section-bg);
+}
+
+/* ===========================
+   HEADER STATES
+   Toggled via JS class — transitions work reliably via CSS, not inline styles
+=========================== */
+.header-solid {
+  background-color: var(--bg-header);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+}
+
+/* ===========================
    SECTION SPACING
 =========================== */
 .section {
@@ -185,6 +239,23 @@ small, .text-caption {
 }
 @media (min-width: 640px)  { .section { padding: 5rem 1.5rem; }  }
 @media (min-width: 1024px) { .section { padding: 6rem 2rem; }    }
+
+.section-hero {
+  padding: 4rem 1.25rem;
+  padding-top: 10rem;
+}
+@media (min-width: 640px) {
+  .section-hero {
+    padding: 5rem 1.5rem;
+    padding-top: 12rem;
+  }
+}
+@media (min-width: 1024px) {
+  .section-hero {
+    padding: 6rem 2rem;
+    padding-top: 12rem;
+  }
+}
 
 .section-inner {
   max-width: 1280px;

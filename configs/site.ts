@@ -20,7 +20,7 @@ export type SiteConfig = {
 
 export const siteConfig: SiteConfig = {
   // "maintenance" | "coming-soon" | "full"
-  mode: "coming-soon",
+  mode: "full",
 
   maintenance: {
     heading: "We'll be back soon",

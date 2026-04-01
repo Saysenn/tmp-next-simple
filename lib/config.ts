@@ -28,6 +28,7 @@ export type HeaderConfig = {
   logo: string;
   logoType: LogoType;
   logoImageSrc?: string;
+  logoInvertImageSrc?: string;
   nav: LinkItem[];
   cta: { enabled: boolean; label: string; href: string };
 };
@@ -47,6 +48,7 @@ export const headerConfig: HeaderConfig = {
   logo: siteConfig.name,
   logoType: siteConfig.logoType,
   logoImageSrc: siteConfig.logoImageSrc,
+  logoInvertImageSrc: siteConfig.logoInvertImageSrc,
   nav: headerNav,
   cta: siteConfig.cta,
 };
