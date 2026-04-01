@@ -163,6 +163,17 @@ See `.claude/legal.md` for the full ruleset. Summary:
 - Neutral colors (`gray-*`, `white`, `black`) are fine as Tailwind classes
 - To retheme, always tell the user: **"Adjust the CSS variables in `app/globals.css` — change `--accent` to retheme the whole site"**
 
+## Applying a New Colour Scheme — Full Mapping Required
+
+When the user provides a new colour scheme (hex values, palette, or CSS variables), **always update ALL of the following in `app/globals.css`** — never only update `:root`:
+
+1. **`:root` base variables** — `--accent`, `--accent-hover`, `--accent-light`, `--accent-muted`, `--bg-pure`, `--bg-base`, `--bg-soft`, `--bg-subtle`, `--text-heading`, `--text-body`, `--text-muted`, `--text-faint`, `--border`, `--border-strong`, `--gradient-hero`, `--gradient-card`
+2. **Header scroll variables** — `--bg-header`, `--nav-color-solid`, `--nav-color-transparent`. Rule: if `--bg-header` is light → `--nav-color-solid` must be dark. If dark → must be light.
+3. **`.section-dark`** — update `--section-bg`, `--section-heading`, `--section-body`, `--section-muted`, `--section-border`, `--section-accent`, `--section-accent-light`, `--section-btn-bg`, `--section-btn-text` to match the dark palette
+4. **`.section-light`** — same variables, mapped to the light contrast palette
+
+Never leave any of these groups out of sync with the others. A colour scheme update is only complete when all four groups are updated.
+
 ## Inline CSS — Always Use CSS Variables
 
 - When writing inline `style={{}}` props, always use CSS variables from `app/globals.css` rather than hardcoded hex values
