@@ -3,12 +3,13 @@
  * Best for: apps with dense navigation, multi-section sites, B2B SaaS.
  */
 
+import Image from "next/image";
 import Link from "next/link";
 import { SocialIcons } from "./_social-icons";
 import type { FooterConfig, HeaderConfig } from "@/lib/config";
 
 interface Props {
-  brand: Pick<HeaderConfig, "logo">;
+  brand: Pick<HeaderConfig, "logo" | "logoType" | "logoImageSrc">;
   config: FooterConfig;
 }
 
@@ -21,7 +22,13 @@ export default function FooterSplit({ brand, config }: Props) {
           <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
             {/* Left — logo + tagline */}
             <div className="max-w-xs">
-              <p className="text-base font-bold text-gray-900">{brand.logo}</p>
+              {brand.logoType === "image" && brand.logoImageSrc ? (
+                <div className="relative w-[160px] h-[56px]">
+                  <Image src={brand.logoImageSrc} alt={brand.logo} fill sizes="160px" className="object-contain p-1" />
+                </div>
+              ) : (
+                <p className="text-base font-bold text-gray-900">{brand.logo}</p>
+              )}
               <p className="mt-3 text-sm leading-relaxed text-gray-500">{config.tagline}</p>
             </div>
 

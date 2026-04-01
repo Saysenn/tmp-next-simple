@@ -55,14 +55,14 @@ export default function StackedHeader() {
         {/* Top row — centred logo */}
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 pt-5 pb-3 flex items-center justify-between md:justify-center">
           {/* Logo */}
-          <Link href="/" className="flex items-center justify-center focus:outline-none">
+          <Link href="/" aria-label={siteConfig.name} className="relative w-[200px] h-[80px] block focus:outline-none">
             {siteConfig.logoImageSrc ? (
               <Image
                 src={siteConfig.logoImageSrc}
                 alt={siteConfig.name}
-                width={280}
-                height={80}
-                className="h-20 w-auto object-contain"
+                fill
+                sizes="(max-width: 768px) 120px, 200px"
+                className="object-contain p-2"
                 priority
               />
             ) : (

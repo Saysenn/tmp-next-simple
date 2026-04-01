@@ -182,6 +182,7 @@ See `.claude/legal.md` for the full ruleset. Summary:
 - Never add animations or transitions that weren't asked for — Tailwind hover/focus transitions are fine
 - **Never add `max-w-*` classes to `<p>` tags** — paragraph width is controlled by its parent container, not the element itself. Adding `max-w-2xl`, `max-w-prose`, or any width constraint directly on a `<p>` breaks layout consistency and fights the grid.
 - **CTAs and buttons inside sections must have `mt-8` on their className** — this gives consistent, professional spacing between body content and the call-to-action. Never leave a CTA immediately flush against the text above it.
+- **Hero section containers must have the class `section-hero`** — always add this alongside any other classes (e.g. `<section className="section-hero relative ..."`). This is required for consistent targeting via CSS and JS selectors.
 
 ---
 
@@ -230,6 +231,29 @@ Every page and every section must feel intentional and distinct. Before writing 
 - **Scroll to top on navigation**: When a user clicks any nav link, the page must always start at the top. This is the intended UX — never preserve scroll position across route changes.
 - Do not use `scroll={false}` on `<Link>` components unless explicitly asked.
 - Do not add any `scrollRestoration` logic or `window.scrollTo` overrides that would break this default.
+
+---
+
+# Performance & Core Web Vitals
+
+Every styling and asset decision must consider initial page load. A visually polished page that loads slowly fails the user before they see it.
+
+- **Images**: always use `next/image` with explicit `width` and `height`. Add `priority` on above-the-fold images (hero, logo). Use `loading="lazy"` on below-fold images — never add `priority` to everything.
+- **Fonts**: always set `display: "swap"` on font declarations to prevent invisible text during load.
+- **Hero sections always require a background image** — always use `public/bg.webp` (preferred) or an SVG as the hero background. Never leave a hero section with a plain colour or gradient only. Use `next/image` with `fill` and `priority` for `.webp` backgrounds, or an `<img>` / inline `<svg>` for SVG backgrounds.
+- **Hero background format rules**: `.webp` is the preferred format for photographic/complex backgrounds. SVG is acceptable for geometric/illustrative backgrounds. Never use `.jpg`, `.png`, or unoptimised formats in the hero — they block LCP. Never use a video background without a `.webp` poster image fallback loaded first.
+- **Hero background performance pattern**:
+  ```tsx
+  {/* Always use this pattern for webp hero backgrounds */}
+  <div className="absolute inset-0 -z-10">
+    <Image src="/bg.webp" alt="" fill sizes="100vw" className="object-cover" priority />
+  </div>
+  ```
+- **Avoid layout shift** — always reserve space for images and dynamic content. Never let images pop in without dimensions.
+- **CSS variables over inline hex** — already required, also faster for the browser to resolve in repaint cycles.
+- **No render-blocking scripts** — third-party scripts (analytics, chat, maps) must be deferred or loaded behind cookie consent. Never load them unconditionally in `<head>`.
+- **Keep component trees lean** — don't nest unnecessary wrapper `<div>`s. Every extra DOM node adds to paint time.
+- **Swiper and GSAP are code-split by default** — only import them in the component that needs them, never at the top of a layout or page file.
 
 ---
 

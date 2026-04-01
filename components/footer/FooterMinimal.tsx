@@ -3,12 +3,13 @@
  * Best for: landing pages, single-product sites, minimal aesthetics.
  */
 
+import Image from "next/image";
 import Link from "next/link";
 import { SocialIcons } from "./_social-icons";
 import type { FooterConfig, HeaderConfig } from "@/lib/config";
 
 interface Props {
-  brand: Pick<HeaderConfig, "logo">;
+  brand: Pick<HeaderConfig, "logo" | "logoType" | "logoImageSrc">;
   config: FooterConfig;
 }
 
@@ -18,7 +19,13 @@ export default function FooterMinimal({ brand, config }: Props) {
       <div className="mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-8 py-5">
         <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
           {/* Logo */}
-          <span className="text-sm font-bold text-gray-900">{brand.logo}</span>
+          {brand.logoType === "image" && brand.logoImageSrc ? (
+            <div className="relative w-[120px] h-[44px]">
+              <Image src={brand.logoImageSrc} alt={brand.logo} fill sizes="120px" className="object-contain p-1" />
+            </div>
+          ) : (
+            <span className="text-sm font-bold text-gray-900">{brand.logo}</span>
+          )}
 
           {/* Copyright + legal links */}
           <p className="text-center text-xs text-gray-400 flex flex-wrap items-center justify-center gap-x-2 gap-y-1">

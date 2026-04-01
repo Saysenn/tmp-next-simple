@@ -26,13 +26,15 @@ export default function FooterStacked({ brand, config }: Props) {
         {/* Row 1 — Logo + tagline */}
         <div className="flex flex-col items-center gap-3 py-12 border-b border-white/10">
           {brand.logoType === "image" && brand.logoImageSrc ? (
-            <Image
-              src={brand.logoImageSrc}
-              alt={brand.logo}
-              width={160}
-              height={56}
-              className="h-14 w-auto object-contain"
-            />
+            <div className="relative w-[160px] h-[56px]">
+              <Image
+                src={brand.logoImageSrc}
+                alt={brand.logo}
+                fill
+                sizes="160px"
+                className="object-contain p-1"
+              />
+            </div>
           ) : (
             <span className="text-2xl font-bold tracking-tight">{brand.logo}</span>
           )}

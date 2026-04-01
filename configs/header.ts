@@ -27,6 +27,11 @@ export type NavLinkStyle =
   | "text-accent"      // text color shifts to accent, no background
   | "dot-below";       // small dot appears below the active/hovered item
 
+export type LogoSize =
+  | "sm"   // w-[140px] h-[56px]
+  | "md"   // w-[200px] h-[80px] — default
+  | "lg";  // w-[260px] h-[100px]
+
 export type NavLink = {
   label: string;
   href: string;
@@ -45,9 +50,12 @@ export type HeaderConfig = {
   copyright: string;
   logoType: LogoType;
   logoImageSrc?: string;
+  logoInvertImageSrc?: string; // alternate logo used when header is transparent (dark/hero bg) — only applies when headerScrollEffect is true
+  logoSize: LogoSize;          // controls the logo container dimensions
   headerType: HeaderType;
   mobileMenuType: MobileMenuType;
   headerSticky: boolean;
+  headerScrollEffect: boolean; // when true: header starts transparent over hero, transitions to solid on scroll. nav links and logo swap colours accordingly.
   navLinkStyle: NavLinkStyle;
   cta: CtaConfig;
 };
@@ -59,9 +67,13 @@ export const siteConfig: HeaderConfig = {
 
   // "text" | "image" | "image-text" | "icon-text"
   logoType: "icon-text",
-  logoImageSrc: undefined, // set to "/your-logo.png" when you have an image
+  logoImageSrc: undefined,        // set to "/logo.webp" when you have an image
+  logoInvertImageSrc: undefined,  // set to "/logo-invert.webp" for the transparent header state
 
-  // "nav" | "floating-nav" | "split-nav" | "cta" | "menu-only" | "centered-logo"
+  // "sm" | "md" | "lg"
+  logoSize: "md",
+
+  // "nav" | "floating-nav" | "split-nav" | "stacked" | "cta" | "menu-only" | "centered-logo"
   headerType: "split-nav",
 
   // "drawer" | "dropdown" | "fullscreen"
@@ -69,9 +81,13 @@ export const siteConfig: HeaderConfig = {
 
   headerSticky: true,
 
+  // when true: header is transparent over hero, becomes solid on scroll
+  // requires a hero section with bg image — set logoInvertImageSrc for the transparent state logo
+  headerScrollEffect: false,
+
   // "bg-fill" | "underline-center" | "underline-left" | "text-accent" | "dot-below"
   navLinkStyle: "bg-fill",
- 
+
   cta: {
     enabled: true,
     label: "Get Started",

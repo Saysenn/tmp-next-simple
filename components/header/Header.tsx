@@ -1,12 +1,17 @@
 "use client";
 
 // Header switcher — change headerType in configs/header.ts to switch layouts.
-// "nav"           → logo + desktop nav + mobile hamburger
+// "nav"           → logo + desktop nav + mobile hamburger (default)
 // "floating-nav"  → 3-col: logo | glass pill nav (centered) | cta
 // "split-nav"     → 3-col: nav links | logo (centered) | cta
-// "cta"           → logo + single CTA button
+// "stacked"       → 2-row: centred logo on top, centred nav below
+// "cta"           → logo + single CTA button, no nav
 // "menu-only"     → logo + Menu button on all sizes
-// "centered-logo" → centered logo only, no nav
+// "centered-logo" → centred logo only, no nav
+//
+// Scroll effect — set headerScrollEffect: true in siteConfig to enable:
+// Header starts transparent over the hero, transitions to solid on scroll.
+// Set logoInvertImageSrc for an alternate logo used in the transparent state.
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -23,74 +28,67 @@ import DrawerHeader from "@/components/header/DrawerHeader";
 import DropdownHeader from "@/components/header/DropdownHeader";
 import FullscreenHeader from "@/components/header/FullscreenHeader";
 
-// ─── NavHeader (default) ──────────────────────────────────────
-
-function HamburgerButton({ open, onClick }: { open: boolean; onClick: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-label={open ? "Close menu" : "Open menu"}
-      aria-expanded={open}
-      className="md:hidden flex flex-col justify-center items-center w-9 h-9 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-    >
-      <span className={`block w-5 h-0.5 bg-current transition-all duration-300 ${open ? "rotate-45 translate-y-1" : ""}`} />
-      <span className={`block w-5 h-0.5 bg-current mt-1 transition-all duration-300 ${open ? "opacity-0" : ""}`} />
-      <span className={`block w-5 h-0.5 bg-current mt-1 transition-all duration-300 ${open ? "-rotate-45 -translate-y-2" : ""}`} />
-    </button>
-  );
-}
+// ─── Nav link styles ──────────────────────────────────────────
 
 const navLinkClass: Record<string, (active: boolean) => string> = {
   "bg-fill": (a) =>
     `px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-      a ? "bg-indigo-50 text-indigo-700" : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+      a ? "bg-gray-100 text-gray-900" : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
     }`,
   "underline-center": (a) =>
-    `nav-underline-center px-2 py-1.5 text-sm font-medium transition-colors ${
-      a ? "text-indigo-600 is-active" : "text-gray-600 hover:text-indigo-600"
+    `px-3 py-1.5 text-sm font-medium relative after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:bg-current after:transition-all after:duration-200 ${
+      a ? "after:w-full text-gray-900" : "after:w-0 text-gray-600 hover:after:w-full hover:text-gray-900"
     }`,
   "underline-left": (a) =>
-    `nav-underline-left px-2 py-1.5 text-sm font-medium transition-colors ${
-      a ? "text-indigo-600 is-active" : "text-gray-600 hover:text-indigo-600"
+    `px-3 py-1.5 text-sm font-medium relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-current after:transition-all after:duration-200 ${
+      a ? "after:w-full text-gray-900" : "after:w-0 text-gray-600 hover:after:w-full hover:text-gray-900"
     }`,
   "text-accent": (a) =>
     `px-3 py-1.5 text-sm font-medium transition-colors ${
       a ? "text-indigo-600 font-semibold" : "text-gray-600 hover:text-indigo-600"
     }`,
   "dot-below": (a) =>
-    `nav-dot-below px-3 py-2 text-sm font-medium transition-colors ${
-      a ? "text-indigo-600 is-active" : "text-gray-600 hover:text-indigo-600"
+    `px-3 py-1.5 text-sm font-medium relative ${
+      a
+        ? "text-gray-900 after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:bg-gray-900 after:rounded-full"
+        : "text-gray-600 hover:text-gray-900"
     }`,
 };
 
+function getNavClass(active: boolean) {
+  const style = siteConfig.navLinkStyle ?? "bg-fill";
+  return (navLinkClass[style] ?? navLinkClass["bg-fill"])(active);
+}
+
+// ─── DesktopNav ───────────────────────────────────────────────
+
 function DesktopNav({ pathname }: { pathname: string }) {
-  const getClass = navLinkClass[siteConfig.navLinkStyle] ?? navLinkClass["bg-fill"];
   return (
     <nav className="hidden md:flex items-center gap-1">
-      {headerNav.map((link) => {
-        const isActive = pathname === link.href;
-        return (
-          <Link
-            key={link.href}
-            href={link.href}
-            target={link.external ? "_blank" : undefined}
-            rel={link.external ? "noopener noreferrer" : undefined}
-            className={getClass(isActive)}
-          >
-            {link.label}
-          </Link>
-        );
-      })}
+      {headerNav.map((link) => (
+        <Link
+          key={link.href}
+          href={link.href}
+          target={link.external ? "_blank" : undefined}
+          rel={link.external ? "noopener noreferrer" : undefined}
+          className={`whitespace-nowrap ${getNavClass(pathname === link.href)}`}
+        >
+          {link.label}
+        </Link>
+      ))}
     </nav>
   );
 }
 
+// ─── NavHeader (default) ──────────────────────────────────────
+
 function NavHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
   const type = siteConfig.mobileMenuType;
   const isDropdown = type === "dropdown";
+  const scrollEffect = siteConfig.headerScrollEffect;
 
   useEffect(() => { setMenuOpen(false); }, [pathname]);
 
@@ -99,36 +97,104 @@ function NavHeader() {
     return () => { document.body.style.overflow = ""; };
   }, [menuOpen, isDropdown]);
 
+  useEffect(() => {
+    if (!scrollEffect) return;
+    function onScroll() { setScrolled(window.scrollY > 20); }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [scrollEffect]);
+
   const menuProps = { open: menuOpen, onClose: () => setMenuOpen(false), pathname };
+
+  // Scroll effect: transparent → solid. Static: always solid.
+  const headerStyle = scrollEffect
+    ? scrolled
+      ? { backgroundColor: "#ffffff", borderBottom: "1px solid rgba(0,0,0,0.08)" }
+      : { backgroundColor: "transparent" }
+    : undefined;
+
+  const headerClass = `${
+    siteConfig.headerSticky ? "fixed top-0 z-50" : "relative"
+  } w-full transition-all duration-300 ${
+    !scrollEffect ? "bg-white/90 backdrop-blur-sm border-b border-gray-200" : ""
+  }`;
+
+  // Logo: swap to invert src when scroll effect is active and not yet scrolled
+  const logoSrc =
+    scrollEffect && !scrolled && siteConfig.logoInvertImageSrc
+      ? siteConfig.logoInvertImageSrc
+      : siteConfig.logoImageSrc;
+
+  // Nav link colour override for transparent state
+  const scrollNavStyle = scrollEffect && !scrolled
+    ? { color: "rgba(255,255,255,0.85)" }
+    : undefined;
 
   return (
     <>
-      <header
-        className={`${
-          siteConfig.headerSticky ? "sticky top-0 z-50" : "relative"
-        } bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700`}
-      >
-        <div className="relative max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center h-16">
+      <header className={headerClass} style={headerStyle}>
+        <div className="mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center h-20">
             <Logo
               type={siteConfig.logoType}
-              imageSrc={siteConfig.logoImageSrc}
+              imageSrc={logoSrc}
               name={siteConfig.name}
+              size={siteConfig.logoSize}
             />
-            <div className="ml-auto flex items-center gap-2">
-              <DesktopNav pathname={pathname} />
+            <div className="ml-auto flex items-center gap-1">
+              {/* Desktop nav — colour overridden in scroll-effect transparent state */}
+              {scrollEffect && !scrolled ? (
+                <nav className="hidden md:flex items-center gap-1">
+                  {headerNav.map((link) => {
+                    const isActive = pathname === link.href;
+                    return (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        target={link.external ? "_blank" : undefined}
+                        rel={link.external ? "noopener noreferrer" : undefined}
+                        className="whitespace-nowrap px-4 py-1.5 text-sm font-medium transition-all duration-200"
+                        style={{
+                          color: isActive ? "var(--accent)" : "rgba(255,255,255,0.85)",
+                          fontWeight: isActive ? 600 : 500,
+                        }}
+                      >
+                        {link.label}
+                      </Link>
+                    );
+                  })}
+                </nav>
+              ) : (
+                <DesktopNav pathname={pathname} />
+              )}
+
               {siteConfig.cta.enabled && (
                 <Link
                   href={siteConfig.cta.href}
-                  className="hidden md:inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 active:bg-indigo-800 transition-colors"
+                  className="hidden md:inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors ml-2"
+                  style={
+                    scrollEffect && !scrolled
+                      ? { background: "rgba(255,255,255,0.15)", color: "#ffffff", backdropFilter: "blur(8px)" }
+                      : { background: "var(--accent)", color: "var(--text-invert, #ffffff)" }
+                  }
                 >
                   {siteConfig.cta.label}
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                    <path d="M2.5 7h9M8 3.5L11.5 7 8 10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
                 </Link>
               )}
-              <HamburgerButton open={menuOpen} onClick={() => setMenuOpen((v) => !v)} />
+
+              {/* Hamburger */}
+              <button
+                type="button"
+                onClick={() => setMenuOpen((v) => !v)}
+                aria-label={menuOpen ? "Close menu" : "Open menu"}
+                aria-expanded={menuOpen}
+                className="md:hidden flex flex-col justify-center items-center w-9 h-9 rounded-md transition-colors ml-1"
+                style={scrollNavStyle ?? { color: "var(--text-heading)" }}
+              >
+                <span className={`block w-5 h-0.5 bg-current transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-1" : ""}`} />
+                <span className={`block w-5 h-0.5 bg-current mt-1 transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`} />
+                <span className={`block w-5 h-0.5 bg-current mt-1 transition-all duration-300 ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
+              </button>
             </div>
           </div>
           {isDropdown && <DropdownHeader {...menuProps} />}
@@ -143,11 +209,11 @@ function NavHeader() {
 // ─── Switcher ─────────────────────────────────────────────────
 
 export default function Header() {
-  if (siteConfig.headerType === "cta") return <CTAHeader />;
-  if (siteConfig.headerType === "menu-only") return <MenuOnlyHeader />;
+  if (siteConfig.headerType === "cta")           return <CTAHeader />;
+  if (siteConfig.headerType === "menu-only")     return <MenuOnlyHeader />;
   if (siteConfig.headerType === "centered-logo") return <CenteredLogoHeader />;
-  if (siteConfig.headerType === "floating-nav") return <FloatingNavHeader />;
-  if (siteConfig.headerType === "split-nav") return <SplitNavHeader />;
-  if (siteConfig.headerType === "stacked") return <StackedHeader />;
+  if (siteConfig.headerType === "floating-nav")  return <FloatingNavHeader />;
+  if (siteConfig.headerType === "split-nav")     return <SplitNavHeader />;
+  if (siteConfig.headerType === "stacked")       return <StackedHeader />;
   return <NavHeader />;
 }

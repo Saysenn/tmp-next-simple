@@ -3,12 +3,13 @@
  * Best for: startups, product launches, high-impact landing pages.
  */
 
+import Image from "next/image";
 import Link from "next/link";
 import { SocialIcon } from "./_social-icons";
 import type { FooterConfig, HeaderConfig } from "@/lib/config";
 
 interface Props {
-  brand: Pick<HeaderConfig, "logo">;
+  brand: Pick<HeaderConfig, "logo" | "logoType" | "logoImageSrc">;
   config: FooterConfig;
 }
 
@@ -51,7 +52,13 @@ export default function FooterBrand({ brand, config }: Props) {
 
         {/* Bottom bar */}
         <div className="flex flex-col items-start justify-between gap-4 border-t border-gray-200 pt-8 sm:flex-row sm:items-center">
-          <span className="text-sm font-bold text-gray-900">{brand.logo}</span>
+          {brand.logoType === "image" && brand.logoImageSrc ? (
+            <div className="relative w-[160px] h-[56px]">
+              <Image src={brand.logoImageSrc} alt={brand.logo} fill sizes="160px" className="object-contain p-1" />
+            </div>
+          ) : (
+            <span className="text-sm font-bold text-gray-900">{brand.logo}</span>
+          )}
 
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-400">
             <span>{config.copyright}</span>

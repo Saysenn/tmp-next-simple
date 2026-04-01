@@ -3,12 +3,13 @@
  * Best for: creative agencies, personal brands, portfolio sites.
  */
 
+import Image from "next/image";
 import Link from "next/link";
 import { SocialIcon } from "./_social-icons";
 import type { FooterConfig, HeaderConfig } from "@/lib/config";
 
 interface Props {
-  brand: Pick<HeaderConfig, "logo">;
+  brand: Pick<HeaderConfig, "logo" | "logoType" | "logoImageSrc">;
   config: FooterConfig;
 }
 
@@ -17,7 +18,13 @@ export default function FooterCentered({ brand, config }: Props) {
     <footer className="border-t border-gray-200 bg-white py-16">
       <div className="mx-auto max-w-2xl px-4 sm:px-6 text-center">
         {/* Logo */}
-        <p className="text-lg font-bold text-gray-900">{brand.logo}</p>
+        {brand.logoType === "image" && brand.logoImageSrc ? (
+          <div className="relative w-[160px] h-[56px] mx-auto">
+            <Image src={brand.logoImageSrc} alt={brand.logo} fill sizes="160px" className="object-contain p-1" />
+          </div>
+        ) : (
+          <p className="text-lg font-bold text-gray-900">{brand.logo}</p>
+        )}
 
         {/* Tagline */}
         <p className="mx-auto mt-3 max-w-sm text-sm leading-relaxed text-gray-500">

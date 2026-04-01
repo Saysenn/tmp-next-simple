@@ -48,13 +48,15 @@ export default function FooterRecruit({ brand, config }: Props) {
       <div className="mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-8 pt-10 pb-6 flex items-center justify-between gap-4 flex-wrap border-b border-white/10">
         <div className="flex-shrink-0">
           {brand.logoImageSrc ? (
-            <Image
-              src={brand.logoImageSrc}
-              alt={brand.logo}
-              width={120}
-              height={48}
-              className="h-12 w-auto object-contain"
-            />
+            <div className="relative w-[160px] h-[56px]">
+              <Image
+                src={brand.logoImageSrc}
+                alt={brand.logo}
+                fill
+                sizes="160px"
+                className="object-contain p-1"
+              />
+            </div>
           ) : (
             <span className="text-xl font-bold text-white">{brand.logo}</span>
           )}

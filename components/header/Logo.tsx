@@ -1,6 +1,12 @@
 import Link from "next/link";
 import Image from "next/image";
-import type { LogoType } from "@/configs/header";
+import type { LogoType, LogoSize } from "@/configs/header";
+
+const sizeMap: Record<LogoSize, { container: string; sizes: string }> = {
+  sm: { container: "w-[140px] h-[56px]", sizes: "(max-width: 768px) 100px, 140px" },
+  md: { container: "w-[200px] h-[80px]", sizes: "(max-width: 768px) 120px, 200px" },
+  lg: { container: "w-[260px] h-[100px]", sizes: "(max-width: 768px) 160px, 260px" },
+};
 
 function LogoIcon() {
   return (
@@ -28,14 +34,24 @@ type LogoProps = {
   type: LogoType;
   name: string;
   imageSrc?: string;
+  size?: LogoSize;
 };
 
-export default function Logo({ type, name, imageSrc }: LogoProps) {
+export default function Logo({ type, name, imageSrc, size = "md" }: LogoProps) {
+  const { container, sizes } = sizeMap[size];
+
   if (type === "image") {
     return (
-      <Link href="/" aria-label={name}>
+      <Link href="/" aria-label={name} className={`relative ${container} block`}>
         {imageSrc && (
-          <Image src={imageSrc} alt={name} width={140} height={40} className="h-10 w-auto" priority />
+          <Image
+            src={imageSrc}
+            alt={name}
+            fill
+            sizes={sizes}
+            className="object-contain p-2"
+            priority
+          />
         )}
       </Link>
     );
