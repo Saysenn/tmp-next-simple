@@ -1,3 +1,7 @@
+GLOBAL RULES: Always follow @.claude/CLAUDE.md, @.claude/legal.md, and @.claude/pages.md — these govern code style, legal compliance, and page structure. Apply @.claude/animate.md last, after all sections are built.
+
+---
+
 # Reusable Prompt — Recruitment + Workforce Support Website
 
 Use this prompt when building a new recruitment agency website with light workforce/payment support. Fill in the bracketed fields and run it in one go.

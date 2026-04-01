@@ -3,7 +3,7 @@
 ## 1. Plan Mode Default
 
 - Enter plan mode for ANY non-trivial task (3+ steps or architectural decisions)
-- If something goes sideways, STOP and re-plan immediately - don't keep pushing
+- If something goes sideways, STOP and re-plan immediately — don't keep pushing
 - Use plan mode for verification steps, not just building
 - Write detailed specs upfront to reduce ambiguity
 
@@ -24,7 +24,7 @@
 ## 4. Verification Before Done
 
 - Never mark a task complete without proving it works
-- Diff behavior between main and your changes when relevant
+- Diff behaviour between main and your changes when relevant
 - Ask yourself: "Would a staff engineer approve this?"
 - Run tests, check logs, demonstrate correctness
 
@@ -32,15 +32,17 @@
 
 - For non-trivial changes: pause and ask "is there a more elegant way?"
 - If a fix feels hacky: "Knowing everything I know now, implement the elegant solution"
-- Skip this for simple, obvious fixes - don't over-engineer
+- Skip this for simple, obvious fixes — don't over-engineer
 - Challenge your own work before presenting it
 
 ## 6. Autonomous Bug Fixing
 
 - When given a bug report: just fix it. Don't ask for hand-holding
-- Point at logs, errors, failing tests - then resolve them
+- Point at logs, errors, failing tests — then resolve them
 - Zero context switching required from the user
 - Go fix failing CI tests without being told how
+
+---
 
 # Task Management
 
@@ -51,6 +53,8 @@
 5. **Document Results**: Add review section to `tasks/todo.md`
 6. **Capture Lessons**: Update `tasks/lessons.md` after corrections
 
+---
+
 # Project Services & Conventions
 
 ## Pre-built Folders — Check these before creating anything new
@@ -59,7 +63,7 @@
 | --------------------- | -------------------------------------------------------------------------------------------------------- |
 | `lib/infra/axios.ts`  | Singleton HTTP client — reusable `get`, `post`, `put`, `delete` with auto 401 redirect                   |
 | `lib/infra/api.ts`    | **All API URLs live here**, grouped by domain. Add new endpoints here, never hardcode URLs in components |
-| `lib/infra/gsap.ts`   | GSAP singleton — plugins registered here. **Always import `gsap` and `ScrollTrigger` from here, never from `gsap` directly** |
+| `lib/infra/gsap.ts`   | GSAP singleton — only use if the user explicitly requests GSAP for a specific interaction. Never for scroll/page animations — those use the CSS system |
 | `lib/infra/swiper.ts` | Swiper singleton — modules + CSS imported here. **Always import Swiper modules from here, never from `swiper` directly** |
 | `lib/utils/format.ts` | **ALL** formatting/conversion helpers go here — dates, durations, initials, input converters, ms→hours, etc. NEVER define these inline in components |
 | `lib/utils/cn.ts`     | Tailwind class merging ONLY (`cn`) — not for general utilities                                           |
@@ -70,7 +74,7 @@
 
 - **Scroll animations**: use the built-in CSS + IntersectionObserver system — add `data-animate="fade-up"`, `data-animate="stagger"`, or `data-animate="fade-in"` to elements. `PageAnimations` in `app/layout.tsx` handles the rest. See `.claude/animate.md` for full reference.
 - **Hero animations**: use `HeroAnimator` component with `.hero-brand`, `.hero-headline`, `.hero-sub`, `.hero-ctas` class names on hero elements. See `.claude/animate.md`.
-- **Never use**: GSAP, Framer Motion, AOS, or any other JS animation library — the CSS system is intentionally lightweight and smooth
+- **Never use**: GSAP, Framer Motion, AOS, or any other JS animation library for scroll/page animations — the CSS system is intentionally lightweight and smooth
 - **Carousels / sliders**: always use Swiper (`swiper/react`) with modules from `@/lib/infra/swiper.ts` — never build custom carousel logic or use other libraries (Embla, Keen Slider, etc.)
 - Simple CSS transitions (hover, focus) are fine with Tailwind
 
@@ -108,6 +112,8 @@ Raw HTML elements (`<input>`, `<button>`, `<select>`, `<textarea>`) are perfectl
   - `useQueryClient` — import from `@tanstack/react-query` directly
   - `isAxiosError` from `axios` is acceptable for error type-checking only
 
+---
+
 # Documentation
 
 - **Always create docs** for any new feature, config file, API route, or reusable component system
@@ -132,6 +138,8 @@ Raw HTML elements (`<input>`, `<button>`, `<select>`, `<textarea>`) are perfectl
 - Max 1 blank line between sections
 - If a section has nothing useful to say, omit it entirely
 
+---
+
 # Legal & Compliance
 
 See `.claude/legal.md` for the full ruleset. Summary:
@@ -140,10 +148,12 @@ See `.claude/legal.md` for the full ruleset. Summary:
 - **Required pages**: Every project must ship with `/privacy`, `/terms`, and a cookie consent banner. Do not consider a project complete without them.
 - **Cookie banner**: `components/cookie/CookieBannerModal.tsx` — must show on first visit, offer Accept / Reject / Manage Preferences, and gate non-essential scripts behind consent.
 - **Anti-slavery**: Optional but recommended for payroll/labour sectors — route `/anti-slavery`, add to footer legal links if built.
-- **Company info source of truth**: store in a single config file (e.g. `configs/footer.ts`) — never hardcode company details inline in components or pages.
+- **Company info source of truth**: store in `configs/footer.ts` — never hardcode company details inline in components or pages.
 - **Pages**: See `.claude/pages.md` for all page rules — default pages, optional pages (Clients, Candidates, etc.), and per-page UX/content requirements. Never add pages beyond the defaults without asking first.
-- **Footer layout standard**: 4 columns — (1) Logo + description + social icons, (2) Company links, (3) Legal links, (4) Contact info. **Strictly ask the user before building the footer: "Do you want to proceed with the standard 4-column footer layout (Logo/Description/Socials | Company | Legal | Contact)?" — never implement without explicit confirmation.**
+- **Footer**: Layout is config-driven via `configs/footer.ts` — ask the user which layout to use before building. Never prescribe or assume a layout.
 - **GDPR/CCPA**: Forms need consent checkboxes, API routes must not log PII, all outbound emails must include company address and opt-out.
+
+---
 
 # Styling Rules
 
@@ -152,6 +162,12 @@ See `.claude/legal.md` for the full ruleset. Summary:
 - **All accent/brand colors** must use CSS variables from `app/globals.css` (`var(--accent)`, `var(--accent-hover)`, `var(--accent-light)`, etc.) — never hardcode hex values or Tailwind color classes like `indigo-600` for brand colors
 - Neutral colors (`gray-*`, `white`, `black`) are fine as Tailwind classes
 - To retheme, always tell the user: **"Adjust the CSS variables in `app/globals.css` — change `--accent` to retheme the whole site"**
+
+## Inline CSS — Always Use CSS Variables
+
+- When writing inline `style={{}}` props, always use CSS variables from `app/globals.css` rather than hardcoded hex values
+- Correct: `style={{ color: "var(--accent)" }}` — Wrong: `style={{ color: "#4f46e5" }}`
+- This keeps theming consistent and ensures retheme works everywhere, including email templates and components that cannot use Tailwind classes
 
 ## Layout — Never Force a Structure
 
@@ -162,26 +178,44 @@ See `.claude/legal.md` for the full ruleset. Summary:
 ## Component Styling — Defaults Only
 
 - Use Tailwind utility classes for all styling — no inline `style=` props unless unavoidable
-- Default to the project's existing spacing, typography, and color patterns — don't introduce new design languages
-- Never add animations or transitions that weren't asked for — Tailwind hover/focus transitions are fine, GSAP only when explicitly requested
+- Default to the project's existing spacing, typography, and colour patterns — don't introduce new design languages
+- Never add animations or transitions that weren't asked for — Tailwind hover/focus transitions are fine
 - **Never add `max-w-*` classes to `<p>` tags** — paragraph width is controlled by its parent container, not the element itself. Adding `max-w-2xl`, `max-w-prose`, or any width constraint directly on a `<p>` breaks layout consistency and fights the grid.
+- **CTAs and buttons inside sections must have `mt-8` on their className** — this gives consistent, professional spacing between body content and the call-to-action. Never leave a CTA immediately flush against the text above it.
 
-## UI/UX Craftsmanship — Think Like a Senior Designer
+---
 
-Every section and component you build must feel intentional and polished. Before writing JSX, ask yourself: *"Would a senior UI/UX designer be proud of this?"*
+# Section Planning & Creative Design
 
-- **Avoid cookie-cutter layouts** — don't default to the same centered-heading + paragraph + button pattern every time. Vary alignment (left-aligned hero, offset grids, asymmetric splits), whitespace, and visual hierarchy
+## Plan Before You Build
+
+Before writing JSX for any page, mentally plan every section first:
+- What is the **purpose** of this section? (inform, persuade, convert, reassure)
+- What **layout pattern** best serves the content? (split, grid, offset, full-bleed, stacked)
+- How does it **contrast** with the section above and below? (dense vs spacious, dark vs light, image vs text)
+- Only then write the code
+
+## Be Deliberately Creative
+
+Every page and every section must feel intentional and distinct. Before writing JSX, ask: *"Would a senior UI/UX designer be proud of this?"*
+
+- **No cookie-cutter layouts** — never default to the same centred-heading + paragraph + button pattern every time. Vary alignment (left-aligned hero, offset grids, asymmetric splits), whitespace, and visual hierarchy
+- **No identical sections** — each section on a page must look and feel different from its neighbours. Alternate background tones, flip column order, change type scale
 - **Think in contrast and rhythm** — alternate dense and breathable sections, vary type sizes deliberately, use spacing to guide the eye
 - **Use visual anchors** — subtle background tints, gradient accents, bordered cards, or decorative elements to break monotony without clutter
-- **Typography matters** — use size, weight, and color contrast to establish clear hierarchy (headline → subheading → body → caption). Never make everything the same size
-- **Responsive means intentional at every breakpoint** — mobile layout should be a deliberate design decision, not just stacked columns
+- **Typography matters** — use size, weight, and colour contrast to establish clear hierarchy (headline → subheading → body → caption). Never make everything the same size
+- **Responsive is intentional** — mobile layout is a deliberate design decision, not just stacked columns
 - **Micro-details count** — rounded corners, shadow depth, icon sizing, and padding consistency signal quality. Match them across the page
 - **When in doubt, go asymmetric** — a left-aligned stat block, an offset image, a pull quote in a side column — these signal craft over templates
-- **Leverage the right UI pattern for the content:**
-  - **Breadcrumbs** — use on any page deeper than 1 level (e.g. blog post, service detail, docs). Never make users guess where they are
-  - **Accordions** — use for FAQs, feature breakdowns, long content lists. Prefer over walls of text
-  - **Carousels (Swiper)** — use for testimonials, portfolio items, team members, logo grids, or any repeating card set with 4+ items. Always import from `@/lib/infra/swiper.ts`
-  - Choose the pattern that best serves the content — don't force flat lists when a smarter component exists
+
+## Use the Right Pattern for the Content
+
+- **Breadcrumbs** — any page deeper than 1 level (blog post, service detail, docs)
+- **Accordions** — FAQs, feature breakdowns, long content lists. Prefer over walls of text
+- **Carousels (Swiper)** — testimonials, portfolio items, team members, logo grids, or any repeating card set with 4+ items. Always import from `@/lib/infra/swiper.ts`
+- Choose the pattern that best serves the content — don't force flat lists when a smarter component exists
+
+---
 
 # Language
 
@@ -189,11 +223,15 @@ Every section and component you build must feel intentional and polished. Before
 - Common differences: enquire (not inquire), colour (not color), organise (not organize), analyse (not analyze), centre (not center), licence/n (not license/n), realise (not realize), travelling (not traveling)
 - This applies to user-facing strings, placeholder text, form labels, email templates, and docs — not to code identifiers (variable/function names stay in standard ASCII)
 
+---
+
 # Navigation Behaviour
 
 - **Scroll to top on navigation**: When a user clicks any nav link, the page must always start at the top. This is the intended UX — never preserve scroll position across route changes.
 - Do not use `scroll={false}` on `<Link>` components unless explicitly asked.
 - Do not add any `scrollRestoration` logic or `window.scrollTo` overrides that would break this default.
+
+---
 
 # Core Principles
 

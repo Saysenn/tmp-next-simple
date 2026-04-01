@@ -1,4 +1,4 @@
-GLOBAL RULES: Always follow @.claude/CLAUDE.md, @.claude/legal.md, @.claude/pages.md, and @.claude/animate.md — these govern code style, legal compliance, page structure, and animation patterns.
+GLOBAL RULES: Always follow @.claude/CLAUDE.md, @.claude/legal.md, and @.claude/pages.md — these govern code style, legal compliance, and page structure. Apply @.claude/animate.md last, after all sections are built.
 
 ---
 
@@ -72,7 +72,7 @@ Ask all questions below before building anything. Present them as a single group
 **GROUP F — Header & Footer**
 28. Which header type to use? (nav / floating-nav / split-nav / stacked — default: nav)
 29. CTA button in header — enabled? If yes, label and link
-30. Footer: standard 4-column layout (Logo+Socials | Company | Legal | Contact)? Confirm before building.
+30. Which footer layout? Options: columns / minimal / centered / brand / split / recruit / stacked — ask the user, never assume. Footer is config-driven via `configs/footer.ts`.
 
 ---
 
@@ -125,6 +125,10 @@ For each page:
 - Apply animation patterns from `@.claude/animate.md`
 - Follow all styling and component rules from `@.claude/CLAUDE.md`
 - Never hardcode company info — always reference `configs/footer.ts`
+- **Plan every section before writing JSX** — purpose, layout pattern, contrast with neighbours
+- **Inline `style={{}}` must use CSS variables** — `var(--accent)`, `var(--text-muted)`, etc. Never hardcode hex in inline styles
+- **All CTAs and buttons inside sections must have `mt-8`** on their className for professional spacing
+- **No `max-w-*` on `<p>` tags** — width is always controlled by the parent container
 
 ---
 
