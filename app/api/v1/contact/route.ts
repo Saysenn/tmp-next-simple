@@ -27,8 +27,15 @@ const RATE_LIMIT_WINDOW = 60 * 1000;
 const RATE_LIMIT_MAX = 5;
 
 function getRateLimitKey(request: NextRequest): string {
-  const forwarded = request.headers.get("x-forwarded-for");
-  return forwarded ? forwarded.split(",")[0].trim() : "unknown";
+  // Prefer headers set by trusted reverse proxies (not forgeable by clients).
+  // x-real-ip: Vercel / nginx; cf-connecting-ip: Cloudflare.
+  // x-forwarded-for is used as last resort — first IP is the originating client.
+  return (
+    request.headers.get("x-real-ip") ||
+    request.headers.get("cf-connecting-ip") ||
+    request.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
+    "unknown"
+  );
 }
 
 function checkRateLimit(ip: string): { allowed: boolean; remaining: number } {
@@ -72,7 +79,7 @@ Sent from the contact form.
 
 export async function POST(request: NextRequest) {
   try {
-    if (request.headers.get("content-type") !== "application/json") {
+    if (!request.headers.get("content-type")?.includes("application/json")) {
       return NextResponse.json({ error: "Unsupported content type" }, { status: 415 });
     }
 

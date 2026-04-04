@@ -26,8 +26,12 @@ const RATE_LIMIT_WINDOW = 60 * 1000;
 const RATE_LIMIT_MAX = 3; // Stricter than contact form
 
 function getRateLimitKey(request: NextRequest): string {
-  const forwarded = request.headers.get("x-forwarded-for");
-  return forwarded ? forwarded.split(",")[0].trim() : "unknown";
+  return (
+    request.headers.get("x-real-ip") ||
+    request.headers.get("cf-connecting-ip") ||
+    request.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
+    "unknown"
+  );
 }
 
 function checkRateLimit(ip: string): { allowed: boolean; remaining: number } {
@@ -55,7 +59,7 @@ function checkRateLimit(ip: string): { allowed: boolean; remaining: number } {
 
 export async function POST(request: NextRequest) {
   try {
-    if (request.headers.get("content-type") !== "application/json") {
+    if (!request.headers.get("content-type")?.includes("application/json")) {
       return NextResponse.json({ error: "Unsupported content type" }, { status: 415 });
     }
 
