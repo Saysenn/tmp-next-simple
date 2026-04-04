@@ -174,6 +174,10 @@ When the user provides a new colour scheme (hex values, palette, or CSS variable
 
 Never leave any of these groups out of sync with the others. A colour scheme update is only complete when all four groups are updated.
 
+5. **Email template brand constants** — after updating `app/globals.css`, sync the `ACCENT`, `DARK`, and `DARK_MID` hex constants at the top of every active email template in `emails/`. CSS variables are stripped by email clients — templates must use raw hex values that match the new palette.
+
+5. **Email template brand constants** — after updating `app/globals.css`, sync the `ACCENT`, `DARK`, and `DARK_MID` hex constants at the top of every active email template in `emails/`. CSS variables are stripped by email clients — templates must use raw hex values that match the new palette.
+
 ## Inline CSS — Always Use CSS Variables
 
 - When writing inline `style={{}}` props, always use CSS variables from `app/globals.css` rather than hardcoded hex values
@@ -301,14 +305,16 @@ Email templates live in `emails/`. Whenever a project has forms (contact, subscr
 
 ## Email Template Rules
 
-- **No logo image** — do not use `<img>` or `next/image` for the logo. Images in emails are unreliable and often blocked. Use the company name as a styled text header instead
-- **Company name as header** — render the company name in a clean, bold style at the top of every email (pull from `configs/footer.ts` or `configs/header.ts`)
-- **Short, professional subject lines** — e.g. `"New enquiry from [Name]"`, `"Thanks for getting in touch"`, `"Application received"` — no filler, no exclamation marks
-- **Professional layout** — clean single-column, clear hierarchy: header → body → details → footer. No clutter, no decorative elements that break in email clients
-- **Brand colours via inline styles only** — email clients strip `<style>` tags. All colours must be inline. Use the actual hex values from `app/globals.css` (not CSS variables — those do not work in email clients)
-- **Full width** — use `width: "100%"` on the container, never `maxWidth`. Email clients handle width differently; let the wrapper control it
-- **Minimal footer** — company name, address, and a one-line legal note. No social icons unless they are plain text links
-- **Plain, readable copy** — short sentences, no marketing fluff. The email should feel like it came from a real person at the company
+- **No logo image** — never use `<img>` or `<Img>` for logos. Use the company name as plain text sourced from `mailConfig.fromName`
+- **Plain white, no decoration** — body and container both `backgroundColor: "#ffffff"`. No dark header bands, no coloured card boxes, no avatar circles, no coloured buttons. The email must look like it came from a real person, not a marketing tool
+- **Full width** — `width: "100%"` on the container, never `maxWidth`. Email clients control the viewport width
+- **Left-aligned** — all content, labels, values, and the footer. Never `textAlign: "center"` anywhere except possibly the footer line
+- **Structure**: company name (gray, small) → thin divider → date → field table → divider + message (if any) → `Reply to [name] →` text link → divider → one-line footer
+- **No Button component** — use a plain `<Link>` styled as text for the reply action: `"Reply to [name] →"`. `color: "#111827"`, no background, no border
+- **Brand colour only on email links** — `ACCENT` hex used only on `mailto:` and `tel:` links. Never on backgrounds, headers, or borders
+- **Inline styles only** — email clients strip `<style>` tags. All styles must be in the `s` object as inline props
+- **Short, professional subject lines** — `"New enquiry from [Name]"`, `"Application received"` — no exclamation marks, no filler
+- **One-line footer** — `© year Company · website.com` — nothing else
 
 ---
 
@@ -326,8 +332,51 @@ When adding or editing forms, rebrand the specific form components that are wire
 
 ---
 
+# Project Kickoff
+
+See `.claude/kickoff.md` for the full protocol. Summary:
+- When the user says "set up this project for [company]" or the configs still show `"MyApp"`, run the kickoff protocol — ask all questions first, then auto-configure all 8 files in one pass.
+- Never leave placeholder values. After any setup task, grep `configs/` for `"MyApp"`, `"hello@myapp.com"`, `"123 Business Street"`, `"+1 (555)"`, `"Your app description"` and fix any survivors before reporting done.
+
+---
+
+# Work Efficiency Rules
+
+Rules that prevent unnecessary reading, writing, and token waste.
+
+## Read Only What You Need
+- Target specific files — use Grep/Glob with precise patterns, not broad directory scans
+- When fixing a bug in file X, read only file X — not all related files "just in case"
+- If you need to understand a config value, read that config file directly — do not read every file that consumes it
+- When checking which template is active, read `configs/email-templates.ts` and the one relevant API route — not all 4 routes
+
+## Write Only What Was Asked
+- Fix the bug that was reported. Do not refactor, clean up, or "improve" surrounding code
+- Do not add comments, docstrings, or type annotations to code you didn't change
+- Do not add error handling, loading states, or validation for scenarios that don't exist yet
+- Do not introduce new abstractions or utilities unless the task explicitly requires them
+- If one component has a bug, fix that component — do not touch other components that "might have the same issue"
+
+## Check Config Before Coding
+- Before editing any form, email template, header, or footer component — check the relevant config to confirm it is actually in use
+- Before rebranding any template — check `configs/email-templates.ts` to know which variant is active (minimal/bold/classic). Only touch the active one
+- Before building a new section or page — confirm which layout type is configured. Do not build for a layout that is not selected
+
+## No Speculative Work
+- Do not build things "in case the user needs them later"
+- Do not add feature flags or configuration options that were not asked for
+- Do not create alternative implementations — implement what was asked, not what you think might be preferred
+- Do not suggest or implement improvements beyond the scope of the request
+
+## Cleanup
+- When the user says "clean up" or "remove unused code" — follow `.claude/cleanup.md` exactly
+- Do not decide independently to delete files without being asked. Cleanup is intentional, not opportunistic
+
+---
+
 # Core Principles
 
 - **Simplicity First**: Make every change as simple as possible. Impact minimal code.
 - **No Laziness**: Find root causes. No temporary fixes. Senior developer standards.
 - **Minimal Impact**: Changes should only touch what's necessary. Avoid introducing bugs.
+- **No placeholder survivors**: Before marking any setup or kickoff task done, grep for `"MyApp"`, `"hello@myapp.com"`, `"123 Business Street"`, `"+1 (555)"`, `"Your app description"` across `configs/`. If any survive, fix them before reporting complete.
