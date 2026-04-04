@@ -39,12 +39,7 @@ export default function ContactFormDetailed() {
 
   const [state, setState] = useState<FormState>("idle");
   const [errorMsg, setErrorMsg] = useState("");
-  const [fields, setFields] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    message: "",
-  });
+  const [fields, setFields] = useState({ name: "", email: "", phone: "", message: "" });
 
   function set(field: keyof typeof fields) {
     return (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
@@ -73,7 +68,6 @@ export default function ContactFormDetailed() {
         body: JSON.stringify({ ...fields, captchaToken }),
       });
       const data = await res.json();
-
       if (!res.ok) {
         setErrorMsg(data.error || "Something went wrong. Please try again.");
         setState("error");
@@ -89,43 +83,43 @@ export default function ContactFormDetailed() {
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-5 overflow-hidden rounded-2xl border border-gray-100 shadow-xl">
+    <div
+      className="grid grid-cols-1 lg:grid-cols-5 overflow-hidden rounded-2xl border"
+      style={{ borderColor: "var(--border)" }}
+    >
       {/* ── Left info panel ─────────────────────────────────── */}
-      <div className="lg:col-span-2 bg-linear-to-br from-slate-900 via-slate-800 to-indigo-900 p-10 flex flex-col justify-between">
+      <div
+        className="lg:col-span-2 p-10 flex flex-col justify-between"
+        style={{ background: "var(--bg-soft)" }}
+      >
         <div>
-          <h2 className="text-2xl font-bold text-white mb-3">Get in touch</h2>
-          <p className="text-slate-300 text-sm leading-relaxed">
+          <h2 className="text-2xl font-bold mb-3" style={{ color: "var(--text-heading)" }}>
+            Get in touch
+          </h2>
+          <p className="text-sm leading-relaxed" style={{ color: "var(--text-muted)" }}>
             We&apos;d love to hear from you. Fill in the form and our team will get back to you within one business day.
           </p>
 
           <div className="mt-10 flex flex-col gap-6">
             <div className="flex items-start gap-4">
-              <span className="mt-0.5 shrink-0 text-indigo-400">
+              <span className="mt-0.5 shrink-0" style={{ color: "var(--accent)" }}>
                 <MapPinIcon />
               </span>
-              <span className="text-slate-300 text-sm">{companyInfo.address}</span>
+              <span className="text-sm" style={{ color: "var(--text-muted)" }}>{companyInfo.address}</span>
             </div>
-
             <div className="flex items-center gap-4">
-              <span className="shrink-0 text-indigo-400">
+              <span className="shrink-0" style={{ color: "var(--accent)" }}>
                 <MailIcon />
               </span>
-              <a
-                href={`mailto:${companyInfo.email}`}
-                className="text-slate-300 text-sm hover:text-white transition-colors"
-              >
+              <a href={`mailto:${companyInfo.email}`} className="text-sm transition-colors" style={{ color: "var(--text-muted)" }}>
                 {companyInfo.email}
               </a>
             </div>
-
             <div className="flex items-center gap-4">
-              <span className="shrink-0 text-indigo-400">
+              <span className="shrink-0" style={{ color: "var(--accent)" }}>
                 <PhoneIcon />
               </span>
-              <a
-                href={`tel:${companyInfo.phone}`}
-                className="text-slate-300 text-sm hover:text-white transition-colors"
-              >
+              <a href={`tel:${companyInfo.phone}`} className="text-sm transition-colors" style={{ color: "var(--text-muted)" }}>
                 {companyInfo.phone}
               </a>
             </div>
@@ -134,114 +128,62 @@ export default function ContactFormDetailed() {
 
         {/* Decorative circles */}
         <div className="relative mt-12 h-24 overflow-hidden" aria-hidden="true">
-          <div className="absolute -bottom-8 -left-8 w-40 h-40 rounded-full border border-indigo-700/40" />
-          <div className="absolute -bottom-4 -left-4 w-24 h-24 rounded-full border border-indigo-600/40" />
+          <div className="absolute -bottom-8 -left-8 w-40 h-40 rounded-full border" style={{ borderColor: "var(--border)" }} />
+          <div className="absolute -bottom-4 -left-4 w-24 h-24 rounded-full border" style={{ borderColor: "var(--accent-muted)" }} />
         </div>
       </div>
 
       {/* ── Right form ───────────────────────────────────────── */}
-      <div className="lg:col-span-3 bg-white p-10">
+      <div className="lg:col-span-3 p-10" style={{ background: "var(--bg-base)" }}>
         {state === "success" ? (
-          <div className="flex flex-col items-center justify-center h-full min-h-[320px] text-center gap-4">
-            <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center text-3xl">
-              ✓
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900">Message sent!</h3>
-            <p className="text-gray-500 max-w-xs text-sm">
-              Thanks for reaching out. We&apos;ll be in touch shortly.
-            </p>
+          <div className="form-success">
+            <div className="form-success-icon">✓</div>
+            <h3 className="text-xl font-semibold" style={{ color: "var(--text-heading)" }}>Message sent</h3>
+            <p style={{ color: "var(--text-muted)" }}>Thanks for reaching out. We&apos;ll be in touch shortly.</p>
             <button
               onClick={() => setState("idle")}
-              className="mt-2 text-sm text-indigo-600 hover:underline"
+              className="mt-2 text-sm font-medium underline underline-offset-4"
+              style={{ color: "var(--accent)" }}
             >
               Send another message
             </button>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
-            {/* Honeypot */}
             <input type="text" name="website" className="hidden" aria-hidden="true" tabIndex={-1} />
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="cf-det-name" className="text-sm font-medium text-gray-700">
-                  Full name <span className="text-red-500">*</span>
-                </label>
-                <input
-                  id="cf-det-name"
-                  type="text"
-                  required
-                  value={fields.name}
-                  onChange={set("name")}
-                  placeholder="Jane Smith"
-                  className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 placeholder-gray-400 outline-none transition focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100"
-                />
+                <label htmlFor="cf-det-name" className="form-label">Full name <span className="text-red-500">*</span></label>
+                <input id="cf-det-name" type="text" required value={fields.name} onChange={set("name")} placeholder="Jane Smith" className="form-input" />
               </div>
-
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="cf-det-email" className="text-sm font-medium text-gray-700">
-                  Email address <span className="text-red-500">*</span>
-                </label>
-                <input
-                  id="cf-det-email"
-                  type="email"
-                  required
-                  value={fields.email}
-                  onChange={set("email")}
-                  placeholder="jane@company.com"
-                  className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 placeholder-gray-400 outline-none transition focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100"
-                />
+                <label htmlFor="cf-det-email" className="form-label">Email address <span className="text-red-500">*</span></label>
+                <input id="cf-det-email" type="email" required value={fields.email} onChange={set("email")} placeholder="jane@company.com" className="form-input" />
               </div>
             </div>
 
             {showPhone && (
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="cf-det-phone" className="text-sm font-medium text-gray-700">
-                  Phone number <span className="text-red-500">*</span>
-                </label>
-                <input
-                  id="cf-det-phone"
-                  type="tel"
-                  required
-                  value={fields.phone}
-                  onChange={set("phone")}
-                  placeholder="+1 (555) 000-0000"
-                  className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 placeholder-gray-400 outline-none transition focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100"
-                />
+                <label htmlFor="cf-det-phone" className="form-label">Phone number <span className="text-red-500">*</span></label>
+                <input id="cf-det-phone" type="tel" required value={fields.phone} onChange={set("phone")} placeholder="+44 7700 900000" className="form-input" />
               </div>
             )}
 
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="cf-det-message" className="text-sm font-medium text-gray-700">
-                Message <span className="text-red-500">*</span>
-              </label>
-              <textarea
-                id="cf-det-message"
-                required
-                rows={6}
-                value={fields.message}
-                onChange={set("message")}
-                placeholder="Tell us how we can help…"
-                className="w-full resize-none rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 placeholder-gray-400 outline-none transition focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100"
-              />
+              <label htmlFor="cf-det-message" className="form-label">Message <span className="text-red-500">*</span></label>
+              <textarea id="cf-det-message" required rows={6} value={fields.message} onChange={set("message")} placeholder="Tell us how we can help…" className="form-input resize-none" />
             </div>
 
             {requireCaptcha && !isV3 && (
-              <CaptchaWidget
-                onVerify={setWidgetToken}
-                onExpire={() => setWidgetToken(null)}
-              />
+              <CaptchaWidget onVerify={setWidgetToken} onExpire={() => setWidgetToken(null)} />
             )}
 
             {state === "error" && (
               <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600">{errorMsg}</p>
             )}
 
-            <button
-              type="submit"
-              disabled={state === "loading"}
-              className="w-full rounded-xl bg-indigo-600 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-indigo-700 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
-            >
+            <button type="submit" disabled={state === "loading"} className="form-btn mt-2">
               {state === "loading" ? "Sending…" : "Send message →"}
             </button>
           </form>

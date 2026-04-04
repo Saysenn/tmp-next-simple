@@ -7,27 +7,17 @@ import CaptchaWidget from "./CaptchaWidget";
 
 type FormState = "idle" | "loading" | "success" | "error";
 
-const inputClass =
-  "w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 placeholder-gray-400 outline-none transition focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100";
-
 export default function ContactFormWithCV() {
-  const { showPhone, requireCaptcha, maxFileSizeMb, allowedFileTypes } =
-    formsConfig.contactCVForm;
+  const { showPhone, requireCaptcha, maxFileSizeMb, allowedFileTypes } = formsConfig.contactCVForm;
   const { isV3, setWidgetToken, getToken } = useCaptcha();
 
   const [state, setState] = useState<FormState>("idle");
   const [errorMsg, setErrorMsg] = useState("");
   const [cvFile, setCvFile] = useState<File | null>(null);
   const [cvError, setCvError] = useState("");
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDragOver, setIsDragOver] = useState(false);
-
-  const [fields, setFields] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    message: "",
-  });
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [fields, setFields] = useState({ name: "", email: "", phone: "", message: "" });
 
   function set(field: keyof typeof fields) {
     return (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
@@ -35,8 +25,7 @@ export default function ContactFormWithCV() {
   }
 
   function validateFile(file: File): string | null {
-    const maxBytes = maxFileSizeMb * 1024 * 1024;
-    if (file.size > maxBytes) return `File must be under ${maxFileSizeMb}MB.`;
+    if (file.size > maxFileSizeMb * 1024 * 1024) return `File must be under ${maxFileSizeMb}MB.`;
     const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
     if (!allowedFileTypes.includes(ext as "pdf" | "doc" | "docx"))
       return `Accepted formats: ${allowedFileTypes.join(", ").toUpperCase()}.`;
@@ -48,12 +37,7 @@ export default function ContactFormWithCV() {
     setCvError("");
     if (!file) { setCvFile(null); return; }
     const err = validateFile(file);
-    if (err) {
-      setCvError(err);
-      setCvFile(null);
-      if (fileInputRef.current) fileInputRef.current.value = "";
-      return;
-    }
+    if (err) { setCvError(err); setCvFile(null); if (fileInputRef.current) fileInputRef.current.value = ""; return; }
     setCvFile(file);
   }
 
@@ -98,11 +82,10 @@ export default function ContactFormWithCV() {
       body.append("message", fields.message);
       if (captchaToken) body.append("captchaToken", captchaToken);
       if (cvFile) body.append("cv", cvFile);
-      body.append("website", ""); // honeypot
+      body.append("website", "");
 
       const res = await fetch("/api/v1/contact-cv", { method: "POST", body });
       const data = await res.json();
-
       if (!res.ok) {
         setErrorMsg(data.error || "Something went wrong. Please try again.");
         setState("error");
@@ -121,15 +104,19 @@ export default function ContactFormWithCV() {
 
   if (state === "success") {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[340px] text-center gap-4 px-4">
-        <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-green-600">
-            <polyline points="20 6 9 17 4 12" />
-          </svg>
-        </div>
-        <h3 className="text-xl font-semibold text-gray-900">Message sent!</h3>
-        <p className="text-gray-500 text-sm">We&apos;ll get back to you as soon as possible.</p>
-        <button onClick={() => setState("idle")} className="mt-2 text-sm text-indigo-600 hover:underline">
+      <div className="form-success">
+        <div className="form-success-icon">✓</div>
+        <h3 className="text-xl font-semibold" style={{ color: "var(--section-heading, var(--text-heading))" }}>
+          Message sent
+        </h3>
+        <p style={{ color: "var(--section-muted, var(--text-muted))" }}>
+          We&apos;ll get back to you as soon as possible.
+        </p>
+        <button
+          onClick={() => setState("idle")}
+          className="mt-2 text-sm font-medium underline underline-offset-4"
+          style={{ color: "var(--section-accent, var(--accent))" }}
+        >
           Send another message
         </button>
       </div>
@@ -140,134 +127,74 @@ export default function ContactFormWithCV() {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
-      {/* Honeypot */}
       <input type="text" name="website" className="hidden" aria-hidden="true" tabIndex={-1} />
 
-      {/* Name + Email */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="ccv-name" className="text-sm font-medium text-gray-700">
-            Full name <span className="text-red-500">*</span>
-          </label>
-          <input
-            id="ccv-name"
-            type="text"
-            required
-            value={fields.name}
-            onChange={set("name")}
-            placeholder="Jane Smith"
-            className={inputClass}
-          />
+          <label htmlFor="ccv-name" className="form-label">Full name <span className="text-red-500">*</span></label>
+          <input id="ccv-name" type="text" required value={fields.name} onChange={set("name")} placeholder="Jane Smith" className="form-input" />
         </div>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="ccv-email" className="text-sm font-medium text-gray-700">
-            Email address <span className="text-red-500">*</span>
-          </label>
-          <input
-            id="ccv-email"
-            type="email"
-            required
-            value={fields.email}
-            onChange={set("email")}
-            placeholder="jane@company.com"
-            className={inputClass}
-          />
+          <label htmlFor="ccv-email" className="form-label">Email address <span className="text-red-500">*</span></label>
+          <input id="ccv-email" type="email" required value={fields.email} onChange={set("email")} placeholder="jane@company.com" className="form-input" />
         </div>
       </div>
 
-      {/* Phone */}
       {showPhone && (
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="ccv-phone" className="text-sm font-medium text-gray-700">
-            Phone number <span className="text-red-500">*</span>
-          </label>
-          <input
-            id="ccv-phone"
-            type="tel"
-            required
-            value={fields.phone}
-            onChange={set("phone")}
-            placeholder="020 1234 5678"
-            className={inputClass}
-          />
+          <label htmlFor="ccv-phone" className="form-label">Phone number <span className="text-red-500">*</span></label>
+          <input id="ccv-phone" type="tel" required value={fields.phone} onChange={set("phone")} placeholder="020 1234 5678" className="form-input" />
         </div>
       )}
 
-      {/* Message */}
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="ccv-message" className="text-sm font-medium text-gray-700">
-          Message <span className="text-red-500">*</span>
-        </label>
-        <textarea
-          id="ccv-message"
-          rows={5}
-          required
-          value={fields.message}
-          onChange={set("message")}
-          placeholder="Tell us how we can help."
-          className={`${inputClass} resize-none`}
-        />
+        <label htmlFor="ccv-message" className="form-label">Message <span className="text-red-500">*</span></label>
+        <textarea id="ccv-message" rows={5} required value={fields.message} onChange={set("message")} placeholder="Tell us how we can help…" className="form-input resize-none" />
       </div>
 
       {/* CV upload */}
       <div className="flex flex-col gap-1.5">
-        <label className="text-sm font-medium text-gray-700">
+        <label className="form-label">
           Attach your CV{" "}
-          <span className="text-gray-400 font-normal">
-            (optional, {allowedFileTypes.join(", ").toUpperCase()} or DOC, max {maxFileSizeMb} MB)
+          <span className="font-normal" style={{ color: "var(--section-muted, var(--text-muted))" }}>
+            ({allowedFileTypes.join(", ").toUpperCase()}, max {maxFileSizeMb}MB)
           </span>
         </label>
 
         {!cvFile ? (
           <label
             htmlFor="ccv-cv"
+            className={`form-upload-zone${isDragOver ? " drag-over" : ""}`}
             onDragOver={(e) => { e.preventDefault(); setIsDragOver(true); }}
             onDragLeave={() => setIsDragOver(false)}
             onDrop={handleDrop}
-            className={`flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed px-6 py-8 text-center cursor-pointer transition ${
-              isDragOver
-                ? "border-indigo-400 bg-indigo-50"
-                : "border-gray-200 bg-gray-50 hover:border-indigo-300 hover:bg-indigo-50/40"
-            }`}
           >
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--section-muted, var(--text-muted))" }}>
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
               <polyline points="17 8 12 3 7 8" />
               <line x1="12" y1="3" x2="12" y2="15" />
             </svg>
-            <span className="text-sm text-gray-600">
+            <span className="text-sm" style={{ color: "var(--section-body, var(--text-body))" }}>
               Click to upload or drag and drop
             </span>
-            <span className="text-xs text-gray-400">
-              {allowedFileTypes.join(", ").toUpperCase()} up to {maxFileSizeMb} MB
+            <span className="text-xs" style={{ color: "var(--section-muted, var(--text-muted))" }}>
+              {allowedFileTypes.join(", ").toUpperCase()} up to {maxFileSizeMb}MB
             </span>
-            <input
-              id="ccv-cv"
-              ref={fileInputRef}
-              type="file"
-              accept={acceptAttr}
-              onChange={handleFileChange}
-              className="hidden"
-            />
+            <input id="ccv-cv" ref={fileInputRef} type="file" accept={acceptAttr} onChange={handleFileChange} className="hidden" />
           </label>
         ) : (
-          <div className="flex items-center justify-between gap-3 rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-3">
+          <div className="form-file-pill">
             <div className="flex items-center gap-2 min-w-0">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-indigo-500 shrink-0">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--section-accent, var(--accent))", flexShrink: 0 }}>
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
                 <polyline points="14 2 14 8 20 8" />
               </svg>
-              <span className="text-sm font-medium text-indigo-700 truncate">{cvFile.name}</span>
-              <span className="text-xs text-indigo-400 shrink-0">
-                {(cvFile.size / 1024 / 1024).toFixed(1)} MB
+              <span className="text-sm font-medium truncate" style={{ color: "var(--section-heading, var(--text-heading))" }}>{cvFile.name}</span>
+              <span className="text-xs shrink-0" style={{ color: "var(--section-muted, var(--text-muted))" }}>
+                {(cvFile.size / 1024 / 1024).toFixed(1)}MB
               </span>
             </div>
-            <button
-              type="button"
-              onClick={removeFile}
-              className="shrink-0 text-xs text-gray-400 hover:text-red-500 transition"
-              aria-label="Remove file"
-            >
+            <button type="button" onClick={removeFile} className="shrink-0 text-xs transition hover:text-red-500" style={{ color: "var(--section-muted, var(--text-muted))" }} aria-label="Remove file">
               ✕ Remove
             </button>
           </div>
@@ -284,11 +211,7 @@ export default function ContactFormWithCV() {
         <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600">{errorMsg}</p>
       )}
 
-      <button
-        type="submit"
-        disabled={state === "loading" || !!cvError}
-        className="w-full rounded-xl bg-indigo-600 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-indigo-700 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
-      >
+      <button type="submit" disabled={state === "loading" || !!cvError} className="form-btn mt-2">
         {state === "loading" ? "Sending…" : "Send message"}
       </button>
     </form>

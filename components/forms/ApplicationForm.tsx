@@ -7,9 +7,6 @@ import CaptchaWidget from "./CaptchaWidget";
 
 type FormState = "idle" | "loading" | "success" | "error";
 
-const inputClass =
-  "w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 placeholder-gray-400 outline-none transition focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100";
-
 export default function ApplicationForm() {
   const { showPhone, showPosition, showCoverLetter, requireCaptcha, maxFileSizeMb, allowedFileTypes } =
     formsConfig.applicationForm;
@@ -19,15 +16,9 @@ export default function ApplicationForm() {
   const [errorMsg, setErrorMsg] = useState("");
   const [cvFile, setCvFile] = useState<File | null>(null);
   const [cvError, setCvError] = useState("");
+  const [isDragOver, setIsDragOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const [fields, setFields] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    position: "",
-    coverLetter: "",
-  });
+  const [fields, setFields] = useState({ name: "", email: "", phone: "", position: "", coverLetter: "" });
 
   function set(field: keyof typeof fields) {
     return (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
@@ -37,20 +28,13 @@ export default function ApplicationForm() {
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0] ?? null;
     setCvError("");
-
-    if (!file) {
-      setCvFile(null);
-      return;
-    }
-
-    const maxBytes = maxFileSizeMb * 1024 * 1024;
-    if (file.size > maxBytes) {
+    if (!file) { setCvFile(null); return; }
+    if (file.size > maxFileSizeMb * 1024 * 1024) {
       setCvError(`File must be under ${maxFileSizeMb}MB.`);
       setCvFile(null);
       if (fileInputRef.current) fileInputRef.current.value = "";
       return;
     }
-
     const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
     if (!allowedFileTypes.includes(ext as "pdf" | "doc" | "docx")) {
       setCvError(`Accepted formats: ${allowedFileTypes.join(", ").toUpperCase()}.`);
@@ -58,7 +42,18 @@ export default function ApplicationForm() {
       if (fileInputRef.current) fileInputRef.current.value = "";
       return;
     }
+    setCvFile(file);
+  }
 
+  function handleDrop(e: React.DragEvent) {
+    e.preventDefault();
+    setIsDragOver(false);
+    const file = e.dataTransfer.files?.[0] ?? null;
+    if (!file) return;
+    setCvError("");
+    if (file.size > maxFileSizeMb * 1024 * 1024) { setCvError(`File must be under ${maxFileSizeMb}MB.`); return; }
+    const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
+    if (!allowedFileTypes.includes(ext as "pdf" | "doc" | "docx")) { setCvError(`Accepted: ${allowedFileTypes.join(", ").toUpperCase()}.`); return; }
     setCvFile(file);
   }
 
@@ -71,7 +66,6 @@ export default function ApplicationForm() {
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     if (cvError) return;
-
     setState("loading");
     setErrorMsg("");
 
@@ -94,12 +88,10 @@ export default function ApplicationForm() {
       if (showCoverLetter) body.append("coverLetter", fields.coverLetter);
       if (captchaToken) body.append("captchaToken", captchaToken);
       if (cvFile) body.append("cv", cvFile);
-      // Honeypot
       body.append("website", "");
 
       const res = await fetch("/api/v1/apply", { method: "POST", body });
       const data = await res.json();
-
       if (!res.ok) {
         setErrorMsg(data.error || "Something went wrong. Please try again.");
         setState("error");
@@ -118,13 +110,19 @@ export default function ApplicationForm() {
 
   if (state === "success") {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[340px] text-center gap-4 px-4">
-        <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center text-3xl">✓</div>
-        <h3 className="text-xl font-semibold text-gray-900">Application submitted!</h3>
-        <p className="text-gray-500 max-w-xs">
+      <div className="form-success">
+        <div className="form-success-icon">✓</div>
+        <h3 className="text-xl font-semibold" style={{ color: "var(--section-heading, var(--text-heading))" }}>
+          Application submitted
+        </h3>
+        <p style={{ color: "var(--section-muted, var(--text-muted))" }}>
           Thank you for applying. We&apos;ll be in touch shortly.
         </p>
-        <button onClick={() => setState("idle")} className="mt-2 text-sm text-indigo-600 hover:underline">
+        <button
+          onClick={() => setState("idle")}
+          className="mt-2 text-sm font-medium underline underline-offset-4"
+          style={{ color: "var(--section-accent, var(--accent))" }}
+        >
           Submit another application
         </button>
       </div>
@@ -135,38 +133,16 @@ export default function ApplicationForm() {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
-      {/* Honeypot — hidden from real users */}
       <input type="text" name="website" className="hidden" aria-hidden="true" tabIndex={-1} />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="af-name" className="text-sm font-medium text-gray-700">
-            Full name <span className="text-red-500">*</span>
-          </label>
-          <input
-            id="af-name"
-            type="text"
-            required
-            value={fields.name}
-            onChange={set("name")}
-            placeholder="Jane Smith"
-            className={inputClass}
-          />
+          <label htmlFor="af-name" className="form-label">Full name <span className="text-red-500">*</span></label>
+          <input id="af-name" type="text" required value={fields.name} onChange={set("name")} placeholder="Jane Smith" className="form-input" />
         </div>
-
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="af-email" className="text-sm font-medium text-gray-700">
-            Email address <span className="text-red-500">*</span>
-          </label>
-          <input
-            id="af-email"
-            type="email"
-            required
-            value={fields.email}
-            onChange={set("email")}
-            placeholder="jane@company.com"
-            className={inputClass}
-          />
+          <label htmlFor="af-email" className="form-label">Email address <span className="text-red-500">*</span></label>
+          <input id="af-email" type="email" required value={fields.email} onChange={set("email")} placeholder="jane@company.com" className="form-input" />
         </div>
       </div>
 
@@ -174,33 +150,18 @@ export default function ApplicationForm() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           {showPhone && (
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="af-phone" className="text-sm font-medium text-gray-700">
-                Phone number <span className="text-gray-400 font-normal">(optional)</span>
+              <label htmlFor="af-phone" className="form-label">
+                Phone <span className="font-normal" style={{ color: "var(--section-muted, var(--text-muted))" }}>(optional)</span>
               </label>
-              <input
-                id="af-phone"
-                type="tel"
-                value={fields.phone}
-                onChange={set("phone")}
-                placeholder="+44 7700 900000"
-                className={inputClass}
-              />
+              <input id="af-phone" type="tel" value={fields.phone} onChange={set("phone")} placeholder="+44 7700 900000" className="form-input" />
             </div>
           )}
-
           {showPosition && (
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="af-position" className="text-sm font-medium text-gray-700">
-                Position applied for <span className="text-gray-400 font-normal">(optional)</span>
+              <label htmlFor="af-position" className="form-label">
+                Position <span className="font-normal" style={{ color: "var(--section-muted, var(--text-muted))" }}>(optional)</span>
               </label>
-              <input
-                id="af-position"
-                type="text"
-                value={fields.position}
-                onChange={set("position")}
-                placeholder="e.g. Senior Designer"
-                className={inputClass}
-              />
+              <input id="af-position" type="text" value={fields.position} onChange={set("position")} placeholder="e.g. Senior Designer" className="form-input" />
             </div>
           )}
         </div>
@@ -208,69 +169,59 @@ export default function ApplicationForm() {
 
       {/* CV upload */}
       <div className="flex flex-col gap-1.5">
-        <label className="text-sm font-medium text-gray-700">
-          CV / Résumé <span className="text-gray-400 font-normal">(optional)</span>
+        <label className="form-label">
+          CV / Résumé{" "}
+          <span className="font-normal" style={{ color: "var(--section-muted, var(--text-muted))" }}>
+            (optional, {allowedFileTypes.join(", ").toUpperCase()}, max {maxFileSizeMb}MB)
+          </span>
         </label>
 
         {!cvFile ? (
           <label
             htmlFor="af-cv"
-            className="flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-gray-200 bg-gray-50 px-6 py-8 text-center cursor-pointer transition hover:border-indigo-300 hover:bg-indigo-50/40"
+            className={`form-upload-zone${isDragOver ? " drag-over" : ""}`}
+            onDragOver={(e) => { e.preventDefault(); setIsDragOver(true); }}
+            onDragLeave={() => setIsDragOver(false)}
+            onDrop={handleDrop}
           >
-            <span className="text-2xl">📄</span>
-            <span className="text-sm text-gray-600">
-              Drag & drop or <span className="text-indigo-600 font-medium">browse</span>
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--section-muted, var(--text-muted))" }}>
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+            </svg>
+            <span className="text-sm" style={{ color: "var(--section-body, var(--text-body))" }}>
+              Drag & drop or <span style={{ color: "var(--section-accent, var(--accent))" }} className="font-medium">browse</span>
             </span>
-            <span className="text-xs text-gray-400">
+            <span className="text-xs" style={{ color: "var(--section-muted, var(--text-muted))" }}>
               {allowedFileTypes.join(", ").toUpperCase()} · Max {maxFileSizeMb}MB
             </span>
-            <input
-              id="af-cv"
-              ref={fileInputRef}
-              type="file"
-              accept={acceptAttr}
-              onChange={handleFileChange}
-              className="hidden"
-            />
+            <input id="af-cv" ref={fileInputRef} type="file" accept={acceptAttr} onChange={handleFileChange} className="hidden" />
           </label>
         ) : (
-          <div className="flex items-center justify-between gap-3 rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-3">
+          <div className="form-file-pill">
             <div className="flex items-center gap-2 min-w-0">
-              <span className="text-lg">📎</span>
-              <span className="text-sm font-medium text-indigo-700 truncate">{cvFile.name}</span>
-              <span className="text-xs text-indigo-400 shrink-0">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--section-accent, var(--accent))", flexShrink: 0 }}>
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+              </svg>
+              <span className="text-sm font-medium truncate" style={{ color: "var(--section-heading, var(--text-heading))" }}>{cvFile.name}</span>
+              <span className="text-xs shrink-0" style={{ color: "var(--section-muted, var(--text-muted))" }}>
                 {(cvFile.size / 1024 / 1024).toFixed(1)}MB
               </span>
             </div>
-            <button
-              type="button"
-              onClick={removeFile}
-              className="shrink-0 text-xs text-gray-400 hover:text-red-500 transition"
-              aria-label="Remove file"
-            >
+            <button type="button" onClick={removeFile} className="shrink-0 text-xs transition hover:text-red-500" style={{ color: "var(--section-muted, var(--text-muted))" }} aria-label="Remove file">
               ✕ Remove
             </button>
           </div>
         )}
-
-        {cvError && (
-          <p className="text-xs text-red-500 mt-1">{cvError}</p>
-        )}
+        {cvError && <p className="text-xs text-red-500 mt-1">{cvError}</p>}
       </div>
 
       {showCoverLetter && (
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="af-cover" className="text-sm font-medium text-gray-700">
-            Cover letter <span className="text-gray-400 font-normal">(optional)</span>
+          <label htmlFor="af-cover" className="form-label">
+            Cover letter <span className="font-normal" style={{ color: "var(--section-muted, var(--text-muted))" }}>(optional)</span>
           </label>
-          <textarea
-            id="af-cover"
-            rows={5}
-            value={fields.coverLetter}
-            onChange={set("coverLetter")}
-            placeholder="Tell us why you'd be a great fit…"
-            className={`${inputClass} resize-none`}
-          />
+          <textarea id="af-cover" rows={5} value={fields.coverLetter} onChange={set("coverLetter")} placeholder="Tell us why you'd be a great fit…" className="form-input resize-none" />
         </div>
       )}
 
@@ -282,11 +233,7 @@ export default function ApplicationForm() {
         <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600">{errorMsg}</p>
       )}
 
-      <button
-        type="submit"
-        disabled={state === "loading" || !!cvError}
-        className="w-full rounded-xl bg-indigo-600 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-indigo-700 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
-      >
+      <button type="submit" disabled={state === "loading" || !!cvError} className="form-btn mt-2">
         {state === "loading" ? "Submitting…" : "Submit application"}
       </button>
     </form>

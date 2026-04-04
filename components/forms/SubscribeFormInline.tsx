@@ -38,7 +38,6 @@ export default function SubscribeFormInline() {
         body: JSON.stringify({ email, ...(showNameField ? { name } : {}), captchaToken }),
       });
       const data = await res.json();
-
       if (!res.ok) {
         setErrorMsg(data.error || "Something went wrong. Please try again.");
         setState("error");
@@ -56,9 +55,13 @@ export default function SubscribeFormInline() {
 
   if (state === "success") {
     return (
-      <div className="text-center py-4">
-        <p className="text-green-600 font-semibold text-lg">You&apos;re on the list!</p>
-        <p className="text-gray-500 text-sm mt-1">We&apos;ll notify you as soon as we launch.</p>
+      <div className="py-4 text-center">
+        <p className="font-semibold text-lg" style={{ color: "var(--section-accent, var(--accent))" }}>
+          You&apos;re on the list!
+        </p>
+        <p className="text-sm mt-1" style={{ color: "var(--section-muted, var(--text-muted))" }}>
+          We&apos;ll notify you as soon as we launch.
+        </p>
       </div>
     );
   }
@@ -66,9 +69,7 @@ export default function SubscribeFormInline() {
   return (
     <div className="w-full">
       <form onSubmit={handleSubmit} noValidate>
-        {/* Honeypot */}
         <input type="text" name="website" className="hidden" aria-hidden="true" tabIndex={-1} />
-
         <div className="flex flex-col sm:flex-row gap-3">
           {showNameField && (
             <input
@@ -76,7 +77,7 @@ export default function SubscribeFormInline() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Your name"
-              className="flex-1 min-w-0 rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 placeholder-gray-400 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+              className="form-input flex-1 min-w-0"
             />
           )}
           <input
@@ -85,12 +86,13 @@ export default function SubscribeFormInline() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email"
-            className="flex-1 min-w-0 rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 placeholder-gray-400 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+            className="form-input flex-1 min-w-0"
           />
           <button
             type="submit"
             disabled={state === "loading"}
-            className="shrink-0 rounded-xl bg-indigo-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed whitespace-nowrap"
+            className="form-btn shrink-0 sm:w-auto whitespace-nowrap"
+            style={{ width: "auto", padding: "0.75rem 1.5rem" }}
           >
             {state === "loading" ? "Joining…" : "Get early access"}
           </button>
@@ -99,19 +101,16 @@ export default function SubscribeFormInline() {
 
       {requireCaptcha && !isV3 && (
         <div className="mt-3">
-          <CaptchaWidget
-            onVerify={setWidgetToken}
-            onExpire={() => setWidgetToken(null)}
-          />
+          <CaptchaWidget onVerify={setWidgetToken} onExpire={() => setWidgetToken(null)} />
         </div>
       )}
 
       {state === "error" && (
-        <p className="mt-3 text-sm text-red-600">{errorMsg}</p>
+        <p className="mt-3 text-sm text-red-500">{errorMsg}</p>
       )}
 
       {subscriberCount > 0 && state !== "error" && (
-        <p className="mt-3 text-xs text-gray-400 text-center sm:text-left">
+        <p className="mt-3 text-xs text-center sm:text-left" style={{ color: "var(--section-muted, var(--text-muted))" }}>
           Join {subscriberCount.toLocaleString()}+ people already on the waitlist. No spam, ever.
         </p>
       )}

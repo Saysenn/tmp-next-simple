@@ -38,7 +38,6 @@ export default function SubscribeFormCard() {
         body: JSON.stringify({ email, ...(showNameField ? { name } : {}), captchaToken }),
       });
       const data = await res.json();
-
       if (!res.ok) {
         setErrorMsg(data.error || "Something went wrong. Please try again.");
         setState("error");
@@ -56,12 +55,12 @@ export default function SubscribeFormCard() {
 
   if (state === "success") {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[260px] text-center gap-4 px-4 py-10">
-        <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center text-3xl">
-          ✓
-        </div>
-        <h3 className="text-xl font-semibold text-gray-900">You&apos;re on the list!</h3>
-        <p className="text-gray-500 text-sm max-w-xs">
+      <div className="form-success" style={{ minHeight: "260px" }}>
+        <div className="form-success-icon">✓</div>
+        <h3 className="text-xl font-semibold" style={{ color: "var(--section-heading, var(--text-heading))" }}>
+          You&apos;re on the list!
+        </h3>
+        <p className="text-sm" style={{ color: "var(--section-muted, var(--text-muted))" }}>
           We&apos;ll send you an email the moment we launch. Stay tuned!
         </p>
       </div>
@@ -71,76 +70,47 @@ export default function SubscribeFormCard() {
   return (
     <div className="flex flex-col gap-6">
       <div className="text-center">
-        <p className="text-xs font-semibold tracking-widest uppercase text-indigo-500 mb-2">
+        <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "var(--section-accent, var(--accent))" }}>
           Coming soon
         </p>
-        <h2 className="text-2xl font-bold text-gray-900 leading-tight">
+        <h2 className="text-2xl font-bold leading-tight" style={{ color: "var(--section-heading, var(--text-heading))" }}>
           Be the first to know
         </h2>
-        <p className="text-gray-500 text-sm mt-2 max-w-sm mx-auto">
+        <p className="text-sm mt-2" style={{ color: "var(--section-muted, var(--text-muted))" }}>
           We&apos;re working on something exciting. Sign up to get early access and exclusive updates.
         </p>
       </div>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>
-        {/* Honeypot */}
         <input type="text" name="website" className="hidden" aria-hidden="true" tabIndex={-1} />
 
         {showNameField && (
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="sf-card-name" className="text-sm font-medium text-gray-700">
-              Your name
-            </label>
-            <input
-              id="sf-card-name"
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Jane Smith"
-              className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 placeholder-gray-400 outline-none transition focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100"
-            />
+            <label htmlFor="sf-card-name" className="form-label">Your name</label>
+            <input id="sf-card-name" type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Jane Smith" className="form-input" />
           </div>
         )}
 
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="sf-card-email" className="text-sm font-medium text-gray-700">
-            Email address <span className="text-red-500">*</span>
-          </label>
-          <input
-            id="sf-card-email"
-            type="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@email.com"
-            className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 placeholder-gray-400 outline-none transition focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100"
-          />
+          <label htmlFor="sf-card-email" className="form-label">Email address <span className="text-red-500">*</span></label>
+          <input id="sf-card-email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@email.com" className="form-input" />
         </div>
 
         {requireCaptcha && !isV3 && (
-          <CaptchaWidget
-            onVerify={setWidgetToken}
-            onExpire={() => setWidgetToken(null)}
-          />
+          <CaptchaWidget onVerify={setWidgetToken} onExpire={() => setWidgetToken(null)} />
         )}
 
         {state === "error" && (
           <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600">{errorMsg}</p>
         )}
 
-        <button
-          type="submit"
-          disabled={state === "loading"}
-          className="w-full rounded-xl bg-indigo-600 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-indigo-700 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
-        >
+        <button type="submit" disabled={state === "loading"} className="form-btn">
           {state === "loading" ? "Joining…" : "Notify me"}
         </button>
       </form>
 
-      <p className="text-center text-xs text-gray-400">
-        {subscriberCount > 0
-          ? `${subscriberCount.toLocaleString()} people already signed up · `
-          : ""}
+      <p className="text-center text-xs" style={{ color: "var(--section-muted, var(--text-muted))" }}>
+        {subscriberCount > 0 ? `${subscriberCount.toLocaleString()} people already signed up · ` : ""}
         No spam. Unsubscribe at any time.
       </p>
     </div>

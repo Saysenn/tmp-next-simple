@@ -186,6 +186,22 @@ Never leave any of these groups out of sync with the others. A colour scheme upd
 - **Never add sections** (hero, features, testimonials, pricing, FAQ, etc.) beyond what was asked
 - If unsure about layout *structure* (number of sections, page order), ask before building
 
+## Forms — Mandatory Recolour on Every Project
+
+All form components in `components/forms/` must use the CSS utility classes from `app/globals.css` — never hardcode `indigo-*`, `gray-*`, or any brand colour directly in form components.
+
+| Element | Class to use |
+|---|---|
+| Input / textarea / select | `form-input` |
+| Label | `form-label` |
+| Submit button | `form-btn` |
+| File upload drop zone | `form-upload-zone` + `drag-over` class on drag |
+| Uploaded file pill | `form-file-pill` |
+| Success state wrapper | `form-success` |
+| Success icon circle | `form-success-icon` |
+
+These classes use `--section-*` CSS variables, so they automatically adapt to `section-dark` and `section-light` parent contexts. When placed inside `section-light`, inputs get light borders and dark text. Inside `section-dark`, they get dark borders and light text — zero extra work. When rebranding, only `app/globals.css` needs updating.
+
 ## Component Styling — Defaults Only
 
 - Use Tailwind utility classes for all styling — no inline `style=` props unless unavoidable
@@ -267,6 +283,46 @@ Every styling and asset decision must consider initial page load. A visually pol
 - **No render-blocking scripts** — third-party scripts (analytics, chat, maps) must be deferred or loaded behind cookie consent. Never load them unconditionally in `<head>`.
 - **Keep component trees lean** — don't nest unnecessary wrapper `<div>`s. Every extra DOM node adds to paint time.
 - **Swiper and GSAP are code-split by default** — only import them in the component that needs them, never at the top of a layout or page file.
+
+---
+
+# Email Templates
+
+## Rebranding — Mandatory on Every Project
+
+Email templates live in `emails/`. Whenever a project has forms (contact, subscribe, application, CV upload, etc.), find which email templates they use and rebrand all of them. Never leave default or placeholder email templates in place.
+
+## How to Rebrand Email Templates
+
+1. **Find all forms** — check `components/forms/` and any API routes in `app/api/` that call `sendEmail` or import from `emails/`
+2. **Trace which template each form uses** — follow the import chain from the form → API route → email template
+3. **Rebrand every template that is actively used** — unused variants (e.g. `ContactEmailBold.tsx` if only `ContactEmailMinimal.tsx` is wired up) do not need updating unless asked
+4. **Source company info from `configs/footer.ts`** — never hardcode company name, address, or email inline in templates
+
+## Email Template Rules
+
+- **No logo image** — do not use `<img>` or `next/image` for the logo. Images in emails are unreliable and often blocked. Use the company name as a styled text header instead
+- **Company name as header** — render the company name in a clean, bold style at the top of every email (pull from `configs/footer.ts` or `configs/header.ts`)
+- **Short, professional subject lines** — e.g. `"New enquiry from [Name]"`, `"Thanks for getting in touch"`, `"Application received"` — no filler, no exclamation marks
+- **Professional layout** — clean single-column, clear hierarchy: header → body → details → footer. No clutter, no decorative elements that break in email clients
+- **Brand colours via inline styles only** — email clients strip `<style>` tags. All colours must be inline. Use the actual hex values from `app/globals.css` (not CSS variables — those do not work in email clients)
+- **Full width** — use `width: "100%"` on the container, never `maxWidth`. Email clients handle width differently; let the wrapper control it
+- **Minimal footer** — company name, address, and a one-line legal note. No social icons unless they are plain text links
+- **Plain, readable copy** — short sentences, no marketing fluff. The email should feel like it came from a real person at the company
+
+---
+
+# Forms
+
+## Auto-Rebranding — Forms in Active Use
+
+When adding or editing forms, rebrand the specific form components that are wired up and visible on the site — not every form in the repo.
+
+- **Identify active forms** — check which forms are imported in pages or sections currently in use. Only rebrand those
+- **Placeholders** — use realistic UK-format examples: `"Jane Smith"`, `"jane@company.com"`, `"+44 7700 900000"`, `"020 7946 0958"` — never US formats
+- **Form labels** — British English throughout: "Enquiry" not "Inquiry", "CV" not "Résumé", "Post code" not "Zip code"
+- **Button copy** — action verbs that match the form purpose: `"Send message"`, `"Submit application"`, `"Reserve my spot"` — never generic `"Submit"`
+- **Success messages** — if the site name adds clarity, use `mailConfig.fromName` or `siteConfig.name` in success copy
 
 ---
 

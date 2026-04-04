@@ -1,16 +1,14 @@
 import {
-  Body,
-  Button,
-  Container,
-  Head,
-  Heading,
-  Hr,
-  Html,
-  Preview,
-  Section,
-  Text,
-  Link,
+  Body, Button, Container, Head, Hr, Html,
+  Link, Preview, Section, Text,
 } from "@react-email/components";
+import { mailConfig } from "@/configs/mail";
+
+// ── Brand — update hex values here when rebranding ───────────
+const ACCENT    = "#6ed39a";
+const DARK      = "#062125";
+const DARK_MID  = "#083433";
+// ─────────────────────────────────────────────────────────────
 
 type Props = {
   name?: string;
@@ -19,253 +17,126 @@ type Props = {
 };
 
 export default function SubscribeEmail({ name, email, role }: Props) {
-  const currentYear = new Date().getFullYear();
+  const year        = new Date().getFullYear();
+  const date        = new Date().toLocaleDateString("en-GB", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
   const displayName = name || email;
-  const initial = displayName.charAt(0).toUpperCase();
+  const siteName    = mailConfig.fromName;
+  const siteUrl     = mailConfig.siteUrl;
 
   return (
-    <Html>
+    <Html lang="en">
       <Head />
-      <Preview>New early access signup from {displayName}</Preview>
-      <Body style={main}>
-        <Container style={container}>
+      <Preview>New subscriber — {displayName}</Preview>
+      <Body style={s.body}>
+        <Container style={s.container}>
+
           {/* Header */}
-          <Section style={header}>
-            <Heading style={headerTitle}>New Early Access Signup</Heading>
-            <Text style={headerDate}>
-              {new Date().toLocaleDateString("en-US", {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </Text>
+          <Section style={{ ...s.header, backgroundColor: DARK }}>
+            <Text style={s.brandName}>{siteName}</Text>
+            <Text style={{ ...s.headerLabel, color: ACCENT }}>New Subscriber</Text>
           </Section>
 
           {/* Content */}
-          <Section style={content}>
+          <Section style={s.content}>
+            <Text style={s.date}>{date}</Text>
+
             {/* Subscriber card */}
-            <Section style={subscriberCard}>
-              <table>
+            <Section style={s.card}>
+              <table style={{ width: "100%", borderCollapse: "collapse" }}>
                 <tr>
-                  <td style={avatarCell}>
-                    <div style={avatar}>{initial}</div>
+                  <td style={s.avatarCell}>
+                    <div style={{ ...s.avatar, backgroundColor: DARK_MID }}>
+                      {displayName.charAt(0).toUpperCase()}
+                    </div>
                   </td>
-                  <td style={subscriberInfo}>
-                    {name && <Text style={subscriberName}>{name}</Text>}
-                    <Link href={`mailto:${email}`} style={subscriberEmail}>
-                      {email}
-                    </Link>
-                    {role && <Text style={subscriberRole}>{role}</Text>}
+                  <td style={s.meta}>
+                    {name && <Text style={s.personName}>{name}</Text>}
+                    <Link href={`mailto:${email}`} style={{ ...s.link, color: ACCENT }}>{email}</Link>
+                    {role && <Text style={s.role}>{role}</Text>}
                   </td>
                 </tr>
               </table>
             </Section>
 
-            {/* Details rows */}
-            <Section style={detailsSection}>
+            {/* Details table */}
+            <Section style={s.detailsBox}>
               <table style={{ width: "100%", borderCollapse: "collapse" }}>
                 {name && (
                   <tr>
-                    <td style={detailLabel}>Name</td>
-                    <td style={detailValue}>{name}</td>
+                    <td style={s.detailLabel}>Name</td>
+                    <td style={s.detailValue}>{name}</td>
                   </tr>
                 )}
                 <tr>
-                  <td style={detailLabel}>Email</td>
-                  <td style={detailValue}>
-                    <Link href={`mailto:${email}`} style={linkStyle}>{email}</Link>
+                  <td style={s.detailLabel}>Email</td>
+                  <td style={s.detailValue}>
+                    <Link href={`mailto:${email}`} style={{ ...s.link, color: ACCENT }}>{email}</Link>
                   </td>
                 </tr>
                 {role && (
                   <tr>
-                    <td style={detailLabel}>Role</td>
-                    <td style={detailValue}>{role}</td>
+                    <td style={s.detailLabel}>Role</td>
+                    <td style={s.detailValue}>{role}</td>
                   </tr>
                 )}
                 <tr>
-                  <td style={detailLabel}>Signed up</td>
-                  <td style={detailValue}>{new Date().toLocaleString()}</td>
+                  <td style={s.detailLabel}>Signed up</td>
+                  <td style={s.detailValue}>{date}</td>
                 </tr>
               </table>
             </Section>
 
             {/* CTA */}
-            <Section style={buttonSection}>
-              <Button href={`mailto:${email}`} style={replyButton}>
+            <Section style={s.btnSection}>
+              <Button href={`mailto:${email}`} style={{ ...s.btn, backgroundColor: DARK }}>
                 Reply to {name ? name.split(" ")[0] : "subscriber"}
               </Button>
             </Section>
           </Section>
 
-          <Hr style={divider} />
-
           {/* Footer */}
-          <Section style={footer}>
-            <Text style={footerText}>
-              This notification was sent because someone signed up for early access.
-            </Text>
-            <Text style={copyright}>
-              © {currentYear} MyApp. All rights reserved.
-            </Text>
+          <Hr style={s.divider} />
+          <Section style={s.footer}>
+            <Text style={s.footerCompany}>{siteName}</Text>
+            {siteUrl && (
+              <Text style={s.footerSite}>
+                <Link href={siteUrl} style={s.mutedLink}>{siteUrl.replace(/^https?:\/\//, "")}</Link>
+              </Text>
+            )}
+            <Text style={s.copyright}>© {year} {siteName}. All rights reserved.</Text>
           </Section>
+
         </Container>
       </Body>
     </Html>
   );
 }
 
-// ─── Styles ───────────────────────────────────────────────────
-
-const main = {
-  backgroundColor: "#f8fafb",
-  fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-};
-
-const container = {
-  maxWidth: "600px",
-  margin: "0 auto",
-  backgroundColor: "#ffffff",
-  borderRadius: "16px",
-  overflow: "hidden" as const,
-  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-};
-
-const header = {
-  background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
-  padding: "40px 30px",
-  textAlign: "center" as const,
-};
-
-const headerTitle = {
-  color: "#ffffff",
-  fontSize: "24px",
-  fontWeight: "600",
-  margin: "0",
-};
-
-const headerDate = {
-  color: "rgba(255,255,255,0.7)",
-  fontSize: "14px",
-  margin: "10px 0 0",
-};
-
-const content = {
-  padding: "40px 30px",
-};
-
-const subscriberCard = {
-  backgroundColor: "#f0f4ff",
-  borderRadius: "12px",
-  padding: "24px",
-  marginBottom: "30px",
-};
-
-const avatarCell = {
-  width: "50px",
-  verticalAlign: "top" as const,
-};
-
-const avatar = {
-  width: "50px",
-  height: "50px",
-  background: "linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)",
-  borderRadius: "50%",
-  color: "#ffffff",
-  fontSize: "20px",
-  fontWeight: "600" as const,
-  lineHeight: "50px",
-  textAlign: "center" as const,
-};
-
-const subscriberInfo = {
-  paddingLeft: "16px",
-  verticalAlign: "top" as const,
-};
-
-const subscriberName = {
-  margin: "0 0 4px",
-  color: "#1a1a2e",
-  fontSize: "18px",
-  fontWeight: "600",
-};
-
-const subscriberEmail = {
-  color: "#6366f1",
-  fontSize: "14px",
-  textDecoration: "none",
-};
-
-const subscriberRole = {
-  margin: "4px 0 0",
-  color: "#64748b",
-  fontSize: "13px",
-};
-
-const detailsSection = {
-  backgroundColor: "#f8fafc",
-  borderRadius: "8px",
-  padding: "20px",
-  marginBottom: "24px",
-};
-
-const detailLabel = {
-  color: "#94a3b8",
-  fontSize: "12px",
-  textTransform: "uppercase" as const,
-  letterSpacing: "0.5px",
-  fontWeight: "600",
-  padding: "8px 12px 8px 0",
-  width: "100px",
-  verticalAlign: "top" as const,
-};
-
-const detailValue = {
-  color: "#334155",
-  fontSize: "14px",
-  padding: "8px 0",
-  verticalAlign: "top" as const,
-};
-
-const linkStyle = {
-  color: "#6366f1",
-  textDecoration: "none",
-};
-
-const buttonSection = {
-  textAlign: "center" as const,
-  paddingTop: "10px",
-};
-
-const replyButton = {
-  background: "linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)",
-  color: "#ffffff",
-  padding: "14px 32px",
-  borderRadius: "50px",
-  fontSize: "14px",
-  fontWeight: "600",
-  textDecoration: "none",
-};
-
-const divider = {
-  borderColor: "#e8eef2",
-  margin: "0",
-};
-
-const footer = {
-  backgroundColor: "#f8fafb",
-  padding: "30px",
-  textAlign: "center" as const,
-};
-
-const footerText = {
-  margin: "0 0 10px",
-  color: "#94a3b8",
-  fontSize: "13px",
-};
-
-const copyright = {
-  margin: "10px 0 0",
-  color: "#b0bec5",
-  fontSize: "12px",
+// ── Styles ────────────────────────────────────────────────────
+const s = {
+  body:          { backgroundColor: "#f4f5f4", fontFamily: "'Segoe UI', Helvetica, Arial, sans-serif", margin: "0", padding: "0" },
+  container:     { maxWidth: "600px", margin: "0 auto", backgroundColor: "#ffffff", borderRadius: "8px", overflow: "hidden" as const, boxShadow: "0 1px 4px rgba(0,0,0,0.08)" },
+  header:        { padding: "32px 40px 28px" },
+  brandName:     { margin: "0 0 4px", color: "#ffffff", fontSize: "20px", fontWeight: "700", letterSpacing: "-0.3px" },
+  headerLabel:   { margin: "0", fontSize: "13px", fontWeight: "600", textTransform: "uppercase" as const, letterSpacing: "1.2px" },
+  content:       { padding: "36px 40px" },
+  date:          { margin: "0 0 24px", color: "#9ca3af", fontSize: "13px" },
+  card:          { backgroundColor: "#f9fafb", border: "1px solid #e5e7eb", borderRadius: "8px", padding: "20px", marginBottom: "24px" },
+  avatarCell:    { width: "48px", verticalAlign: "top" as const },
+  avatar:        { width: "44px", height: "44px", borderRadius: "50%", color: "#ffffff", fontSize: "17px", fontWeight: "700" as const, lineHeight: "44px", textAlign: "center" as const },
+  meta:          { paddingLeft: "16px", verticalAlign: "top" as const },
+  personName:    { margin: "0 0 4px", color: "#111827", fontSize: "15px", fontWeight: "600" },
+  role:          { margin: "4px 0 0", color: "#9ca3af", fontSize: "13px" },
+  link:          { fontSize: "13px", textDecoration: "none", fontWeight: "500" },
+  mutedLink:     { color: "#9ca3af", textDecoration: "none", fontSize: "12px" },
+  detailsBox:    { backgroundColor: "#f9fafb", border: "1px solid #e5e7eb", borderRadius: "8px", padding: "16px 20px", marginBottom: "28px" },
+  detailLabel:   { color: "#9ca3af", fontSize: "11px", fontWeight: "600", textTransform: "uppercase" as const, letterSpacing: "1px", padding: "7px 16px 7px 0", width: "90px", verticalAlign: "top" as const },
+  detailValue:   { color: "#374151", fontSize: "14px", padding: "7px 0", verticalAlign: "top" as const },
+  btnSection:    { textAlign: "center" as const, paddingTop: "4px" },
+  btn:           { color: "#ffffff", padding: "13px 36px", borderRadius: "6px", fontSize: "14px", fontWeight: "600", textDecoration: "none", display: "inline-block" },
+  divider:       { borderColor: "#e5e7eb", margin: "0" },
+  footer:        { backgroundColor: "#f9fafb", padding: "24px 40px", textAlign: "center" as const },
+  footerCompany: { margin: "0 0 2px", color: "#6b7280", fontSize: "13px", fontWeight: "600" },
+  footerSite:    { margin: "0 0 8px", fontSize: "12px" },
+  copyright:     { margin: "0", color: "#d1d5db", fontSize: "11px" },
 };

@@ -264,6 +264,109 @@ small, .text-caption {
 }
 
 /* ===========================
+   FORM UTILITIES
+   Context-aware — inherit --section-* vars from parent section-dark / section-light.
+   Falls back to global vars when used outside a section context.
+   Never hardcode indigo/gray in form components — use these classes instead.
+=========================== */
+.form-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--section-heading, var(--text-heading));
+}
+
+.form-input {
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid var(--section-border, var(--border));
+  background-color: rgba(128, 128, 128, 0.06);
+  color: var(--section-heading, var(--text-heading));
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.form-input::placeholder {
+  color: var(--section-muted, var(--text-muted));
+  opacity: 0.6;
+}
+.form-input:focus {
+  border-color: var(--section-accent, var(--accent));
+  box-shadow: 0 0 0 3px var(--section-accent-light, var(--accent-light));
+}
+
+.form-btn {
+  width: 100%;
+  border-radius: 0.75rem;
+  background-color: var(--section-btn-bg, var(--accent));
+  color: var(--section-btn-text, var(--bg-pure));
+  padding: 0.875rem 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.1s ease;
+}
+.form-btn:hover:not(:disabled) { opacity: 0.88; }
+.form-btn:active:not(:disabled) { transform: scale(0.98); }
+.form-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+.form-upload-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 0.75rem;
+  border: 2px dashed var(--section-border, var(--border));
+  background-color: rgba(128, 128, 128, 0.04);
+  padding: 2rem 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+.form-upload-zone:hover,
+.form-upload-zone.drag-over {
+  border-color: var(--section-accent, var(--accent));
+  background-color: var(--section-accent-light, var(--accent-light));
+}
+
+.form-file-pill {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--section-border, var(--border));
+  background-color: var(--section-accent-light, var(--accent-light));
+  padding: 0.75rem 1rem;
+}
+
+.form-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1rem;
+  min-height: 320px;
+  padding: 2rem 1rem;
+}
+
+.form-success-icon {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 9999px;
+  background-color: var(--section-accent-light, var(--accent-light));
+  color: var(--section-accent, var(--accent));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+/* ===========================
    NAV LINK STYLES
    Controlled via navLinkStyle in configs/header.ts
 =========================== */
