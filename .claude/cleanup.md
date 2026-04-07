@@ -128,10 +128,6 @@ Before deleting any form component: grep for its import across `app/` to confirm
 | `/api/v1/contact-cv` | `ContactCVEmail` — always keep |
 | `/api/v1/apply` | `ApplicationEmail` — always keep |
 
-**Always delete (not wired to any active route):**
-- `emails/ContactFormEmail.tsx`
-- `emails/SubscribeEmail.tsx`
-
 **Delete based on which template variant is NOT configured:**
 | If `contactTemplate` is | Delete |
 |---|---|
@@ -164,6 +160,15 @@ After all deletions:
 1. Grep across `app/` and `components/` for any remaining imports of deleted files — fix any that appear
 2. Check `emails/index.ts` exports — remove entries for deleted templates
 3. Run `npm run build` to confirm no missing module errors
+
+---
+
+## Step 9 — Developer Files
+
+Delete these folders — they are developer reference only and should not ship with client projects:
+
+- `docs/` — documentation
+- `.claude/` — AI rules and protocols
 
 ---
 
