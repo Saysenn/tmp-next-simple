@@ -109,11 +109,6 @@ export default function SubscribeFormInline() {
         <p className="mt-3 text-sm text-red-500">{errorMsg}</p>
       )}
 
-      {subscriberCount > 0 && state !== "error" && (
-        <p className="mt-3 text-xs text-center sm:text-left" style={{ color: "var(--section-muted, var(--text-muted))" }}>
-          Join {subscriberCount.toLocaleString()}+ people already on the waitlist. No spam, ever.
-        </p>
-      )}
     </div>
   );
 }

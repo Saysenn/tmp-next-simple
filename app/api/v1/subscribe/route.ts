@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { render } from "@react-email/render";
-import { SubscribeEmailBold, SubscribeEmailClassic, SubscribeEmailMinimal } from "@/emails";
+import { SubscribeEmail, SubscribeEmailBold, SubscribeEmailClassic, SubscribeEmailMinimal } from "@/emails";
 import { sendEmail, sanitizeInput, validateEmailStrict } from "@/lib/services/mail";
 import { verifyCaptchaToken } from "@/lib/services/captcha";
 import { mailConfig } from "@/configs/mail";
@@ -8,6 +8,7 @@ import { formsConfig } from "@/configs/forms";
 import { emailTemplatesConfig } from "@/configs/email-templates";
 
 const subscribeTemplates = {
+  default: SubscribeEmail,
   bold: SubscribeEmailBold,
   classic: SubscribeEmailClassic,
   minimal: SubscribeEmailMinimal,

@@ -1,14 +1,11 @@
 import {
-  Body, Button, Container, Head, Hr, Html,
+  Body, Container, Head, Hr, Html,
   Link, Preview, Section, Text,
 } from "@react-email/components";
 import { mailConfig } from "@/configs/mail";
 
-// ── Brand — update hex values here when rebranding ───────────
-const ACCENT    = "#6ed39a";
-const DARK      = "#062125";
-const DARK_MID  = "#083433";
-// ─────────────────────────────────────────────────────────────
+// Update hex when rebranding
+const ACCENT = "#6ed39a";
 
 type Props = {
   name?: string;
@@ -19,9 +16,9 @@ type Props = {
 export default function SubscribeEmail({ name, email, role }: Props) {
   const year        = new Date().getFullYear();
   const date        = new Date().toLocaleDateString("en-GB", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
-  const displayName = name || email;
   const siteName    = mailConfig.fromName;
   const siteUrl     = mailConfig.siteUrl;
+  const displayName = name || email;
 
   return (
     <Html lang="en">
@@ -30,80 +27,54 @@ export default function SubscribeEmail({ name, email, role }: Props) {
       <Body style={s.body}>
         <Container style={s.container}>
 
-          {/* Header */}
-          <Section style={{ ...s.header, backgroundColor: DARK }}>
-            <Text style={s.brandName}>{siteName}</Text>
-            <Text style={{ ...s.headerLabel, color: ACCENT }}>New Subscriber</Text>
+          <Section style={s.top}>
+            <Text style={s.company}>{siteName}</Text>
           </Section>
 
-          {/* Content */}
+          <Hr style={s.divider} />
+
           <Section style={s.content}>
             <Text style={s.date}>{date}</Text>
 
-            {/* Subscriber card */}
-            <Section style={s.card}>
-              <table style={{ width: "100%", borderCollapse: "collapse" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse" }}>
+              {name && (
                 <tr>
-                  <td style={s.avatarCell}>
-                    <div style={{ ...s.avatar, backgroundColor: DARK_MID }}>
-                      {displayName.charAt(0).toUpperCase()}
-                    </div>
-                  </td>
-                  <td style={s.meta}>
-                    {name && <Text style={s.personName}>{name}</Text>}
-                    <Link href={`mailto:${email}`} style={{ ...s.link, color: ACCENT }}>{email}</Link>
-                    {role && <Text style={s.role}>{role}</Text>}
-                  </td>
+                  <td style={s.label}>Name</td>
+                  <td style={s.value}>{name}</td>
                 </tr>
-              </table>
-            </Section>
+              )}
+              <tr>
+                <td style={s.label}>Email</td>
+                <td style={s.value}>
+                  <Link href={`mailto:${email}`} style={{ color: ACCENT, textDecoration: "none" }}>{email}</Link>
+                </td>
+              </tr>
+              {role && (
+                <tr>
+                  <td style={s.label}>Role</td>
+                  <td style={s.value}>{role}</td>
+                </tr>
+              )}
+              <tr>
+                <td style={s.label}>Signed up</td>
+                <td style={s.value}>{new Date().toLocaleString("en-GB")}</td>
+              </tr>
+            </table>
 
-            {/* Details table */}
-            <Section style={s.detailsBox}>
-              <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                {name && (
-                  <tr>
-                    <td style={s.detailLabel}>Name</td>
-                    <td style={s.detailValue}>{name}</td>
-                  </tr>
-                )}
-                <tr>
-                  <td style={s.detailLabel}>Email</td>
-                  <td style={s.detailValue}>
-                    <Link href={`mailto:${email}`} style={{ ...s.link, color: ACCENT }}>{email}</Link>
-                  </td>
-                </tr>
-                {role && (
-                  <tr>
-                    <td style={s.detailLabel}>Role</td>
-                    <td style={s.detailValue}>{role}</td>
-                  </tr>
-                )}
-                <tr>
-                  <td style={s.detailLabel}>Signed up</td>
-                  <td style={s.detailValue}>{date}</td>
-                </tr>
-              </table>
-            </Section>
-
-            {/* CTA */}
-            <Section style={s.btnSection}>
-              <Button href={`mailto:${email}`} style={{ ...s.btn, backgroundColor: DARK }}>
-                Reply to {name ? name.split(" ")[0] : "subscriber"}
-              </Button>
-            </Section>
+            <Text style={s.replyText}>
+              <Link href={`mailto:${email}`} style={s.replyLink}>Reply to {displayName.split(" ")[0]} →</Link>
+            </Text>
           </Section>
 
-          {/* Footer */}
           <Hr style={s.divider} />
+
           <Section style={s.footer}>
-            <Text style={s.footerCompany}>{siteName}</Text>
-            {siteUrl && (
-              <Text style={s.footerSite}>
-                <Link href={siteUrl} style={s.mutedLink}>{siteUrl.replace(/^https?:\/\//, "")}</Link>
-              </Text>
-            )}
-            <Text style={s.copyright}>© {year} {siteName}. All rights reserved.</Text>
+            <Text style={s.footerText}>
+              © {year} {siteName}
+              {siteUrl && (
+                <> · <Link href={siteUrl} style={{ color: "#9ca3af", textDecoration: "none" }}>{siteUrl.replace(/^https?:\/\//, "")}</Link></>
+              )}
+            </Text>
           </Section>
 
         </Container>
@@ -112,31 +83,18 @@ export default function SubscribeEmail({ name, email, role }: Props) {
   );
 }
 
-// ── Styles ────────────────────────────────────────────────────
 const s = {
-  body:          { backgroundColor: "#f4f5f4", fontFamily: "'Segoe UI', Helvetica, Arial, sans-serif", margin: "0", padding: "0" },
-  container:     { maxWidth: "600px", margin: "0 auto", backgroundColor: "#ffffff", borderRadius: "8px", overflow: "hidden" as const, boxShadow: "0 1px 4px rgba(0,0,0,0.08)" },
-  header:        { padding: "32px 40px 28px" },
-  brandName:     { margin: "0 0 4px", color: "#ffffff", fontSize: "20px", fontWeight: "700", letterSpacing: "-0.3px" },
-  headerLabel:   { margin: "0", fontSize: "13px", fontWeight: "600", textTransform: "uppercase" as const, letterSpacing: "1.2px" },
-  content:       { padding: "36px 40px" },
-  date:          { margin: "0 0 24px", color: "#9ca3af", fontSize: "13px" },
-  card:          { backgroundColor: "#f9fafb", border: "1px solid #e5e7eb", borderRadius: "8px", padding: "20px", marginBottom: "24px" },
-  avatarCell:    { width: "48px", verticalAlign: "top" as const },
-  avatar:        { width: "44px", height: "44px", borderRadius: "50%", color: "#ffffff", fontSize: "17px", fontWeight: "700" as const, lineHeight: "44px", textAlign: "center" as const },
-  meta:          { paddingLeft: "16px", verticalAlign: "top" as const },
-  personName:    { margin: "0 0 4px", color: "#111827", fontSize: "15px", fontWeight: "600" },
-  role:          { margin: "4px 0 0", color: "#9ca3af", fontSize: "13px" },
-  link:          { fontSize: "13px", textDecoration: "none", fontWeight: "500" },
-  mutedLink:     { color: "#9ca3af", textDecoration: "none", fontSize: "12px" },
-  detailsBox:    { backgroundColor: "#f9fafb", border: "1px solid #e5e7eb", borderRadius: "8px", padding: "16px 20px", marginBottom: "28px" },
-  detailLabel:   { color: "#9ca3af", fontSize: "11px", fontWeight: "600", textTransform: "uppercase" as const, letterSpacing: "1px", padding: "7px 16px 7px 0", width: "90px", verticalAlign: "top" as const },
-  detailValue:   { color: "#374151", fontSize: "14px", padding: "7px 0", verticalAlign: "top" as const },
-  btnSection:    { textAlign: "center" as const, paddingTop: "4px" },
-  btn:           { color: "#ffffff", padding: "13px 36px", borderRadius: "6px", fontSize: "14px", fontWeight: "600", textDecoration: "none", display: "inline-block" },
-  divider:       { borderColor: "#e5e7eb", margin: "0" },
-  footer:        { backgroundColor: "#f9fafb", padding: "24px 40px", textAlign: "center" as const },
-  footerCompany: { margin: "0 0 2px", color: "#6b7280", fontSize: "13px", fontWeight: "600" },
-  footerSite:    { margin: "0 0 8px", fontSize: "12px" },
-  copyright:     { margin: "0", color: "#d1d5db", fontSize: "11px" },
+  body:       { backgroundColor: "#ffffff", fontFamily: "'Helvetica Neue', Arial, sans-serif", margin: "0", padding: "0" },
+  container:  { width: "100%", margin: "0 auto", backgroundColor: "#ffffff" },
+  top:        { padding: "40px 48px 20px" },
+  company:    { margin: "0", color: "#9ca3af", fontSize: "13px", fontWeight: "500" },
+  divider:    { borderColor: "#e5e7eb", margin: "0" },
+  content:    { padding: "32px 48px" },
+  date:       { margin: "0 0 24px", color: "#9ca3af", fontSize: "13px" },
+  label:      { color: "#9ca3af", fontSize: "11px", fontWeight: "600", textTransform: "uppercase" as const, letterSpacing: "0.5px", padding: "6px 24px 6px 0", width: "72px", verticalAlign: "top" as const },
+  value:      { color: "#111827", fontSize: "14px", padding: "6px 0", verticalAlign: "top" as const },
+  replyText:  { margin: "24px 0 0" },
+  replyLink:  { color: "#111827", fontSize: "14px", fontWeight: "500", textDecoration: "none" },
+  footer:     { padding: "20px 48px 40px" },
+  footerText: { margin: "0", color: "#9ca3af", fontSize: "12px" },
 };
