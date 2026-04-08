@@ -45,3 +45,4 @@ next-env.d.ts
 docs/
 .claude/
 .vscode/
+tasks/
