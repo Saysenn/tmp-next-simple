@@ -16,3 +16,5 @@
 8. Ensure workspace (Google Workspace) is bought
 9. Set up Resend — see `docs/email-setup/resend.md`
 10. Set up Google reCAPTCHA (any version) or Cloudflare Turnstile
+11. the rest is up to you on how to secure and make things work. I usually develop on my device then be a collaborator of the company repo then push my changes in their repo and then it wil automatically be deployed on vercel ( downside is the company need to fetch and pull and push to make everything live thats how secured it is)
+12. I advise you created your own full website template, ensure it have captchas, secured form and different layouts for header, footer, modals for cookies and also have prepared GDPR and UK compliances pages
