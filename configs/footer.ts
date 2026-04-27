@@ -12,14 +12,15 @@
 // ─── Types ────────────────────────────────────────────────────
 
 export type FooterLayout =
-  | "columns"   // FooterColumns  — 3-col grid: brand | links | connect
-  | "minimal"   // FooterMinimal  — single compact bar: logo · legal · socials
-  | "centered"  // FooterCentered — centered stacked: logo → tagline → socials → legal
-  | "brand"     // FooterBrand    — bold brand statement with gradient accent line
-  | "split"     // FooterSplit    — two-tone zones: upper (brand+links) / lower (copyright+socials)
+  | "columns"    // FooterColumns   — 3-col grid: brand | links | connect
+  | "minimal"    // FooterMinimal   — single compact bar: logo · legal · socials
+  | "centered"   // FooterCentered  — centered stacked: logo → tagline → socials → legal
+  | "brand"      // FooterBrand     — bold brand statement with gradient accent line
+  | "split"      // FooterSplit     — two-tone zones: upper (brand+links) / lower (copyright+socials)
   | "info"
-  | "recruit"      // FooterRecruit  — dark gradient: offices + contact + subscribe
-  | "stacked";     // FooterStacked  — centred logo/tagline | 2-col contact/office | nav row | bottom bar
+  | "recruit"    // FooterRecruit   — dark gradient: offices + contact + subscribe
+  | "stacked"    // FooterStacked   — centred logo/tagline | 2-col contact/office | nav row | bottom bar
+  | "corporate"; // FooterCorporate — dark formal: logo + legal details + company number + VAT
 
 export type SocialIconName =
   | "twitter"
@@ -51,6 +52,8 @@ export type CompanyInfo = {
   email: string;
   phone: string;
   companyNumber?: string;
+  vatNumber?: string;
+  legalName?: string;
 };
 
 // ─── Config ───────────────────────────────────────────────────
