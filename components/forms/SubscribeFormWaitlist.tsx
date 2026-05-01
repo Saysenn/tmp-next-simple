@@ -1,3 +1,4 @@
+// Batch 1 — SubscribeFormWaitlist (full hero: heading + subscriber count + name + email + role)
 "use client";
 
 import { useState, FormEvent } from "react";

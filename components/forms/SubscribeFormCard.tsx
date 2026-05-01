@@ -1,3 +1,4 @@
+// Batch 1 — SubscribeFormCard (centered card: name + email)
 "use client";
 
 import { useState, FormEvent } from "react";

@@ -1,3 +1,4 @@
+// Batch 1 — ContactFormDetailed (2-col split: left info panel, right form)
 "use client";
 
 import { useState, FormEvent } from "react";

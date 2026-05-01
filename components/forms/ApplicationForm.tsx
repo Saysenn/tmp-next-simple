@@ -1,3 +1,4 @@
+// Batch 1 — ApplicationForm (standard single-column layout)
 "use client";
 
 import { useState, FormEvent, useRef } from "react";

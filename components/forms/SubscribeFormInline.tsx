@@ -1,3 +1,4 @@
+// Batch 1 — SubscribeFormInline (horizontal: email input + button in one row)
 "use client";
 
 import { useState, FormEvent } from "react";
