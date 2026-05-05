@@ -35,7 +35,7 @@ export default function RootLayout({
       >
         <div className="flex flex-col min-h-screen">
           <Header />
-          <main className="flex-1 mx-auto w-full max-w-[1200px]">{children}</main>
+          <main className="flex-1 w-full">{children}</main>
           <Footer />
         </div>
         <CookieBanner />

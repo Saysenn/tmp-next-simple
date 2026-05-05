@@ -132,7 +132,7 @@ function NavHeader() {
   return (
     <>
       <header className={headerClass}>
-        <div className="mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-8">
           <div className="flex items-center h-20">
             <Logo
               type={siteConfig.logoType}

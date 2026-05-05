@@ -12,6 +12,16 @@ import CaptchaWidget from "./CaptchaWidget";
 // ─── Config ──────────────────────────────────────────────────────────────────
 const SERVICE_OPTIONS = ["Recruitment", "Payroll Services", "Compliance", "General Enquiry", "Partnership"];
 
+// ─── Colours — change any value here to retheme this form independently ──────
+const c = {
+  accent:  "var(--section-accent, var(--accent))",
+  heading: "var(--section-heading, var(--text-heading))",
+  body:    "var(--section-body, var(--text-body))",
+  muted:   "var(--section-muted, var(--text-muted))",
+  border:  "var(--section-border, var(--border))",
+  radius:  "8px",   // standard rounded
+};
+
 type FormState = "idle" | "loading" | "success" | "error";
 
 function InlineInput({
@@ -34,8 +44,8 @@ function InlineInput({
         width,
         background: "transparent",
         border: "none",
-        borderBottom: `1.5px solid ${focused ? "var(--section-accent, var(--accent))" : "var(--section-border, var(--border))"}`,
-        color: "var(--section-heading, var(--text-heading))",
+        borderBottom: `1.5px solid ${focused ? c.accent : c.border}`,
+        color: c.heading,
         fontSize: "inherit",
         fontFamily: "inherit",
         outline: "none",
@@ -75,10 +85,10 @@ export default function ContactFormConversational() {
     }
 
     const combinedMessage = [
-      fields.city ? `Location: ${fields.city}` : "",
+      fields.city    ? `Location: ${fields.city}` : "",
       fields.service ? `Interested in: ${fields.service}` : "",
       fields.message ? `Message: ${fields.message}` : "",
-    ].filter(Boolean).join("\n");
+    ].filter(Boolean).join("\n") || "No message provided";
 
     try {
       const res = await fetch("/api/v1/contact", {
@@ -94,13 +104,21 @@ export default function ContactFormConversational() {
     }
   }
 
+  // ── Success — large personalised text, no icon ──
   if (state === "success") {
     return (
-      <div className="form-success">
-        <div className="form-success-icon">✓</div>
-        <h3 className="text-xl font-semibold" style={{ color: "var(--section-heading, var(--text-heading))" }}>Got it — thanks!</h3>
-        <p style={{ color: "var(--section-muted, var(--text-muted))" }}>We typically reply within 24 hours.</p>
-        <button onClick={() => setState("idle")} className="mt-2 text-sm font-medium underline underline-offset-4" style={{ color: "var(--section-accent, var(--accent))" }}>Send another</button>
+      <div className="py-10 text-center flex flex-col items-center gap-4">
+        <p style={{ fontSize: "2rem", fontWeight: 700, color: c.heading, lineHeight: 1.2 }}>
+          Brilliant{fields.name ? `, ${fields.name.split(" ")[0]}` : ""}!
+        </p>
+        <p className="text-base" style={{ color: c.muted }}>We typically reply within 24 hours.</p>
+        <button
+          onClick={() => setState("idle")}
+          className="mt-2 text-sm underline underline-offset-4"
+          style={{ color: c.accent }}
+        >
+          Send another message
+        </button>
       </div>
     );
   }
@@ -108,24 +126,18 @@ export default function ContactFormConversational() {
   const sentenceStyle: React.CSSProperties = {
     fontSize: "1.125rem",
     lineHeight: 2.2,
-    color: "var(--section-body, var(--text-body))",
+    color: c.body,
     flexWrap: "wrap",
     display: "flex",
     alignItems: "baseline",
     gap: "6px",
   };
-
-  const wordStyle: React.CSSProperties = {
-    whiteSpace: "nowrap",
-    color: "var(--section-muted, var(--text-muted))",
-    fontSize: "1.125rem",
-  };
+  const wordStyle: React.CSSProperties = { whiteSpace: "nowrap", color: c.muted, fontSize: "1.125rem" };
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-8" noValidate>
       <input type="text" name="website" className="hidden" aria-hidden="true" tabIndex={-1} />
 
-      {/* Sentence block */}
       <div className="flex flex-col gap-6">
         <div style={sentenceStyle}>
           <span style={wordStyle}>Hi, I&apos;m</span>
@@ -142,8 +154,8 @@ export default function ContactFormConversational() {
               style={{
                 background: "transparent",
                 border: "none",
-                borderBottom: `1.5px solid ${focused === "service" ? "var(--section-accent, var(--accent))" : "var(--section-border, var(--border))"}`,
-                color: fields.service ? "var(--section-heading, var(--text-heading))" : "var(--section-muted, var(--text-muted))",
+                borderBottom: `1.5px solid ${focused === "service" ? c.accent : c.border}`,
+                color: fields.service ? c.heading : c.muted,
                 fontSize: "1.125rem",
                 fontFamily: "inherit",
                 outline: "none",
@@ -161,9 +173,8 @@ export default function ContactFormConversational() {
           <span style={wordStyle}>.</span>
         </div>
 
-        {/* Optional message */}
         <div className="flex flex-col gap-2">
-          <label className="text-xs tracking-widest uppercase" style={{ color: "var(--section-muted, var(--text-muted))" }}>
+          <label className="text-xs tracking-widest uppercase" style={{ color: c.muted }}>
             Anything else to add? (optional)
           </label>
           <textarea
@@ -172,16 +183,17 @@ export default function ContactFormConversational() {
             onChange={set("message")}
             placeholder="A bit more context helps…"
             className="form-input resize-none"
+            style={{ borderRadius: c.radius }}
           />
         </div>
       </div>
 
       {requireCaptcha && !isV3 && <CaptchaWidget onVerify={setWidgetToken} onExpire={() => setWidgetToken(null)} />}
-      {state === "error" && <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600">{errorMsg}</p>}
+      {state === "error" && <p className="px-4 py-3 text-sm text-red-600 bg-red-50 rounded-lg">{errorMsg}</p>}
 
       <div className="flex items-center justify-between gap-4 flex-wrap">
-        <p className="text-xs" style={{ color: "var(--section-muted, var(--text-muted))" }}>We typically reply within 24 hours.</p>
-        <button type="submit" disabled={state === "loading"} className="form-btn">
+        <p className="text-xs" style={{ color: c.muted }}>We typically reply within 24 hours.</p>
+        <button type="submit" disabled={state === "loading"} className="form-btn" style={{ borderRadius: c.radius }}>
           {state === "loading" ? "Sending…" : "Send message"}
         </button>
       </div>

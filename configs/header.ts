@@ -89,9 +89,9 @@ export const siteConfig: HeaderConfig = {
   navLinkStyle: "text-accent",
 
   cta: {
-    enabled: true,
+    enabled: false,   // set true + update label/href when the CTA page exists
     label: "Get Started",
-    href: "/get-started",
+    href: "/contact",
   },
 };
 

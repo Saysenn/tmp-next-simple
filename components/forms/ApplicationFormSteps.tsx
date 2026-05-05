@@ -1,6 +1,7 @@
 // Batch 2 — ApplicationFormSteps
-// Layout: single centered column, progress bar top, one step visible at a time
-// Style: 12–16px radius, guided prompts, Next/Back navigation, review final step
+// Layout: single centered column, progress bar top, 3 steps (simplified)
+// Step 1: Personal  Step 2: Role + Availability  Step 3: CV + Submit
+// Style: 10px radius, placeholder-only inputs (step headings provide context), Next/Back nav
 // API: /api/v1/apply
 "use client";
 
@@ -10,9 +11,20 @@ import { useCaptcha } from "@/hooks/useCaptcha";
 import CaptchaWidget from "./CaptchaWidget";
 
 // ─── Config ──────────────────────────────────────────────────────────────────
-const EXPERIENCE_OPTIONS = ["0–1 year", "1–3 years", "3–5 years", "5–10 years", "10+ years"];
+const EXPERIENCE_OPTIONS  = ["0–1 year", "1–3 years", "3–5 years", "5–10 years", "10+ years"];
 const AVAILABILITY_OPTIONS = ["Full-time", "Part-time", "Contract", "Freelance", "Temporary"];
-const STEPS = ["Personal", "Role", "Availability", "Your CV", "Review"];
+const STEPS = ["Personal", "Role & Availability", "Your CV"];
+
+// ─── Colours — change any value here to retheme this form independently ──────
+const c = {
+  accent:      "var(--section-accent, var(--accent))",
+  accentLight: "var(--section-accent-light, var(--accent-light))",
+  heading:     "var(--section-heading, var(--text-heading))",
+  body:        "var(--section-body, var(--text-body))",
+  muted:       "var(--section-muted, var(--text-muted))",
+  border:      "var(--section-border, var(--border))",
+  radius:      "10px",   // standard rounded
+};
 
 type FormState = "idle" | "loading" | "success" | "error";
 
@@ -20,22 +32,21 @@ export default function ApplicationFormSteps() {
   const { requireCaptcha, maxFileSizeMb, allowedFileTypes } = formsConfig.applicationForm;
   const { isV3, setWidgetToken, getToken } = useCaptcha();
 
-  const [step, setStep] = useState(0);
+  const [step, setStep]         = useState(0);
   const [appState, setAppState] = useState<FormState>("idle");
   const [errorMsg, setErrorMsg] = useState("");
-  const [cvFile, setCvFile]   = useState<File | null>(null);
-  const [cvError, setCvError] = useState("");
+  const [cvFile, setCvFile]     = useState<File | null>(null);
+  const [cvError, setCvError]   = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [fields, setFields] = useState({
     firstName: "", lastName: "", email: "", phone: "",
     position: "", experience: "",
     availability: [] as string[],
-    coverLetter: "",
   });
 
   function set(field: keyof Omit<typeof fields, "availability">) {
-    return (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
+    return (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
       setFields((prev) => ({ ...prev, [field]: e.target.value }));
   }
 
@@ -60,7 +71,6 @@ export default function ApplicationFormSteps() {
 
   function canAdvance(): boolean {
     if (step === 0) return !!fields.firstName && !!fields.email;
-    if (step === 1) return !!fields.position;
     return true;
   }
 
@@ -80,10 +90,9 @@ export default function ApplicationFormSteps() {
       body.append("phone", fields.phone);
       body.append("position", fields.position);
       body.append("coverLetter", [
-        fields.experience ? `Experience: ${fields.experience}` : "",
+        fields.experience    ? `Experience: ${fields.experience}` : "",
         fields.availability.length ? `Availability: ${fields.availability.join(", ")}` : "",
-        fields.coverLetter,
-      ].filter(Boolean).join("\n\n"));
+      ].filter(Boolean).join("\n"));
       if (captchaToken) body.append("captchaToken", captchaToken);
       if (cvFile) body.append("cv", cvFile);
       body.append("website", "");
@@ -97,197 +106,135 @@ export default function ApplicationFormSteps() {
     }
   }
 
+  // ── Success — completed step pills ──
   if (appState === "success") {
     return (
-      <div className="form-success">
-        <div className="form-success-icon">✓</div>
-        <h3 className="text-xl font-semibold" style={{ color: "var(--section-heading, var(--text-heading))" }}>Application submitted</h3>
-        <p style={{ color: "var(--section-muted, var(--text-muted))" }}>Thank you, {fields.firstName}. We review every application personally.</p>
+      <div className="flex flex-col items-center gap-6 py-8 w-full max-w-xl mx-auto text-center">
+        <div className="flex flex-wrap gap-2 justify-center">
+          {STEPS.map((s) => (
+            <span key={s} className="px-3 py-1.5 text-xs font-semibold rounded-full" style={{ backgroundColor: c.accentLight, color: c.accent }}>
+              ✓ {s}
+            </span>
+          ))}
+        </div>
+        <div>
+          <p className="text-lg font-semibold mb-1" style={{ color: c.heading }}>Application submitted</p>
+          <p className="text-sm" style={{ color: c.muted }}>Thank you, {fields.firstName}. We&apos;ll be in touch shortly.</p>
+        </div>
       </div>
     );
   }
 
-  const progress = ((step) / (STEPS.length - 1)) * 100;
+  const progress = (step / (STEPS.length - 1)) * 100;
   const acceptAttr = allowedFileTypes.map((t) => `.${t}`).join(",");
-
-  const inputCls = "form-input";
+  const r = { borderRadius: c.radius };
 
   return (
     <div className="flex flex-col gap-6 w-full max-w-xl mx-auto">
       {/* Progress bar */}
       <div>
         <div className="flex justify-between mb-2">
-          <span className="text-xs font-medium" style={{ color: "var(--section-muted, var(--text-muted))" }}>
-            {step + 1} of {STEPS.length} completed
-          </span>
-          <span className="text-xs font-medium" style={{ color: "var(--section-accent, var(--accent))" }}>
-            {STEPS[step]}
-          </span>
+          <span className="text-xs font-medium" style={{ color: c.muted }}>Step {step + 1} of {STEPS.length}</span>
+          <span className="text-xs font-medium" style={{ color: c.accent }}>{STEPS[step]}</span>
         </div>
-        <div className="w-full h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: "var(--section-border, var(--border))" }}>
-          <div
-            className="h-full rounded-full transition-all duration-500"
-            style={{ width: `${progress}%`, backgroundColor: "var(--section-accent, var(--accent))" }}
-          />
+        <div className="w-full h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: c.border }}>
+          <div className="h-full rounded-full transition-all duration-500" style={{ width: `${progress}%`, backgroundColor: c.accent }} />
         </div>
       </div>
 
-      {/* Step content */}
-      <div className="flex flex-col gap-5 min-h-[260px]">
+      <div className="flex flex-col gap-4 min-h-[220px]">
 
-        {/* Step 0 — Personal */}
+        {/* Step 0 — Personal — placeholder-only, no field labels */}
         {step === 0 && (
           <>
-            <h3 className="text-lg font-semibold" style={{ color: "var(--section-heading, var(--text-heading))" }}>
-              Let&apos;s start with you
-            </h3>
+            <h3 className="text-lg font-semibold" style={{ color: c.heading }}>Let&apos;s start with you</h3>
             <div className="grid grid-cols-2 gap-4">
-              <div className="flex flex-col gap-1.5">
-                <label className="form-label">First name <span className="text-red-500">*</span></label>
-                <input type="text" required value={fields.firstName} onChange={set("firstName")} placeholder="Amelia" className={inputCls} />
-              </div>
-              <div className="flex flex-col gap-1.5">
-                <label className="form-label">Last name</label>
-                <input type="text" value={fields.lastName} onChange={set("lastName")} placeholder="Turner" className={inputCls} />
-              </div>
+              <input type="text" required value={fields.firstName} onChange={set("firstName")} placeholder="First name *" className="form-input" style={r} />
+              <input type="text" value={fields.lastName} onChange={set("lastName")} placeholder="Last name" className="form-input" style={r} />
             </div>
-            <div className="flex flex-col gap-1.5">
-              <label className="form-label">Email address <span className="text-red-500">*</span></label>
-              <input type="email" required value={fields.email} onChange={set("email")} placeholder="amelia@email.co.uk" className={inputCls} />
-            </div>
-            <div className="flex flex-col gap-1.5">
-              <label className="form-label">Phone number</label>
-              <input type="tel" value={fields.phone} onChange={set("phone")} placeholder="+44 7700 900000" className={inputCls} />
-            </div>
+            <input type="email" required value={fields.email} onChange={set("email")} placeholder="Email address *" className="form-input" style={r} />
+            <input type="tel" value={fields.phone} onChange={set("phone")} placeholder="Phone (optional)" className="form-input" style={r} />
           </>
         )}
 
-        {/* Step 1 — Role */}
+        {/* Step 1 — Role + Availability — placeholder-only */}
         {step === 1 && (
           <>
-            <h3 className="text-lg font-semibold" style={{ color: "var(--section-heading, var(--text-heading))" }}>
-              Tell us about the role
-            </h3>
-            <div className="flex flex-col gap-1.5">
-              <label className="form-label">Desired role <span className="text-red-500">*</span></label>
-              <input type="text" required value={fields.position} onChange={set("position")} placeholder="e.g. Payroll Administrator" className={inputCls} />
-            </div>
-            <div className="flex flex-col gap-1.5">
-              <label className="form-label">Years of experience</label>
-              <select value={fields.experience} onChange={set("experience")} className={inputCls}>
-                <option value="">Choose a range…</option>
-                {EXPERIENCE_OPTIONS.map((o) => <option key={o} value={o}>{o}</option>)}
-              </select>
+            <h3 className="text-lg font-semibold" style={{ color: c.heading }}>Role &amp; availability</h3>
+            <input type="text" value={fields.position} onChange={set("position")} placeholder="Position applying for (e.g. Payroll Administrator)" className="form-input" style={r} />
+            <select value={fields.experience} onChange={set("experience")} className="form-input" style={r}>
+              <option value="">Years of experience…</option>
+              {EXPERIENCE_OPTIONS.map((o) => <option key={o} value={o}>{o}</option>)}
+            </select>
+            <div className="flex flex-col gap-2">
+              <p className="text-xs font-semibold tracking-widest uppercase" style={{ color: c.muted }}>Availability</p>
+              <div className="flex flex-wrap gap-2">
+                {AVAILABILITY_OPTIONS.map((option) => {
+                  const active = fields.availability.includes(option);
+                  return (
+                    <button key={option} type="button" onClick={() => toggleAvailability(option)}
+                      className="px-4 py-2 text-sm font-medium transition-all"
+                      style={{
+                        borderRadius: c.radius,
+                        backgroundColor: active ? c.accent : "transparent",
+                        color: active ? "#ffffff" : c.body,
+                        border: `1.5px solid ${active ? c.accent : c.border}`,
+                      }}>
+                      {option}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </>
         )}
 
-        {/* Step 2 — Availability */}
+        {/* Step 2 — CV */}
         {step === 2 && (
           <>
-            <h3 className="text-lg font-semibold" style={{ color: "var(--section-heading, var(--text-heading))" }}>
-              What works best for you?
-            </h3>
-            <p className="text-sm" style={{ color: "var(--section-muted, var(--text-muted))" }}>Select all that apply.</p>
-            <div className="flex flex-wrap gap-2">
-              {AVAILABILITY_OPTIONS.map((option) => {
-                const active = fields.availability.includes(option);
-                return (
-                  <button
-                    key={option}
-                    type="button"
-                    onClick={() => toggleAvailability(option)}
-                    className="px-4 py-2 text-sm font-medium rounded-xl transition-all"
-                    style={{
-                      backgroundColor: active ? "var(--section-accent, var(--accent))" : "transparent",
-                      color: active ? "#ffffff" : "var(--section-body, var(--text-body))",
-                      border: `1.5px solid ${active ? "var(--section-accent, var(--accent))" : "var(--section-border, var(--border))"}`,
-                    }}
-                  >
-                    {option}
-                  </button>
-                );
-              })}
-            </div>
-            <div className="flex flex-col gap-1.5 mt-2">
-              <label className="form-label">Anything else? (optional)</label>
-              <textarea rows={3} value={fields.coverLetter} onChange={set("coverLetter")} placeholder="Tell us why you&apos;d be a great fit…" className="form-input resize-none" />
-            </div>
-          </>
-        )}
-
-        {/* Step 3 — CV Upload */}
-        {step === 3 && (
-          <>
-            <h3 className="text-lg font-semibold" style={{ color: "var(--section-heading, var(--text-heading))" }}>
-              Upload your CV
-            </h3>
-            <p className="text-sm" style={{ color: "var(--section-muted, var(--text-muted))" }}>
-              Accepted: {allowedFileTypes.join(", ").toUpperCase()} · Max {maxFileSizeMb}MB
+            <h3 className="text-lg font-semibold" style={{ color: c.heading }}>Upload your CV</h3>
+            <p className="text-sm" style={{ color: c.muted }}>
+              {allowedFileTypes.join(", ").toUpperCase()} · Max {maxFileSizeMb}MB · Optional
             </p>
             {!cvFile ? (
-              <label className="form-upload-zone cursor-pointer">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--section-muted, var(--text-muted))" }}>
+              <label className="form-upload-zone cursor-pointer" style={r}>
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: c.muted }}>
                   <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" />
                 </svg>
-                <span className="text-sm" style={{ color: "var(--section-body, var(--text-body))" }}>
-                  Drop file here or <span style={{ color: "var(--section-accent, var(--accent))" }} className="font-medium">browse</span>
+                <span className="text-sm" style={{ color: c.body }}>
+                  Drop file here or <span style={{ color: c.accent }} className="font-medium">browse</span>
                 </span>
                 <input ref={fileInputRef} type="file" accept={acceptAttr} onChange={handleFileChange} className="hidden" />
               </label>
             ) : (
               <div className="form-file-pill">
-                <span className="text-sm font-medium truncate" style={{ color: "var(--section-heading, var(--text-heading))" }}>{cvFile.name}</span>
-                <button type="button" onClick={() => { setCvFile(null); if (fileInputRef.current) fileInputRef.current.value = ""; }} className="text-xs shrink-0" style={{ color: "var(--section-muted, var(--text-muted))" }}>✕ Remove</button>
+                <span className="text-sm font-medium truncate" style={{ color: c.heading }}>{cvFile.name}</span>
+                <button type="button" onClick={() => { setCvFile(null); if (fileInputRef.current) fileInputRef.current.value = ""; }} className="text-xs shrink-0" style={{ color: c.muted }}>✕ Remove</button>
               </div>
             )}
             {cvError && <p className="text-xs text-red-500">{cvError}</p>}
-          </>
-        )}
-
-        {/* Step 4 — Review */}
-        {step === 4 && (
-          <>
-            <h3 className="text-lg font-semibold" style={{ color: "var(--section-heading, var(--text-heading))" }}>
-              Review your application
-            </h3>
-            <div className="flex flex-col gap-3 text-sm">
-              {[
-                { label: "Name",         value: `${fields.firstName} ${fields.lastName}`.trim() },
-                { label: "Email",        value: fields.email },
-                { label: "Phone",        value: fields.phone || "—" },
-                { label: "Role",         value: fields.position || "—" },
-                { label: "Experience",   value: fields.experience || "—" },
-                { label: "Availability", value: fields.availability.join(", ") || "—" },
-                { label: "CV",           value: cvFile?.name || "Not uploaded" },
-              ].map(({ label, value }) => (
-                <div key={label} className="flex gap-3">
-                  <span className="w-28 shrink-0 font-medium" style={{ color: "var(--section-muted, var(--text-muted))" }}>{label}</span>
-                  <span style={{ color: "var(--section-heading, var(--text-heading))" }}>{value}</span>
-                </div>
-              ))}
-            </div>
-
             {requireCaptcha && !isV3 && <CaptchaWidget onVerify={setWidgetToken} onExpire={() => setWidgetToken(null)} />}
-            {appState === "error" && <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600">{errorMsg}</p>}
+            {appState === "error" && <p className="px-4 py-3 text-sm text-red-600 bg-red-50" style={r}>{errorMsg}</p>}
           </>
         )}
       </div>
 
       {/* Navigation */}
-      <div className="flex items-center justify-between gap-3 pt-2" style={{ borderTop: "1px solid var(--section-border, var(--border))" }}>
+      <div className="flex items-center justify-between gap-3 pt-2" style={{ borderTop: `1px solid ${c.border}` }}>
         {step > 0 ? (
-          <button type="button" onClick={() => setStep((s) => s - 1)} className="px-5 py-2.5 text-sm font-medium rounded-xl transition-opacity hover:opacity-70" style={{ border: "1.5px solid var(--section-border, var(--border))", color: "var(--section-body, var(--text-body))", background: "transparent" }}>
+          <button type="button" onClick={() => setStep((s) => s - 1)}
+            className="px-5 py-2.5 text-sm font-medium transition-opacity hover:opacity-70"
+            style={{ border: `1.5px solid ${c.border}`, color: c.body, background: "transparent", borderRadius: c.radius }}>
             ← Back
           </button>
         ) : <div />}
 
         {step < STEPS.length - 1 ? (
-          <button type="button" onClick={() => setStep((s) => s + 1)} disabled={!canAdvance()} className="form-btn disabled:opacity-40">
+          <button type="button" onClick={() => setStep((s) => s + 1)} disabled={!canAdvance()} className="form-btn disabled:opacity-40" style={r}>
             Next →
           </button>
         ) : (
-          <button type="button" onClick={handleSubmit} disabled={appState === "loading"} className="form-btn">
+          <button type="button" onClick={handleSubmit} disabled={appState === "loading"} className="form-btn" style={r}>
             {appState === "loading" ? "Submitting…" : "Submit application"}
           </button>
         )}

@@ -109,8 +109,8 @@ export async function POST(request: NextRequest) {
     const message = sanitizeInput(body.message?.trim() || "");
     const captchaToken = body.captchaToken;
 
-    if (!name || !email || !phone || !message) {
-      return NextResponse.json({ error: "All fields are required" }, { status: 400 });
+    if (!name || !email || !message) {
+      return NextResponse.json({ error: "Name, email, and message are required" }, { status: 400 });
     }
 
     if (name.length < 2) {
