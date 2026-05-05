@@ -151,7 +151,7 @@ export default function ApplicationFormEditorial() {
       {/* Fields — widely spaced */}
       <div className="flex flex-col gap-12">
         <EditorialInput label="Full name" value={fields.name} onChange={set("name")} placeholder="Charlotte Bennett" {...f("name")} />
-        <EditorialInput label="Email" type="email" value={fields.email} onChange={set("email")} placeholder="charlotte@email.co.uk" {...f("email")} />
+        <EditorialInput label="Email" type="email" value={fields.email} onChange={set("email")} placeholder="email@company.co.uk" {...f("email")} />
         <EditorialInput label={ROLE_HINTS[0]} value={fields.position} onChange={set("position")} placeholder={ROLE_HINTS[1]} {...f("position")} />
         <EditorialInput label="Personal statement (optional)" value={fields.statement} onChange={set("statement")} placeholder="Tell us what drives you and why you want to join…" {...f("statement")} multiline />
 

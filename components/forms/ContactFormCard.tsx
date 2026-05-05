@@ -113,7 +113,7 @@ export default function ContactFormCard() {
         </UnderlineField>
         <UnderlineField focused={focused === "email"}>
           <label style={labelStyle}>Email</label>
-          <input type="email" required value={fields.email} onChange={set("email")} placeholder="sean@company.co.uk" style={inputStyle} onFocus={() => setFocused("email")} onBlur={() => setFocused(null)} />
+          <input type="email" required value={fields.email} onChange={set("email")} placeholder="email@company.co.uk" style={inputStyle} onFocus={() => setFocused("email")} onBlur={() => setFocused(null)} />
         </UnderlineField>
       </div>
 

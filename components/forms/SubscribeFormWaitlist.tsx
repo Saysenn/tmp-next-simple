@@ -141,7 +141,7 @@ export default function SubscribeFormWaitlist() {
 
         <div className="flex flex-col gap-1.5">
           <label htmlFor="sf-wl-email" className="form-label">Email address <span className="text-red-500">*</span></label>
-          <input id="sf-wl-email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@email.com" className="form-input" />
+          <input id="sf-wl-email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@email.co.uk" className="form-input" />
         </div>
 
         {showRoleField && (

@@ -173,7 +173,7 @@ export default function ApplicationFormProgressive() {
             </div>
             <div className="flex flex-col gap-1.5">
               <label className="form-label">Email address <span className="text-red-500">*</span></label>
-              <input type="email" required value={fields.email} onChange={set("email")} placeholder="amelia@email.co.uk" className="form-input" style={{ borderRadius: c.radius }} />
+              <input type="email" required value={fields.email} onChange={set("email")} placeholder="email@company.co.uk" className="form-input" style={{ borderRadius: c.radius }} />
             </div>
           </div>
           <button type="button" disabled={!fields.name || !fields.email} onClick={() => setStage("step2")} className="form-btn disabled:opacity-40" style={{ borderRadius: c.radius }}>

@@ -139,7 +139,7 @@ export default function ContactFormClassic() {
           </div>
           <div className="flex flex-col gap-1.5">
             <label className="form-label">Email address <span className="text-red-500">*</span></label>
-            <input type="email" required value={fields.email} onChange={set("email")} placeholder="oliver@company.co.uk" className="form-input" style={r} />
+            <input type="email" required value={fields.email} onChange={set("email")} placeholder="email@company.co.uk" className="form-input" style={r} />
           </div>
         </div>
 

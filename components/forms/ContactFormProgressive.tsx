@@ -162,7 +162,7 @@ export default function ContactFormProgressive() {
             </div>
             <div className="flex flex-col gap-1.5">
               <label className="form-label">Email address <span className="text-red-500">*</span></label>
-              <input type="email" required value={fields.email} onChange={set("email")} placeholder="jane@company.co.uk" className="form-input" style={{ borderRadius: c.radius }} />
+              <input type="email" required value={fields.email} onChange={set("email")} placeholder="email@company.co.uk" className="form-input" style={{ borderRadius: c.radius }} />
             </div>
           </div>
           <button

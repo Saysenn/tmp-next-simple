@@ -104,7 +104,7 @@ export async function POST(request: NextRequest) {
     if (name.length < 2 || name.length > 100) {
       return NextResponse.json({ error: "Name must be between 2 and 100 characters." }, { status: 400 });
     }
-    if (formsConfig.contactCVForm.showPhone && !phone) {
+    if (formsConfig.applicationForm.showPhone && !phone) {
       return NextResponse.json({ error: "Phone number is required." }, { status: 400 });
     }
     if (phone && phone.length > 30) {
@@ -125,7 +125,7 @@ export async function POST(request: NextRequest) {
     }
 
     // ── CAPTCHA ──
-    if (formsConfig.contactCVForm.requireCaptcha) {
+    if (formsConfig.applicationForm.requireCaptcha) {
       if (!captchaToken) {
         return NextResponse.json({ error: "CAPTCHA token missing." }, { status: 400 });
       }
@@ -141,10 +141,10 @@ export async function POST(request: NextRequest) {
     let cvFilename = "";
 
     if (cvFile && cvFile.size > 0) {
-      const maxBytes = formsConfig.contactCVForm.maxFileSizeMb * 1024 * 1024;
+      const maxBytes = formsConfig.applicationForm.maxFileSizeMb * 1024 * 1024;
       if (cvFile.size > maxBytes) {
         return NextResponse.json(
-          { error: `CV must be under ${formsConfig.contactCVForm.maxFileSizeMb}MB.` },
+          { error: `CV must be under ${formsConfig.applicationForm.maxFileSizeMb}MB.` },
           { status: 400 }
         );
       }
@@ -158,7 +158,7 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      if (!formsConfig.contactCVForm.allowedFileTypes.includes(detectedType as "pdf" | "doc" | "docx")) {
+      if (!formsConfig.applicationForm.allowedFileTypes.includes(detectedType as "pdf" | "doc" | "docx")) {
         return NextResponse.json(
           { error: "This file type is not accepted." },
           { status: 400 }

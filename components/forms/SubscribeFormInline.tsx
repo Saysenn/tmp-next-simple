@@ -86,7 +86,7 @@ export default function SubscribeFormInline() {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email"
+            placeholder="you@email.co.uk"
             className="form-input flex-1 min-w-0"
           />
           <button

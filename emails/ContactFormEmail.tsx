@@ -1,11 +1,8 @@
 import {
-  Body, Container, Head, Hr, Html,
+  Body, Head, Hr, Html,
   Link, Preview, Section, Text,
 } from "@react-email/components";
 import { mailConfig } from "@/configs/mail";
-
-// Update hex when rebranding
-const ACCENT = "#6ed39a";
 
 type Props = {
   name: string;
@@ -25,18 +22,14 @@ export default function ContactFormEmail({ name, email, phone, message }: Props)
       <Head />
       <Preview>New enquiry from {name}</Preview>
       <Body style={s.body}>
-        <Container style={s.container}>
 
-          <Section style={s.top}>
-            <Text style={s.company}>{siteName}</Text>
-          </Section>
+        <Section style={s.wrap}>
+          <Text style={s.company}>{siteName}</Text>
+          <Hr style={s.hr} />
+          <Text style={s.date}>{date}</Text>
 
-          <Hr style={s.divider} />
-
-          <Section style={s.content}>
-            <Text style={s.date}>{date}</Text>
-
-            <table style={{ width: "100%", borderCollapse: "collapse" }}>
+          <table style={{ borderCollapse: "collapse", width: "100%" }}>
+            <tbody>
               <tr>
                 <td style={s.label}>Name</td>
                 <td style={s.value}>{name}</td>
@@ -44,64 +37,55 @@ export default function ContactFormEmail({ name, email, phone, message }: Props)
               <tr>
                 <td style={s.label}>Email</td>
                 <td style={s.value}>
-                  <Link href={`mailto:${email}`} style={{ color: ACCENT, textDecoration: "none" }}>{email}</Link>
+                  <Link href={`mailto:${email}`} style={s.link}>{email}</Link>
                 </td>
               </tr>
               {phone && (
                 <tr>
                   <td style={s.label}>Phone</td>
                   <td style={s.value}>
-                    <Link href={`tel:${phone}`} style={{ color: "#374151", textDecoration: "none" }}>{phone}</Link>
+                    <Link href={`tel:${phone}`} style={s.link}>{phone}</Link>
                   </td>
                 </tr>
               )}
-            </table>
+            </tbody>
+          </table>
 
-            {message && (
-              <>
-                <Hr style={s.midDivider} />
-                <Text style={s.fieldLabel}>Message</Text>
-                <Text style={s.messageText}>{message}</Text>
-              </>
-            )}
+          {message && (
+            <>
+              <Hr style={s.hr} />
+              <Text style={s.fieldLabel}>Message</Text>
+              <Text style={s.message}>{message}</Text>
+            </>
+          )}
 
-            <Text style={s.replyText}>
-              <Link href={`mailto:${email}`} style={s.replyLink}>Reply to {name.split(" ")[0]} →</Link>
-            </Text>
-          </Section>
+          <Text style={s.reply}>
+            <Link href={`mailto:${email}`} style={s.replyLink}>Reply to {name.split(" ")[0]} →</Link>
+          </Text>
 
-          <Hr style={s.divider} />
+          <Hr style={s.hr} />
+          <Text style={s.footer}>
+            © {year} {siteName}{siteUrl ? ` · ${siteUrl.replace(/^https?:\/\//, "")}` : ""}
+          </Text>
+        </Section>
 
-          <Section style={s.footer}>
-            <Text style={s.footerText}>
-              © {year} {siteName}
-              {siteUrl && (
-                <> · <Link href={siteUrl} style={{ color: "#9ca3af", textDecoration: "none" }}>{siteUrl.replace(/^https?:\/\//, "")}</Link></>
-              )}
-            </Text>
-          </Section>
-
-        </Container>
       </Body>
     </Html>
   );
 }
 
 const s = {
-  body:        { backgroundColor: "#ffffff", fontFamily: "'Helvetica Neue', Arial, sans-serif", margin: "0", padding: "0" },
-  container:   { width: "100%", margin: "0 auto", backgroundColor: "#ffffff" },
-  top:         { padding: "40px 48px 20px" },
-  company:     { margin: "0", color: "#9ca3af", fontSize: "13px", fontWeight: "500" },
-  divider:     { borderColor: "#e5e7eb", margin: "0" },
-  content:     { padding: "32px 48px" },
-  date:        { margin: "0 0 24px", color: "#9ca3af", fontSize: "13px" },
-  label:       { color: "#9ca3af", fontSize: "11px", fontWeight: "600", textTransform: "uppercase" as const, letterSpacing: "0.5px", padding: "6px 24px 6px 0", width: "72px", verticalAlign: "top" as const },
-  value:       { color: "#111827", fontSize: "14px", padding: "6px 0", verticalAlign: "top" as const },
-  midDivider:  { borderColor: "#e5e7eb", margin: "24px 0" },
-  fieldLabel:  { margin: "0 0 8px", color: "#9ca3af", fontSize: "11px", fontWeight: "600", textTransform: "uppercase" as const, letterSpacing: "0.5px" },
-  messageText: { margin: "0 0 28px", color: "#374151", fontSize: "14px", lineHeight: "1.7", whiteSpace: "pre-wrap" as const },
-  replyText:   { margin: "0" },
-  replyLink:   { color: "#111827", fontSize: "14px", fontWeight: "500", textDecoration: "none" },
-  footer:      { padding: "20px 48px 40px" },
-  footerText:  { margin: "0", color: "#9ca3af", fontSize: "12px" },
+  body:       { backgroundColor: "#ffffff", fontFamily: "Arial, sans-serif", margin: "0", padding: "0" },
+  wrap:       { padding: "32px 40px" },
+  company:    { margin: "0 0 16px", color: "#9ca3af", fontSize: "13px" },
+  hr:         { borderColor: "#e5e7eb", margin: "20px 0" },
+  date:       { margin: "0 0 20px", color: "#9ca3af", fontSize: "13px" },
+  label:      { color: "#6b7280", fontSize: "13px", padding: "4px 20px 4px 0", width: "80px", verticalAlign: "top" as const },
+  value:      { color: "#111827", fontSize: "14px", padding: "4px 0", verticalAlign: "top" as const },
+  link:       { color: "#111827", textDecoration: "underline" },
+  fieldLabel: { margin: "0 0 6px", color: "#6b7280", fontSize: "13px" },
+  message:    { margin: "0 0 24px", color: "#374151", fontSize: "14px", lineHeight: "1.65", whiteSpace: "pre-wrap" as const },
+  reply:      { margin: "0" },
+  replyLink:  { color: "#111827", fontSize: "14px", textDecoration: "none" },
+  footer:     { margin: "0", color: "#9ca3af", fontSize: "12px" },
 };

@@ -144,7 +144,7 @@ export default function ApplicationFormCorporate() {
           <div className="grid grid-cols-2 gap-4">
             <div className="flex flex-col gap-1.5">
               <label className="form-label">Email <span className="text-red-500">*</span></label>
-              <input type="email" required value={fields.email} onChange={set("email")} placeholder="oliver.smith@gmail.com" className="form-input" style={r} />
+              <input type="email" required value={fields.email} onChange={set("email")} placeholder="email@company.co.uk" className="form-input" style={r} />
             </div>
             <div className="flex flex-col gap-1.5">
               <label className="form-label">Phone</label>

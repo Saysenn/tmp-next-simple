@@ -165,7 +165,7 @@ export default function ApplicationFormModular() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <ModuleCard title="Profile" icon={<PersonIcon />} complete={profileComplete}>
           <input type="text" required value={fields.name} onChange={set("name")} placeholder="Jane Smith" className={inputCls} style={cardRadius} />
-          <input type="email" required value={fields.email} onChange={set("email")} placeholder="jane@company.co.uk" className={inputCls} style={cardRadius} />
+          <input type="email" required value={fields.email} onChange={set("email")} placeholder="email@company.co.uk" className={inputCls} style={cardRadius} />
           <input type="text" value={fields.position} onChange={set("position")} placeholder="Role applying for (optional)" className={inputCls} style={cardRadius} />
         </ModuleCard>
 

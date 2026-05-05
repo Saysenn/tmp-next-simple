@@ -94,7 +94,7 @@ export default function SubscribeFormCard() {
 
         <div className="flex flex-col gap-1.5">
           <label htmlFor="sf-card-email" className="form-label">Email address <span className="text-red-500">*</span></label>
-          <input id="sf-card-email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@email.com" className="form-input" />
+          <input id="sf-card-email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@email.co.uk" className="form-input" />
         </div>
 
         {requireCaptcha && !isV3 && (

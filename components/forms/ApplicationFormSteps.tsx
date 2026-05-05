@@ -153,7 +153,7 @@ export default function ApplicationFormSteps() {
               <input type="text" value={fields.lastName} onChange={set("lastName")} placeholder="Last name" className="form-input" style={r} />
             </div>
             <input type="email" required value={fields.email} onChange={set("email")} placeholder="Email address *" className="form-input" style={r} />
-            <input type="tel" value={fields.phone} onChange={set("phone")} placeholder="Phone (optional)" className="form-input" style={r} />
+            <input type="tel" value={fields.phone} onChange={set("phone")} placeholder="+44 7700 900123 (optional)" className="form-input" style={r} />
           </>
         )}
 
