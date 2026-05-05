@@ -1,18 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { render } from "@react-email/render";
-import { SubscribeEmail, SubscribeEmailBold, SubscribeEmailClassic, SubscribeEmailMinimal } from "@/emails";
+import { SubscribeEmail } from "@/emails";
 import { sendEmail, sanitizeInput, validateEmailStrict } from "@/lib/services/mail";
 import { verifyCaptchaToken } from "@/lib/services/captcha";
 import { mailConfig } from "@/configs/mail";
 import { formsConfig } from "@/configs/forms";
-import { emailTemplatesConfig } from "@/configs/email-templates";
-
-const subscribeTemplates = {
-  default: SubscribeEmail,
-  bold: SubscribeEmailBold,
-  classic: SubscribeEmailClassic,
-  minimal: SubscribeEmailMinimal,
-};
 
 type SubscribeFormData = {
   name?: string;
@@ -128,8 +120,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const Template = subscribeTemplates[emailTemplatesConfig.subscribeTemplate];
-    const emailComponent = Template({ name, email, role });
+    const emailComponent = SubscribeEmail({ name, email, role });
     const html = await render(emailComponent);
 
     await sendEmail({

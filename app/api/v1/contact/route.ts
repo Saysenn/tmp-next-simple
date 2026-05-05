@@ -1,18 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { render } from "@react-email/render";
-import { ContactFormEmail, ContactEmailBold, ContactEmailClassic, ContactEmailMinimal } from "@/emails";
+import { ContactFormEmail } from "@/emails";
 import { sendEmail, sanitizeInput, validateEmailStrict } from "@/lib/services/mail";
 import { verifyCaptchaToken } from "@/lib/services/captcha";
 import { mailConfig } from "@/configs/mail";
 import { formsConfig } from "@/configs/forms";
-import { emailTemplatesConfig } from "@/configs/email-templates";
-
-const contactTemplates = {
-  default: ContactFormEmail,
-  bold: ContactEmailBold,
-  classic: ContactEmailClassic,
-  minimal: ContactEmailMinimal,
-};
 
 type ContactFormData = {
   name: string;
@@ -153,8 +145,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const Template = contactTemplates[emailTemplatesConfig.contactTemplate];
-    const emailComponent = Template({ name, email, phone, message });
+    const emailComponent = ContactFormEmail({ name, email, phone, message });
     const html = await render(emailComponent);
     const text = generatePlainText(name, email, phone, message);
 
