@@ -1,5 +1,5 @@
-import ContactForm from "@/components/forms/ContactForm";
-import SubscribeForm from "@/components/forms/SubscribeForm";
+import ContactFormClassic from "@/components/forms/ContactFormClassic";
+import SubscribeFormInline from "@/components/forms/SubscribeFormInline";
 
 export default function Contact() {
   return (
@@ -39,7 +39,7 @@ export default function Contact() {
           <p className="mb-10" style={{ color: "var(--section-muted)" }}>
             Have a question or want to work with us? Fill in the form and we&apos;ll be in touch shortly.
           </p>
-          <ContactForm />
+          <ContactFormClassic />
         </div>
       </section>
 
@@ -58,7 +58,7 @@ export default function Contact() {
           <p className="mb-10" style={{ color: "var(--section-muted)" }}>
             Be the first to hear about news, opportunities, and updates from our team.
           </p>
-          <SubscribeForm />
+          <SubscribeFormInline />
         </div>
       </section>
 
