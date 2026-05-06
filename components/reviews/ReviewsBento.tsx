@@ -233,35 +233,6 @@ export default function ReviewsBento() {
           ))}
         </div>
 
-        {/* Stats strip */}
-        <div
-          data-animate="fade-up"
-          style={{
-            display: "flex",
-            gap: 0,
-            marginTop: 14,
-            backgroundColor: c.cardBg,
-            border: `1px solid ${c.border}`,
-            borderRadius: 16,
-            overflow: "hidden",
-          }}
-        >
-          {[{ n: "200+", l: "Placements made" }, { n: "98%", l: "Client retention rate" }, { n: "24h", l: "Average response time" }, { n: "5★", l: "Average client rating" }].map(({ n, l }, i, arr) => (
-            <div
-              key={l}
-              style={{
-                flex: 1,
-                padding: "20px 24px",
-                borderRight: i < arr.length - 1 ? `1px solid ${c.border}` : "none",
-                textAlign: "center",
-              }}
-            >
-              <p style={{ fontSize: "1.6rem", fontWeight: 800, color: c.accent, lineHeight: 1 }}>{n}</p>
-              <p style={{ fontSize: "0.7rem", color: c.muted, marginTop: 6 }}>{l}</p>
-            </div>
-          ))}
-        </div>
-
       </div>
     </section>
   );
