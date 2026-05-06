@@ -10,7 +10,9 @@
 // ─────────────────────────────────────────────────────────────
 
 import Link from "next/link";
-import { headerNav } from "@/configs/header";
+import { headerNav, siteConfig } from "@/configs/header";
+
+const isNeuro = siteConfig.navLinkStyle === "neuro";
 
 type Props = { open: boolean; onClose: () => void; pathname: string; allSizes?: boolean };
 
@@ -33,11 +35,15 @@ export default function DropdownHeader({ open, onClose, pathname, allSizes = fal
               target={link.external ? "_blank" : undefined}
               rel={link.external ? "noopener noreferrer" : undefined}
               onClick={onClose}
-              className="flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+              className="flex items-center px-3 py-2 text-sm font-medium transition-all duration-150"
               style={
-                isActive
-                  ? { background: "var(--accent-light)", color: "var(--accent)" }
-                  : { color: "var(--nav-color-solid)" }
+                isNeuro
+                  ? isActive
+                    ? { color: "var(--accent)", background: "linear-gradient(to bottom, var(--bg-soft), var(--bg-base))", boxShadow: "inset 0 3px 8px rgba(0,0,0,0.28)" }
+                    : { color: "var(--nav-color-solid)" }
+                  : isActive
+                    ? { background: "var(--accent-light)", color: "var(--accent)", borderRadius: "0.5rem" }
+                    : { color: "var(--nav-color-solid)" }
               }
             >
               {link.label}

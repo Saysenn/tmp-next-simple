@@ -29,36 +29,7 @@ import DropdownHeader from "@/components/header/DropdownHeader";
 import FullscreenHeader from "@/components/header/FullscreenHeader";
 
 // ─── Nav link styles ──────────────────────────────────────────
-
-const navLinkClass: Record<string, (active: boolean) => string> = {
-  "bg-fill": (a) =>
-    `px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-      a ? "accent-light accent-text font-semibold" : "hover:accent-light"
-    }`,
-  "underline-center": (a) =>
-    `px-3 py-1.5 text-sm font-medium relative after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:bg-current after:transition-all after:duration-200 ${
-      a ? "after:w-full accent-text" : "after:w-0 hover:after:w-full"
-    }`,
-  "underline-left": (a) =>
-    `px-3 py-1.5 text-sm font-medium relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-current after:transition-all after:duration-200 ${
-      a ? "after:w-full accent-text" : "after:w-0 hover:after:w-full"
-    }`,
-  "text-accent": (a) =>
-    `px-3 py-1.5 text-sm font-medium transition-colors ${
-      a ? "accent-text font-semibold" : "hover:accent-text"
-    }`,
-  "dot-below": (a) =>
-    `px-3 py-1.5 text-sm font-medium relative ${
-      a
-        ? "accent-text after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:accent-bg after:rounded-full"
-        : "hover:accent-text"
-    }`,
-};
-
-function getNavClass(active: boolean) {
-  const style = siteConfig.navLinkStyle ?? "bg-fill";
-  return (navLinkClass[style] ?? navLinkClass["bg-fill"])(active);
-}
+import { getNavClass, getNavStyle } from "@/components/header/navLinkStyles";
 
 // ─── DesktopNav ───────────────────────────────────────────────
 
@@ -73,12 +44,8 @@ function DesktopNav({ pathname, transparent = false }: { pathname: string; trans
             href={link.href}
             target={link.external ? "_blank" : undefined}
             rel={link.external ? "noopener noreferrer" : undefined}
-            className="whitespace-nowrap px-3 py-1.5 text-sm font-medium transition-colors duration-200 rounded-md"
-            style={
-              transparent
-                ? { color: isActive ? "var(--nav-color-transparent-active)" : "var(--nav-color-transparent)", fontWeight: isActive ? 600 : 500 }
-                : { color: isActive ? "var(--nav-color-solid-active)" : "var(--nav-color-solid)", fontWeight: isActive ? 600 : 500 }
-            }
+            className={getNavClass(isActive)}
+            style={getNavStyle(isActive, transparent)}
           >
             {link.label}
           </Link>

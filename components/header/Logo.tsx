@@ -61,7 +61,9 @@ export default function Logo({ type, name, imageSrc, size = "md" }: LogoProps) {
     return (
       <Link href="/" className="flex items-center gap-2.5 text-lg font-semibold">
         {imageSrc && (
-          <Image src={imageSrc} alt={name} width={28} height={28} className="rounded-lg" priority />
+          <div className="relative w-10 h-10 shrink-0">
+            <Image src={imageSrc} alt="" fill sizes="40px" className="object-contain" priority />
+          </div>
         )}
         <span>{name}</span>
       </Link>

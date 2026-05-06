@@ -7,6 +7,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { headerNav, siteConfig } from "@/configs/header";
+import { getNavClass, getNavStyle } from "@/components/header/navLinkStyles";
 import Logo from "@/components/header/Logo";
 import DrawerHeader from "@/components/header/DrawerHeader";
 import DropdownHeader from "@/components/header/DropdownHeader";
@@ -62,11 +63,8 @@ export default function SplitNavHeader() {
                     href={link.href}
                     target={link.external ? "_blank" : undefined}
                     rel={link.external ? "noopener noreferrer" : undefined}
-                    className={`whitespace-nowrap px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-                      isActive
-                        ? "bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400"
-                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-800"
-                    }`}
+                    className={getNavClass(isActive)}
+                    style={getNavStyle(isActive)}
                   >
                     {link.label}
                   </Link>

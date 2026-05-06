@@ -25,7 +25,8 @@ export type NavLinkStyle =
   | "underline-center" // underline expands from center outward
   | "underline-left"   // underline slides in from left to right
   | "text-accent"      // text color shifts to accent, no background
-  | "dot-below";       // small dot appears below the active/hovered item
+  | "dot-below"        // small dot appears below the active/hovered item
+  | "neuro";           // neumorphic inset shadow, gradient bg, no border radius
 
 export type LogoSize =
   | "sm"   // w-[140px] h-[56px]
@@ -79,14 +80,14 @@ export const siteConfig: HeaderConfig = {
   // "drawer" | "dropdown" | "fullscreen"
   mobileMenuType: "drawer",
 
-  headerSticky: true,
+  headerSticky: false,
 
   // when true: header is transparent over hero, becomes solid on scroll
   // requires a hero section with bg image — set logoInvertImageSrc for the transparent state logo
-  headerScrollEffect: true,
+  headerScrollEffect: false,
 
-  // "bg-fill" | "underline-center" | "underline-left" | "text-accent" | "dot-below"
-  navLinkStyle: "text-accent",
+  // "bg-fill" | "underline-center" | "underline-left" | "text-accent" | "dot-below" | "neuro"
+  navLinkStyle: "neuro",
 
   cta: {
     enabled: false,   // set true + update label/href when the CTA page exists

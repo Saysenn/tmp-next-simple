@@ -16,6 +16,8 @@ import Link from "next/link";
 import Logo from "@/components/header/Logo";
 import { headerNav, siteConfig } from "@/configs/header";
 
+const isNeuro = siteConfig.navLinkStyle === "neuro";
+
 type Props = { open: boolean; onClose: () => void; pathname: string; allSizes?: boolean };
 
 export default function DrawerHeader({ open, onClose, pathname, allSizes = false }: Props) {
@@ -69,11 +71,15 @@ export default function DrawerHeader({ open, onClose, pathname, allSizes = false
                 target={link.external ? "_blank" : undefined}
                 rel={link.external ? "noopener noreferrer" : undefined}
                 onClick={onClose}
-                className="flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 border-l-2"
+                className={`flex items-center px-3 py-2.5 text-sm font-medium transition-all duration-150 ${isNeuro ? "" : "rounded-lg border-l-2"}`}
                 style={
-                  isActive
-                    ? { borderLeftColor: "var(--accent)", background: "var(--accent-light)", color: "var(--accent)" }
-                    : { borderLeftColor: "transparent", color: "var(--nav-color-solid)" }
+                  isNeuro
+                    ? isActive
+                      ? { color: "var(--accent)", background: "linear-gradient(to bottom, var(--bg-soft), var(--bg-base))", boxShadow: "inset 0 3px 8px rgba(0,0,0,0.28)" }
+                      : { color: "var(--nav-color-solid)" }
+                    : isActive
+                      ? { borderLeftColor: "var(--accent)", background: "var(--accent-light)", color: "var(--accent)" }
+                      : { borderLeftColor: "transparent", color: "var(--nav-color-solid)" }
                 }
               >
                 {link.label}

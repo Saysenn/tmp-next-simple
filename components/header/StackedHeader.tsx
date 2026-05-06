@@ -10,6 +10,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { headerNav, siteConfig } from "@/configs/header";
+import { getNavClass, getNavStyle } from "@/components/header/navLinkStyles";
 import DrawerHeader from "@/components/header/DrawerHeader";
 import DropdownHeader from "@/components/header/DropdownHeader";
 import FullscreenHeader from "@/components/header/FullscreenHeader";
@@ -93,10 +94,8 @@ export default function StackedHeader() {
                   href={link.href}
                   target={link.external ? "_blank" : undefined}
                   rel={link.external ? "noopener noreferrer" : undefined}
-                  className={`nav-underline-left pb-0.5 text-sm font-medium transition-colors ${isActive ? "is-active" : ""}`}
-                  style={{
-                    color: isActive ? "var(--primary)" : "var(--text-heading)",
-                  }}
+                  className={getNavClass(isActive)}
+                  style={getNavStyle(isActive)}
                 >
                   {link.label}
                 </Link>

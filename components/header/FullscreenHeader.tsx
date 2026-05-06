@@ -15,6 +15,8 @@ import Link from "next/link";
 import Logo from "@/components/header/Logo";
 import { headerNav, siteConfig } from "@/configs/header";
 
+const isNeuro = siteConfig.navLinkStyle === "neuro";
+
 type Props = { open: boolean; onClose: () => void; pathname: string; allSizes?: boolean };
 
 export default function FullscreenHeader({ open, onClose, pathname, allSizes = false }: Props) {
@@ -60,11 +62,15 @@ export default function FullscreenHeader({ open, onClose, pathname, allSizes = f
                 target={link.external ? "_blank" : undefined}
                 rel={link.external ? "noopener noreferrer" : undefined}
                 onClick={onClose}
-                className="flex items-center px-4 py-3 rounded-xl text-lg font-normal transition-colors"
+                className="flex items-center px-4 py-3 text-lg font-normal transition-all duration-150"
                 style={
-                  isActive
-                    ? { color: "var(--accent)", background: "var(--accent-light)" }
-                    : { color: "var(--nav-color-solid)" }
+                  isNeuro
+                    ? isActive
+                      ? { color: "var(--accent)", background: "linear-gradient(to bottom, var(--bg-soft), var(--bg-base))", boxShadow: "inset 0 3px 8px rgba(0,0,0,0.28)" }
+                      : { color: "var(--nav-color-solid)" }
+                    : isActive
+                      ? { color: "var(--accent)", background: "var(--accent-light)", borderRadius: "0.75rem" }
+                      : { color: "var(--nav-color-solid)" }
                 }
               >
                 {link.label}

@@ -7,6 +7,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { headerNav, siteConfig } from "@/configs/header";
+import { getNavClass, getNavStyle } from "@/components/header/navLinkStyles";
 import Logo from "@/components/header/Logo";
 import DrawerHeader from "@/components/header/DrawerHeader";
 import DropdownHeader from "@/components/header/DropdownHeader";
@@ -39,11 +40,8 @@ function GlassNav({ pathname }: { pathname: string }) {
             href={link.href}
             target={link.external ? "_blank" : undefined}
             rel={link.external ? "noopener noreferrer" : undefined}
-            className={`whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
-              isActive
-                ? "bg-white dark:bg-gray-700 text-indigo-600 dark:text-indigo-400 shadow-sm"
-                : "text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-white/60 dark:hover:bg-gray-700/60"
-            }`}
+            className={getNavClass(isActive)}
+            style={getNavStyle(isActive)}
           >
             {link.label}
           </Link>
