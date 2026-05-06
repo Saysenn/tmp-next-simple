@@ -86,7 +86,7 @@ export default function ReviewsHorizontal() {
         .rh-track:hover .rh-row2 { animation-play-state: paused; }
       `}</style>
 
-      <div className="section-inner mb-12" data-animate="fade-up">
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px" }} className="mb-12" data-animate="fade-up">
         <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 12 }}>
           {[...Array(5)].map((_, i) => (
             <svg key={i} width="13" height="13" viewBox="0 0 20 20" fill={c.starColor}>

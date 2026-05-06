@@ -56,7 +56,7 @@ export default function ReviewsFocus() {
   const r = reviewsData[active];
 
   return (
-    <section style={{ background: c.bg, borderTop: `1px solid ${c.divider}`, borderBottom: `1px solid ${c.divider}` }} className="py-20 lg:py-28">
+    <section style={{ background: c.bg, borderTop: `1px solid ${c.divider}`, borderBottom: `1px solid ${c.divider}` }} className="py-16 lg:py-28">
       <style>{`
         @keyframes rf-in {
           from { opacity: 0; transform: translateY(10px); }
@@ -71,7 +71,7 @@ export default function ReviewsFocus() {
           display: flex;
           align-items: center;
           gap: 12px;
-          padding: 14px 0;
+          padding: 14px 12px;
           border-bottom: 1px solid var(--border);
           cursor: pointer;
           background: none;
@@ -85,12 +85,28 @@ export default function ReviewsFocus() {
         .rf-row:first-of-type { border-top: 1px solid var(--border); }
         .rf-row:hover { background: var(--bg-soft); }
         .rf-row.rf-active { background: var(--bg-soft); }
+
+        /* Mobile overrides */
+        @media (max-width: 767px) {
+          .rf-header { flex-wrap: wrap; gap: 8px; }
+          .rf-header-spacer { display: none !important; }
+          .rf-header-title { font-size: 1.4rem !important; }
+          .rf-split { flex-direction: column !important; border-top: none !important; }
+          .rf-quote-panel {
+            border-right: none !important;
+            border-top: 1px solid var(--border) !important;
+            padding: 28px 0 !important;
+            min-height: unset !important;
+          }
+          .rf-sidebar { display: none !important; }
+          .rf-dots-mobile { display: flex !important; }
+        }
       `}</style>
 
       <div className="section-inner">
 
-        {/* Section label */}
-        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 48 }} data-animate="fade-up">
+        {/* Header */}
+        <div className="rf-header" style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 40 }} data-animate="fade-up">
           <div style={{ display: "flex", gap: 3 }}>
             {[...Array(5)].map((_, i) => (
               <svg key={i} width="12" height="12" viewBox="0 0 20 20" fill={c.star}>
@@ -101,22 +117,25 @@ export default function ReviewsFocus() {
           <span style={{ fontSize: "0.7rem", letterSpacing: "0.15em", textTransform: "uppercase", color: c.accent, fontWeight: 600 }}>
             5.0 · Client Reviews
           </span>
-          <span style={{ flex: 1 }} />
-          <h2 className="text-2xl lg:text-3xl font-bold" style={{ color: c.heading }}>
+          <span className="rf-header-spacer" style={{ flex: 1 }} />
+          <h2 className="rf-header-title text-2xl lg:text-3xl font-bold" style={{ color: c.heading }}>
             In Their Own Words
           </h2>
         </div>
 
         {/* Main split */}
         <div
+          className="rf-split"
           style={{ display: "flex", gap: 0, alignItems: "stretch", borderTop: `1px solid ${c.divider}` }}
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
           data-animate="fade-up"
         >
-
           {/* Left — featured quote */}
-          <div style={{ flex: "1 1 0", padding: "48px 48px 48px 0", borderRight: `1px solid ${c.divider}`, display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: 380, position: "relative", overflow: "hidden" }}>
+          <div
+            className="rf-quote-panel"
+            style={{ flex: "1 1 0", padding: "40px 48px 40px 0", borderRight: `1px solid ${c.divider}`, display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: 340, position: "relative", overflow: "hidden" }}
+          >
             {/* Progress line */}
             <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: c.divider }}>
               {!paused && <div key={`prog-${animKey}`} className="rf-prog" style={{ height: "100%", backgroundColor: c.accent }} />}
@@ -124,51 +143,47 @@ export default function ReviewsFocus() {
 
             {/* Quote */}
             <div key={`body-${animKey}`} className="rf-animate">
-              <p style={{ fontSize: "clamp(1rem, 1.4vw, 1.2rem)", color: c.body, lineHeight: 1.85, fontStyle: "italic" }}>
+              <p style={{ fontSize: "clamp(0.9rem, 1.4vw, 1.15rem)", color: c.body, lineHeight: 1.85, fontStyle: "italic" }}>
                 &ldquo;{r.body}&rdquo;
               </p>
             </div>
 
             {/* Author */}
-            <div key={`auth-${animKey}`} className="rf-animate" style={{ display: "flex", alignItems: "center", gap: 16, paddingTop: 32, marginTop: 32, borderTop: `1px solid ${c.divider}` }}>
+            <div key={`auth-${animKey}`} className="rf-animate" style={{ display: "flex", alignItems: "center", gap: 16, paddingTop: 28, marginTop: 28, borderTop: `1px solid ${c.divider}` }}>
               <div style={{
-                width: 40, height: 40,
+                width: 38, height: 38,
                 backgroundColor: c.accent, color: "#fff",
                 display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: "0.72rem", fontWeight: 700, flexShrink: 0,
+                fontSize: "0.7rem", fontWeight: 700, flexShrink: 0,
                 borderRadius: 0,
               }}>
                 {initials(r.name)}
               </div>
               <div>
                 <p style={{ fontSize: "0.875rem", fontWeight: 700, color: c.heading, marginBottom: 3 }}>{r.name}</p>
-                <p style={{ fontSize: "0.72rem", color: c.muted }}>{r.role}</p>
+                <p style={{ fontSize: "0.7rem", color: c.muted }}>{r.role}</p>
               </div>
-              {/* Index */}
-              <span style={{ marginLeft: "auto", fontSize: "0.7rem", color: c.muted, fontVariantNumeric: "tabular-nums" }}>
+              <span style={{ marginLeft: "auto", fontSize: "0.68rem", color: c.muted, fontVariantNumeric: "tabular-nums" }}>
                 {String(active + 1).padStart(2, "0")} / {String(reviewsData.length).padStart(2, "0")}
               </span>
             </div>
           </div>
 
-          {/* Right — reviewer list */}
-          <div style={{ flex: "0 0 300px", padding: "0 0 0 48px", display: "flex", flexDirection: "column", justifyContent: "center" }} className="rf-sidebar">
-            <style>{`@media (max-width: 767px) { .rf-sidebar { display: none !important; } }`}</style>
-
+          {/* Right — reviewer list (desktop only) */}
+          <div className="rf-sidebar" style={{ flex: "0 0 280px", padding: "0 0 0 40px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
             {reviewsData.map((rev, i) => (
               <button
                 key={i}
                 className={`rf-row${active === i ? " rf-active" : ""}`}
                 onClick={() => goTo(i)}
-                style={{ padding: "14px 12px" }}
               >
                 <div style={{
-                  width: 28, height: 28,
+                  width: 26, height: 26,
                   backgroundColor: active === i ? c.accent : "transparent",
                   border: `1px solid ${active === i ? c.accent : c.divider}`,
                   color: active === i ? "#fff" : c.muted,
                   display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: "0.58rem", fontWeight: 700, flexShrink: 0,
+                  fontSize: "0.56rem", fontWeight: 700, flexShrink: 0,
                   borderRadius: 0,
                   transition: "background 0.2s, border-color 0.2s, color 0.2s",
                 }}>
@@ -176,44 +191,44 @@ export default function ReviewsFocus() {
                 </div>
                 <div style={{ overflow: "hidden", flex: 1 }}>
                   <p style={{
-                    fontSize: "0.8rem",
+                    fontSize: "0.78rem",
                     fontWeight: active === i ? 700 : 400,
                     color: active === i ? c.heading : c.body,
                     whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
-                    transition: "color 0.2s, font-weight 0.2s",
+                    transition: "color 0.2s",
                   }}>
                     {rev.name}
                   </p>
-                  <p style={{ fontSize: "0.64rem", color: c.muted, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                  <p style={{ fontSize: "0.62rem", color: c.muted, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                     {rev.role.split(",")[0]}
                   </p>
                 </div>
-                {active === i && (
-                  <div style={{ width: 4, height: 4, backgroundColor: c.accent, flexShrink: 0, borderRadius: 0 }} />
-                )}
+                {active === i && <div style={{ width: 4, height: 4, backgroundColor: c.accent, flexShrink: 0 }} />}
               </button>
             ))}
           </div>
-
-          {/* Mobile dots */}
-          <div style={{ display: "none" }} className="rf-mob-dots">
-            <style>{`.rf-mob-dots { display: none !important; } @media (max-width: 767px) { .rf-mob-dots { display: flex !important; gap: 6px; padding-top: 24px; } }`}</style>
-            {reviewsData.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => goTo(i)}
-                style={{
-                  width: active === i ? 20 : 6, height: 6,
-                  backgroundColor: active === i ? c.accent : c.divider,
-                  border: "none", cursor: "pointer", padding: 0,
-                  transition: "width 0.25s, background 0.2s",
-                  borderRadius: 0,
-                }}
-              />
-            ))}
-          </div>
-
         </div>
+
+        {/* Mobile dots — below the quote panel */}
+        <div
+          className="rf-dots-mobile"
+          style={{ display: "none", gap: 6, paddingTop: 20, justifyContent: "center" }}
+        >
+          {reviewsData.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => goTo(i)}
+              style={{
+                width: active === i ? 20 : 6, height: 6,
+                backgroundColor: active === i ? c.accent : c.divider,
+                border: "none", cursor: "pointer", padding: 0,
+                transition: "width 0.25s, background 0.2s",
+                borderRadius: 0,
+              }}
+            />
+          ))}
+        </div>
+
       </div>
     </section>
   );

@@ -59,7 +59,7 @@ export default function ReviewsMarquee() {
 
       {/* Left — editorial title */}
       <div className="section-inner py-20 lg:py-28 relative z-10">
-        <div style={{ maxWidth: 380 }} data-animate="fade-up">
+        <div style={{ maxWidth: 380, width: "100%" }} data-animate="fade-up">
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20 }}>
             <StarRow />
             <span style={{ fontSize: "0.7rem", letterSpacing: "0.15em", textTransform: "uppercase", color: c.accent, fontWeight: 600 }}>

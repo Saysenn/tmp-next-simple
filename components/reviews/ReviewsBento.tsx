@@ -80,9 +80,6 @@ export default function ReviewsBento() {
             <h2 className="text-3xl lg:text-4xl font-bold" style={{ color: c.heading }}>
               Trusted by Leaders<br />Across the UK
             </h2>
-            <p style={{ fontSize: "0.875rem", color: c.muted, maxWidth: 260, lineHeight: 1.6 }}>
-              Over 200 placements and counting — from temp cover to permanent senior hires.
-            </p>
           </div>
         </div>
 

@@ -50,9 +50,6 @@ export default function ReviewsGrid() {
               What Our Clients Say
             </h2>
           </div>
-          <p style={{ fontSize: "0.875rem", color: c.muted, maxWidth: 280, lineHeight: 1.6 }}>
-            Trusted by HR leaders, finance managers, and MDs across the UK.
-          </p>
         </div>
 
         {/* Grid */}
@@ -60,7 +57,7 @@ export default function ReviewsGrid() {
           data-animate="stagger"
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fill, minmax(min(280px, 100%), 1fr))",
             gap: 16,
           }}
         >

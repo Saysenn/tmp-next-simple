@@ -25,7 +25,7 @@ const reviewsData = [
 
 function Card({ r }: { r: typeof reviewsData[0] }) {
   return (
-    <div style={{ backgroundColor: c.cardBg, border: `1px solid ${c.border}`, borderRadius: 16, padding: "20px" }}>
+    <div style={{ backgroundColor: c.cardBg, border: `1px solid ${c.border}`, borderRadius: 0, padding: "20px" }}>
       <p style={{ fontSize: "0.75rem", color: c.body, lineHeight: 1.65, marginBottom: "0.75rem" }}>
         &ldquo;{r.body}&rdquo;
       </p>
@@ -51,27 +51,30 @@ export default function ReviewsMirrorDiagonal() {
             inset: 0 !important;
             width: 100% !important;
             height: 100% !important;
-            top: 0 !important; right: 0 !important;
-            opacity: 0.08 !important;
+            opacity: 0.22 !important;
             pointer-events: none !important;
-            filter: blur(1px) !important;
+            filter: none !important;
           }
-          .rmd-content { position: relative; z-index: 10; }
+          .rmd-content {
+            position: relative;
+            z-index: 10;
+            justify-content: flex-start !important;
+          }
         }
       `}</style>
 
       {/* Diagonal columns — LEFT side (mirrored from ReviewsMarquee) */}
       <div
         className="rmd-columns"
-        style={{ position: "absolute", top: "-20%", left: "-2%", width: "60%", height: "140%", overflow: "hidden", pointerEvents: "none" }}
+        style={{ position: "absolute", top: "-20%", left: "-2%", width: "62%", height: "140%", overflow: "hidden", pointerEvents: "none" }}
       >
         {/* Fade edges */}
         <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 140, background: `linear-gradient(to bottom, ${c.bg}, transparent)`, zIndex: 5 }} />
         <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 140, background: `linear-gradient(to top, ${c.bg}, transparent)`, zIndex: 5 }} />
-        <div style={{ position: "absolute", top: 0, right: 0, bottom: 0, width: 80, background: `linear-gradient(to left, ${c.bg}, transparent)`, zIndex: 5 }} />
+        <div style={{ position: "absolute", top: 0, right: 0, bottom: 0, width: 160, background: `linear-gradient(to left, ${c.bg}, transparent)`, zIndex: 5 }} />
 
         {/* Reverse diagonal: +16deg, columns scroll DOWN */}
-        <div style={{ display: "flex", gap: 14, transform: "rotate(16deg) translateX(8%)", transformOrigin: "top center", height: "100%" }}>
+        <div style={{ display: "flex", gap: 14, transform: "rotate(16deg) translateX(35%)", transformOrigin: "top center", height: "100%" }}>
           <div style={{ flex: "0 0 260px" }}>
             <div className="rmd-col1" style={{ display: "flex", flexDirection: "column", gap: 14 }}>
               {[...reviewsData, ...reviewsData].map((r, i) => <Card key={i} r={r} />)}
@@ -103,17 +106,6 @@ export default function ReviewsMirrorDiagonal() {
           <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 3rem)", color: c.heading, fontWeight: 700, lineHeight: 1.15, marginBottom: 20 }}>
             Real Results.<br />Real People.
           </h2>
-          <p style={{ fontSize: "0.9rem", color: c.muted, lineHeight: 1.7 }}>
-            Over 200 placements and counting — from temp cover to permanent senior hires — every one backed by a team that stays invested in the outcome.
-          </p>
-          <div style={{ display: "flex", gap: 24, marginTop: 32 }}>
-            {[{ n: "200+", l: "Placements" }, { n: "98%", l: "Retention" }, { n: "24h", l: "Response" }].map(({ n, l }) => (
-              <div key={l}>
-                <p style={{ fontSize: "1.5rem", fontWeight: 800, color: c.accent, lineHeight: 1 }}>{n}</p>
-                <p style={{ fontSize: "0.7rem", color: c.muted, marginTop: 4 }}>{l}</p>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     </section>
