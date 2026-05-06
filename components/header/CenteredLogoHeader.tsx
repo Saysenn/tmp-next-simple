@@ -2,6 +2,7 @@
 
 import { siteConfig } from "@/configs/header";
 import Logo from "@/components/header/Logo";
+import TopBar from "@/components/header/TopBar";
 
 export default function CenteredLogoHeader() {
   return (
@@ -10,6 +11,7 @@ export default function CenteredLogoHeader() {
         siteConfig.headerSticky ? "sticky top-0 z-50" : "relative"
       } bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700`}
     >
+      <TopBar />
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-center">
         <Logo
           type={siteConfig.logoType}

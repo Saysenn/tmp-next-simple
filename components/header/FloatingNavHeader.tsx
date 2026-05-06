@@ -12,6 +12,7 @@ import Logo from "@/components/header/Logo";
 import DrawerHeader from "@/components/header/DrawerHeader";
 import DropdownHeader from "@/components/header/DropdownHeader";
 import FullscreenHeader from "@/components/header/FullscreenHeader";
+import TopBar from "@/components/header/TopBar";
 
 function HamburgerButton({ open, onClick }: { open: boolean; onClick: () => void }) {
   return (
@@ -72,8 +73,9 @@ export default function FloatingNavHeader() {
           siteConfig.headerSticky ? "sticky top-0 z-50" : "relative"
         }`}
       >
+        <TopBar />
         <div className="relative max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-3 grid-cols-2 items-center h-16 py-3">
+        <div className="grid md:grid-cols-3 grid-cols-2 items-center h-16 py-3">
 
             {/* Col 1: Logo */}
             <div className="flex items-center">

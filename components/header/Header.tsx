@@ -18,6 +18,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { headerNav, siteConfig } from "@/configs/header";
 import Logo from "@/components/header/Logo";
+import TopBar from "@/components/header/TopBar";
 import CTAHeader from "@/components/header/CTAHeader";
 import MenuOnlyHeader from "@/components/header/MenuOnlyHeader";
 import CenteredLogoHeader from "@/components/header/CenteredLogoHeader";
@@ -99,6 +100,7 @@ function NavHeader() {
   return (
     <>
       <header className={headerClass}>
+        <TopBar />
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="flex items-center h-20">
             <Logo

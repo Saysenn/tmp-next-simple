@@ -45,6 +45,18 @@ export type CtaConfig = {
   href: string;
 };
 
+export type TopbarLink = {
+  label: string;
+  href: string;
+  external?: boolean;
+};
+
+export type TopbarConfig = {
+  enabled: boolean;           // show or hide the topbar across all header types
+  description: string;        // short SEO tagline displayed on the left
+  links: TopbarLink[];        // utility/legal links displayed on the right
+};
+
 export type HeaderConfig = {
   name: string;
   description: string;
@@ -59,6 +71,7 @@ export type HeaderConfig = {
   headerScrollEffect: boolean; // when true: header starts transparent over hero, transitions to solid on scroll. nav links and logo swap colours accordingly.
   navLinkStyle: NavLinkStyle;
   cta: CtaConfig;
+  topbar: TopbarConfig;
 };
 
 export const siteConfig: HeaderConfig = {
@@ -93,6 +106,16 @@ export const siteConfig: HeaderConfig = {
     enabled: false,   // set true + update label/href when the CTA page exists
     label: "Get Started",
     href: "/contact",
+  },
+
+  topbar: {
+    enabled: true,
+    description: "Specialist recruitment & payroll solutions across the UK.",
+    links: [
+      { label: "Privacy Policy", href: "/privacy" },
+      { label: "Terms of Use",   href: "/terms" },
+      { label: "Anti-Slavery",   href: "/anti-slavery" },
+    ],
   },
 };
 
